@@ -1,0 +1,108 @@
+jpeg_enc DSP-side DRAM pre-write — static build-feasibility prep (read-only, 0 flash)
+
+HEADLINE: NO-GO for the proposed design (scalar strb a constant into 0x60000000+off).
+The SA-DSP scalar core cannot address the DRAM pixel pool at all — its store reach is
+SRAM + MMIO + stack only. The CONSTANT test as specified is not buildable. Details below;
+the salvageable alternatives are at the end.
+
+====================================================================
+3) DRAM-WRITE FEASIBILITY  (answered first — it is the blocker)
+====================================================================
+VERIFIED — the scalar never writes (or reads) DRAM:
+- Emulated the whole jpeg_enc scalar from entry 0x0 (saemu, 10808 scalar stores). Every
+  store lands in: SRAM 0x1000-block, the stack 0x403xx (sp=0x40400), or MMIO 0x40xxx/
+  0x48xxx. ZERO stores to any DRAM (0x4000_0000+) or to a masked-physical alias
+  (0x2xxx_xxxx / 0x3fff_ffff) range.
+- Descriptor semantics confirm it: 0x60000000 (luma pool) / 0x68000000 (chroma pool)
+  appear ONLY as a stored VALUE written into DMA-descriptor fields — e.g. @0x7e6-0x7fc
+  `ldr r1,=0x60000000; add r1,r4; and r1,0x1ff80000; lsr r1,#19; ... str r1,[r3,#4]`
+  with r3=SRAM 0x93c0. The 0x60000000+off value is NEVER used as a load/store base; it
+  is data for the DMA/engine, which does the fetch. The `&0x3fffffff` mask produces a
+  PHYSICAL bus address for the DMA engine, not a scalar-visible alias (no scalar access
+  to it in the whole run).
+- No scalar-visible DRAM aperture exists in jpeg_enc. yknr exposed an engine aperture
+  0xf81400 (C-PIPE-022) that is still NOT scalar-pixel-addressable; jpeg_enc has no
+  0xf8xxxx literal at all — the engine consumes a scatter-list of DRAM addresses handed
+  to it via config port 0x400bc (@0x87c-0x87e), i.e. the MCUs stream DRAM->engine
+  internally, never transiting scalar SRAM.
+- Precedent for scalar DRAM writes in any module: NONE found. sftfcs's proven write
+  (E-5) was to SRAM struct[+164]=0x8000-range, not DRAM. The atlas's own model
+  (sa-dsp-isa.md) states the scalar "reads/writes SRAM 0x9xxx"; it never claims DRAM.
+Cache/barrier: moot — there is no scalar store to flush. (If one forced a DMA-out, the
+module already serialises with wfi + status poll 0x94xx; that is the only barrier.)
+
+====================================================================
+1) HOOK SITE
+====================================================================
+VERIFIED locations (but see blocker #3 — the write they'd host is infeasible):
+- Luma DRAM address is live in r1 across @0x7e6-0x7fc (value 0x60000000+off), and the
+  per-component descriptor loop body runs 0x7be-0x840. The IN-DMA kick for the main
+  input descriptor is @0x586-0x598: `str #1,[0x48230]; str 0x10000,[0x48208](IN en);
+  wfi @0x590; str …,[0x48200](IN kick)`. That window (just after 0x588, before 0x590
+  wfi) is the correct "just before GO" insertion point in control-flow terms.
+- A literal-patch divert like sftfcs exists in principle (many `ldr rX,=const; <use>`
+  pairs), but there is NO target to divert TO that can reach the pixels, because the
+  pixels aren't in scalar space. So I am NOT giving a byte-patch: it would be a hook with
+  nowhere useful to write.
+
+====================================================================
+2) CODE SPACE / executable bound
+====================================================================
+VERIFIED: scarce. Unlike yknr (14 vliw-nop caves) and sftfcs (the 0x1e42 30-B pad),
+jpeg_enc img0 has NO run of >=3 consecutive scalar NOPs between functions — code and
+inline VLIW/command-table data are densely interleaved. Real `ret`s extend to 0x2c36,
+so the executable span is large but there is no clean in-place cave; any hook would need
+a trampoline, and (per the sftfcs E-3/E-4 lesson) dead-in-file != executable-as-branch-
+target, so the branch target would itself need a camera no-op probe. OPINION: buildable
+only with a trampoline + a separate executable-bound probe; not worth it given #3.
+
+====================================================================
+4) DELIVERY  (VERIFIED, usable regardless)
+====================================================================
+- Module: sa_jpeg_enc_1unit.bin, 17412 B, ver2, tag SAJPGE_ULF4_. file-id = 16.
+- Stock on-camera copy: /usr/sabin/sa_jpeg_enc_1unit.bin (p8). Redirect copy goes to
+  /setting/sa_jpeg_enc_1unit.bin.
+- Backup dir-slot byte: 0x00bd0002 byte **133** (= 8*16 + 5). Set 0x00 -> 0x06 to make
+  ODL open the /setting copy; 0x06 -> 0x00 reverts. (deliver_setting.py takes OFF=133;
+  yknr used 597, sftfcs 445 — same mechanism, C-MOD-044.)
+- Checksum: sum32 of body[:-4] stored at len-4 (C-DSP-001; all 32 p8 modules valid). A
+  build must recompute it. Recoverable: bad module -> that OPEN fails -> capture-sequence
+  error, fixed by reverting the byte or a p3 reflash (28 flashes, 0 bricks, C-SAFE-003).
+  jpeg_enc OPEN failing may be worse than a leaf NR module (encoder is mandatory) — treat
+  a broken jpeg_enc as capture-fatal until proven otherwise. OPINION on severity.
+
+====================================================================
+5) MINIMAL PAYLOAD
+====================================================================
+Cannot be written as specified. A scalar strb loop to 0x60000000+off has no effect
+(the address isn't in the scalar's store map). Free regs at the hook (r0-r3 scratch,
+r1 holds the live DRAM value) are irrelevant without a reachable target.
+The ONLY DSP-side way to get noise into that DRAM pool is to have the scalar PROGRAM A
+DMA-OUT: stage a noise tile in free SRAM, append a descriptor {dram_luma_addr, GO} on an
+OUT channel, kick + wfi + poll, BEFORE the encode IN-DMA reads the same bytes. That is
+not a minimal constant proof — it needs a free SRAM tile, a free DMA channel/ring slot,
+a barrier to beat the read, and correct pool/offset geometry; and it duplicates exactly
+the already-refuted class of writing the develop/YCC_FULL DRAM canvas (C-MEM-021).
+
+====================================================================
+GO / NO-GO
+====================================================================
+NO-GO on the scalar-strb DRAM constant test. (VERIFIED buildability failure: scalar has
+no DRAM store path; emulation + descriptor semantics + no aperture + no precedent.)
+
+Cheaper decisive alternatives (pick one):
+ (A) If the team still wants to know whether the encoder's input is writable at all, the
+     cheapest camera-confirmable test is NOT on the SA-DSP — it is the Linux route
+     C-LNX-011: /setting/env.txt dmode + LD_PRELOAD a shim that on each still runs
+     MprLib::DecodeStillOnMemory -> add grain to Y -> EncodeStillOnMemory -> rewrite the
+     file. That touches full-res luma at EVERY ISO, in-JPEG, with no DSP-reach problem;
+     cost = one JPEG generation loss. It is the only route that actually clears the
+     DRAM-reach wall this analysis exposes.
+ (B) If staying on the DSP, the honest next static task is to prove/disprove a scalar-
+     programmed DMA-OUT into the luma pool (feasibility of a free OUT channel + ring slot
+     + barrier) — a multi-step build, not a quick constant proof.
+
+Bottom line for the coordinator: the jpeg_enc "DSP-side DRAM pre-write" cannot be built
+as a minimal scalar write, because the SA-DSP scalar cannot address DRAM. Redirect the
+grain effort to the Linux decode/re-encode route (C-LNX-011), which is the one path that
+reaches full-res luma at all ISO in the SOOC JPEG.

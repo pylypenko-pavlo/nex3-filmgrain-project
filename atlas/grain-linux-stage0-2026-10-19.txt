@@ -1,0 +1,212 @@
+STAGE 0 — SONYLD LOADER CONTRACT + CODEC BACKEND (offline, zero camera contact)
+2026-10-19. Read-only w.r.t. camera and nex3n-*. Artifacts under this dir only.
+Sources: sonyld.so (p3 initrd, EABI4, stripped), libmpr.so / libInfraFsys.so /
+tool/{libsonyefence,LeakTracer}.so (p8). Tools: capstone 5.0.7, pyelftools 0.33, Apple clang.
+
+======================================================================
+A) SONYLD LD_PRELOAD ACCEPTANCE CONTRACT
+======================================================================
+Die mechanism [VERIFIED]: a failed preload load is fatal. _rtld_preload @0x2554 iterates
+LD_PRELOAD tokens, calls the per-object loader @0x2348; on failure returns -1; main @0x5ac8
+does `cmn r0,#1; beq _rtld_die(@0x56a4)` -> exit. Confirms C-LNX-012.
+
+Acceptance checks — recovered directly from the loader's own die-strings (referenced by the
+header validator) at sonyld file off 0x251cc.. [VERIFIED]:
+  0x251cc "unrecognized file format2 [%x != %x]"  -> e_ident magic == "\x7fELF" (SELFMAG=4;
+                                                       reference template bytes at 0x251c4)
+  0x251f8 "unsupported file version"               -> e_version == EV_CURRENT (1)
+  0x25218 "unsupported file type"                  -> e_type   == ET_DYN (3)
+  0x25234 "unsupported machine"                    -> e_machine== EM_ARM (40)
+  0x2524c "not dynamically linked"                 -> a PT_DYNAMIC segment must exist
+  0x25268 "wrong number of segments (%d != 2)"     -> EXACTLY 2 PT_LOAD segments (STRICT)
+  0x25290 "mmap of entire address space failed"    -> mmap must succeed
+
+NOT checked [VERIFIED by absence of any die-string + empirics]: e_flags / EABI version. The two
+objects sonyld PROVABLY preloads today (tool/libsonyefence.so, tool/LeakTracer.so) are EABI4
+(e_flags 0x04000002); libmpr.so is EABI5 (0x05000000). Both load -> EABI is irrelevant.
+
+Empirical template (the two accepted preload .so) [VERIFIED by readelf/pyelftools]:
+  ELFCLASS32, ELFDATA2LSB, EI_OSABI SYSV(0), abiversion 0; ET_DYN; EM_ARM; EXACTLY 2 PT_LOAD
+  (RX flags=5 + RW flags=6) each p_align 0x8000; PT_DYNAMIC; PT_GNU_STACK; a hash table
+  (both use DT_GNU_HASH; libmpr uses DT_HASH -> sonyld accepts either); DT_SYMTAB/STRTAB/STRSZ/
+  SYMENT=16; interposed symbols are STB_GLOBAL STT_FUNC STV_DEFAULT, defined (shndx!=UNDEF)
+  (efence interposes malloc/free the same way our shim interposes close/Fsys_Close).
+  Both templates have >=1 DT_NEEDED; zero-NEEDED is legal and un-die-able (loader only iterates
+  the list) but is the one shape deviation from ground truth -> [OPINION] safe.
+
+Bonus fail-safe lever [VERIFIED]: sonyld EXPORTS __dlopen/__dlsym/__dladdr in its own .dynsym.
+=> the real grain shim can keep DT_NEEDED EMPTY and resolve Fsys_Close/Decode/Encode at RUNTIME
+via __dlsym (lazy, guarded). A missing dependency symbol then cannot trigger _rtld_die at load.
+
+TOOLCHAIN [VERIFIED]: Apple clang assembles ARM EABI5 ELF objects
+(`clang --target=arm-linux-gnueabi -march=armv5te -c`). NO ELF linker present (no lld, no
+binutils ld, no arm-none-eabi). => cannot LINK a .so by normal means; emitted one by hand.
+
+CANDIDATE .so BUILT: grain_probe.so (488 B, md5 8cae10855ea02bc2a455b88a1bdd8d33).
+  - exports close() = transparent raw-syscall passthrough (`mov r7,#6; svc #0; bx lr`) — cannot
+    crash a boot-critical close; proves interposition without needing any import.
+  - DT_INIT constructor appends one line to /setting/grain_probe.log via raw open/write/close.
+  - ZERO DT_NEEDED, ZERO relocations, ZERO external symbols (code is fully PC-relative; `adr`
+    became `add rX,pc,#imm`, confirmed reloc-free in probe.o).
+  - PASSES all 12 contract checks (magic, class32, LSB, EV_CURRENT, ET_DYN, EM_ARM, exactly
+    2 PT_LOAD, PT_DYNAMIC, va/off congruent mod 0x8000, DT HASH/STRTAB/SYMTAB/SYMENT/INIT,
+    close=GLOBAL FUNC defined, close in RX segment). Files: build_so.py, probe.s/.o, elfdump.py.
+  RESIDUAL [OPINION]: structural conformance is VERIFIED, but this object is MORE MINIMAL than
+  any template (no GOT/PLT/relocs/NEEDED/section-headers). sonyld's _rtld_digest_dynamic was not
+  fully traced for a mandatory-tag it might deref on an object this bare. Actual load cannot be
+  proven offline (no sonyld emulation here) — only the Stage-3 on-camera probe (net pre-placed)
+  or a qemu-arm run of sonyld itself would prove it. Do NOT claim load-safety beyond structural.
+
+======================================================================
+B) CODEC BACKEND + DECODE/MODIFY/ENCODE PLAN + TRIGGER
+======================================================================
+Signatures [VERIFIED by Thumb disasm of the entries]:
+- MprLib::DecodeStillOnMemory @0x5d52bc marshals an 8-word param block from static slots:
+  [dstVirtAddr, maxDstSize, srcVirtAddr, srcSize, sizeX, sizeY, resultWidth, resultHeight]
+  then `mov r0,sp; blx 0x448ea0` (MprLibCore decode); r0==0 => success.
+- MprLib::EncodeStillOnMemory @0x5d53f8 marshals a ~10-word block:
+  [srcVirtAddr, srcSizeX, srcSizeY, dstSizeX, dstSizeY, dstTgtSize, dstBufVirtAddr, dstBufSize, ..]
+  then `blx 0x448ec0`. Field names confirmed by rodata at 0x333260.. ("DecodeStillOnMemory :
+  dstVirtAddr/srcVirtAddr/sizeX", "EncodeStillOnMemory : srcVirtAddr").
+=> API is process-VIRTUAL-ADDRESS/size based. dstVirtAddr (decode out) and srcVirtAddr (encode
+   in) are in-process mappings the shim can read/modify directly — no IPC. [VERIFIED]
+   libmpr also logs "p_pixelBufVirtAddr [0x..]" (0x146488) = a pixel-buffer VA is exposed.
+
+Y-plane direct access: [PARTIALLY UNRESOLVED / OPINION] the decode OUTPUT pixel FORMAT (planar
+YUV vs packed, subsampling, whether Y is a contiguous modifiable plane) is NOT determined from
+the entry disasm; MprLibCore (0x448ea0 fan-out) was not traced to the plane layout. The VA is
+modifiable; the layout to target the luma bytes needs one more disasm hop (or an on-console
+decode dump). This is the remaining known-unknown for the grain write.
+
+Backend HW vs SW: [OPINION, indicative] libmpr imports ioctl/mmap/open and carries strings
+"ioctl DMA_TRANSFER_MEM", "IOCTL_CMD_SET_PHYS_", "/dev/mem" — the codec path touches HW DMA /
+physical memory, i.e. a HW/DSP-assisted codec, not a pure-SW libjpeg loop. NOT traced to the
+exact decode ioctl/device; Q-11 stays formally OPEN. No "/dev/ldec" string in libmpr (the ldec
+node 252:200 appeared only in the updater device list, E-0023), so if HW decode is used it is
+reached by a different node/ioctl.
+
+File-write TRIGGER [VERIFIED symbols]: the SOOC JPEG is written through Fsys_* — libInfraFsys.so
+EXPORTS Fsys_Close/Fsys_Write/Fsys_Open/Fsys_Flush; libmpr IMPORTS Fsys_Close/Write/
+WriteAndFlush/Open/Flush + close/write/open. DCF template "\DCIM\101MSDCF\DSC0%04ld.JPG" is in
+libmpr. => interpose Fsys_Close (or Fsys_WriteAndFlush): on close of a *.JPG path, run the
+in-process chain, then call the real Fsys_Close via __dlsym(RTLD_NEXT).
+
+Same-address-space call plan [VERIFIED symbols exist; end-to-end sequence OPINION, not executed]:
+  1. shim exports Fsys_Close; on a DCF *.JPG path:
+  2. DecodeStillOnMemory(file bytes -> dstVirtAddr pixel buffer)   [same process]
+  3. add grain to the luma bytes in that buffer                    [layout per the open item]
+  4. EncodeStillOnMemory(buffer -> dstBufVirtAddr JPEG bytes)
+  5. overwrite the file, then call real Fsys_Close.
+  All of Decode/Encode/Fsys_* live in the appFw process that loads the preload -> directly
+  callable; resolve them lazily via sonyld __dlsym so the shim LOAD never depends on them.
+
+VERDICT: the decode/encode primitive is REAL and VA-based (VERIFIED); the file-write trigger
+(Fsys_Close) is VERIFIED; the only unresolved pieces are the decoded-plane FORMAT and the exact
+codec backend (Q-11). None of these blocks Stage 0. Nothing here changes the Stage-2 gate:
+no camera step is taken, and no preload is loaded until the Q-39 recovery net is proven.
+
+======================================================================
+STAGE 0.5 — OFFLINE DE-RISK (qemu load-proof + Y-plane format)
+======================================================================
+1) QEMU LOAD-PROOF OF grain_probe.so AGAINST REAL SONYLD
+VERDICT: NOT-RUNNABLE in this environment. [VERIFIED]
+  - No qemu-arm / qemu-arm-static / qemu-system-arm; Docker not usable; no colima/lima; no
+    `unicorn` python module. Host is arm64 macOS 27.2. A faithful sonyld run needs ARM-Linux
+    USER-MODE emulation with real syscall translation (open/fstat64/mmap/mprotect + an
+    ARM-Linux process stack/auxv/TLS). Unicorn alone (even if installed) gives only a CPU core,
+    not an OS; hand-stubbing the ~dozen syscalls sonyld issues would be emulating MY model of its
+    needs, i.e. exactly the fake pass to avoid. So I did NOT run it.
+  - Minimum setup to actually do it: `qemu-arm-static` (ARMv5TE user mode) + a Linux ARM rootfs
+    containing the dump's /lib/sonyld.so and a tiny dynamically-linked ARM `main` (PT_INTERP =
+    sonyld); run `LD_PRELOAD=./grain_probe.so qemu-arm-static ./main`; observe no _rtld_die,
+    ctor log line, and that close() interposes. Needs a Linux box or Docker (qemu-user + binfmt).
+
+  INSTEAD — the gap I flagged, closed statically [VERIFIED by full disasm of _rtld_digest_dynamic
+  @0x1a60..0x22c4]: the digest is a pure `cmp d_tag,#const; beq case` dispatch over the tags that
+  are PRESENT. Fields for ABSENT tags stay zero-initialised (zeroed at 0x1a60-0x1a6c); the
+  post-loop finalisation (0x1ac4+) guards every use with `cmp …,#0` (rel/pltgot/needed branches).
+  No tag our minimal object omits is ever dereferenced. DECISIVE: the DT_HASH (SysV) case @0x1f10
+  is fully implemented (reads nbucket/nchain, sets obj->buckets/chains) — and libmpr.so itself
+  uses DT_HASH (no GNU_HASH) and is loaded by THIS sonyld as every p8 binary's interpreter, so
+  SysV-hash objects provably load. grain_probe.so provides exactly {HASH,STRTAB,SYMTAB,STRSZ,
+  SYMENT,INIT,SONAME,NULL}; digest parses all, trips nothing.
+  RESIDUAL [OPINION]: grain_probe.so is the first object I've observed with ZERO relocations and
+  no DT_PLTGOT; the reloc loop is count-guarded (RELSZ absent → 0 → empty) and NetBSD pltgot
+  setup is NULL-guarded, but that specific combination is unproven empirically. To erase it,
+  rebuild to mirror libsonyefence exactly: add DT_INIT_ARRAY(1 entry)+one R_ARM_RELATIVE
+  (also guarantees the ctor runs via the modern path) so the object is relocation-bearing like
+  every proven-accepted preload. Recommended before the Stage-3 camera probe; still ultimately
+  confirmed only on-camera or via the qemu setup above.
+
+2) Y-PLANE FORMAT (one hop past DecodeStillOnMemory)
+  Chain [VERIFIED]: MprIf veneer 0x448ea0 → MprLibCore::DecodeStillOnMemory @0x174be0, which is a
+  veneer table (`push{r4,lr}; blx 0x2e3c28; pop`) → the actual codec body is several more hops
+  deep (MemInfo/codec driver), a large stripped fan-out.
+  Decode output [VERIFIED by strings]: a SINGLE contiguous YUV buffer — "[MprLib] Dst YUV Address
+  : = <addr> , Size = <n>" (0x5d5d21); "Source/destination YUV Parameter"; "wPixels[YCbCr]()";
+  thumbnail path uses "YCbCr420" (0x61ab10) (implying the MAIN still is NOT 420 → 4:2:2).
+  Pipeline convention [VERIFIED-hw, C-MEM-005]: the camera's full-res YC is packed YUYV 4:2:2,
+  luma in EVEN bytes, stride = 2×width.
+  => BEST TARGET [OPINION, strong]: decoded still = packed YUYV 4:2:2 in one buffer at Dst YUV
+     Address; size = sizeX·sizeY·2; luma Y at byte offsets 0,2,4,… (odd bytes = Cb/Cr). Grain =
+     add signed noise to dst[2k], clamp 0..255, leave odd bytes → luma-only grain, exactly the
+     even-byte model the DSP-side work validated.
+  ROBUST RESOLUTION (removes the unknown without the deep trace): the shim reads the logged
+  Dst Size and sizeX·sizeY at RUNTIME and discriminates — Size==2·w·h → packed 4:2:2, luma =
+  even bytes; Size==1.5·w·h → planar 4:2:0, luma = the first w·h contiguous bytes. In BOTH cases
+  luma is a well-defined contiguous/strided plane the shim writes directly, so the exact format
+  does not block the grain write. [VERIFIED that these are the only two layouts consistent with a
+  single-base YUV buffer; which one is runtime-detectable, not statically pinned here.]
+
+======================================================================
+STAGE 0.5 — QEMU EMPIRICAL (real sonyld load-proof)  [RESULT: PASS]
+======================================================================
+Env: lima VM `armgrain` (Debian-12 aarch64) + qemu-arm-static + arm-linux-gnueabi-gcc (armel
+ARMv5TE EABI5 soft-float = camera match). Sonyld used: the camera's own
+nflasha3 initrd /lib/sonyld.so, md5 df94859e14cc6004a849dfb4670a2999 (safeboot == sonygen copies
+identical); its die-string at off 0x251cc reads exactly "%s: unrecognized file format2 [%x != %x]"
+= the build my static analysis used. [VERIFIED]
+
+Build (guest /tmp):
+  arm-linux-gnueabi-gcc -march=armv5te -shared -fPIC -nostdlib -o grain_probe_fs.so probe_fs.c
+  arm-linux-gnueabi-gcc -march=armv5te -nostdlib -fPIC -Wl,--dynamic-linker=/tmp/lp/sonyld.so \
+      -Wl,-e,_start -o testprog testprog.c
+readelf grain_probe_fs.so [VERIFIED]: Type DYN, Machine ARM, Flags 0x5000200 (EABI5 soft-float);
+  2x PT_LOAD (R E + RW) + PT_DYNAMIC + GNU_STACK; DT_GNU_HASH@0x118; DT_INIT_ARRAY@0x1f7c sz 4;
+  .rel.dyn = 1 entry R_ARM_RELATIVE @0x1f7c; ZERO DT_NEEDED; dynsym: close FUNC GLOBAL DEFAULT.
+testprog [VERIFIED]: INTERP = /tmp/lp/sonyld.so.
+
+Runs (qemu-arm-static honours testprog's PT_INTERP = camera sonyld):
+  baseline  `qemu-arm-static ./testprog`                               -> exit=0
+  TEST 1    `LD_PRELOAD=.../grain_probe_fs.so qemu-arm-static ./testprog`
+            -> exit=0 ; /tmp/grain_probe.log = "grain_probe(fs) ctor ran: sonyld accepted the preload"
+  TEST 2    `LD_PRELOAD=.../grain_probe.so   qemu-arm-static ./testprog`  (488B hand-built)
+            -> exit=0 ; with /setting writable, /setting/grain_probe.log =
+               "grain_probe: preload loaded, constructor ran"
+  CONTROL   `LD_PRELOAD=.../junk.so (64 random bytes) qemu-arm-static ./testprog`
+            -> stderr "junk.so: unrecognized file format2 [d1 != 1]" ; exit=1
+All outputs observed directly. [VERIFIED]
+
+INTERPRETATION (using the static map): the CONTROL reproduces the EXACT die-string extracted at
+sonyld off 0x251cc -> the rig faithfully exercises _rtld_map_object / _rtld_die (@0x56a4) and a
+REJECT is loud (die-string + exit 1). Therefore TEST 1 and TEST 2 (exit 0, NO die-string, ctor
+LOG LINE written) mean the camera's real sonyld MAPS, RELOCATES, processes the hash/symtab, and
+RUNS THE CONSTRUCTOR of both objects. The 488B zero-reloc object loads AND its DT_INIT ctor runs;
+the gold grain_probe_fs.so (R_ARM_RELATIVE + DT_INIT_ARRAY, matching libsonyefence shape) loads
+AND its init_array ctor runs.
+
+VERDICT: sonyld ACCEPTS the preload shape. [VERIFIED — observed exit 0 + ctor log + no die-string,
+against a control that fails with the exact expected die-string]. The Stage-0 residual (zero-reloc
+object unproven; was it just structural?) is now CLOSED empirically for BOTH the gold and the
+ultra-minimal object. This removes the single biggest load-time brick cause.
+
+Caveats [stated, not hidden]: (1) qemu-user emulates the ARM CPU + Linux syscall ABI, not the
+camera's exact rootfs/TLS — but sonyld itself is the camera binary and the acceptance logic is
+file-format parsing, which is environment-independent; the faithful control supports this. (2) A
+clean PLT-interposition micro-test (prove an external close() call resolves to the preload) was
+NOT completed: building a libc-free executable that imports close via PLT without a DT_NEEDED
+provider produced a malformed call (segfault unrelated to sonyld). Not required for the verdict —
+acceptance + ctor execution already prove map/relocate/symtab processing, and the real grain shim
+resolves its hook lazily via sonyld's exported __dlsym, not a link-time PLT.
+RECOMMENDATION: use the grain_probe_fs.so shape (init_array + R_ARM_RELATIVE, zero DT_NEEDED) for
+the Stage-3 camera probe. Nothing here changes the Stage-2 gate (Q-39) before any camera step.

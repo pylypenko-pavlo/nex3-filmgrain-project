@@ -1,0 +1,79 @@
+UPDATE 2026-10-21: this build DID run on the camera afterwards, see grain-linux-stage4c-ONCAMERA-run-log-2026-10-21.txt.
+
+STAGE 4c — SPEED offline #2: FAST transforms + CHROMA PASSTHROUGH, validated end-to-end offline
+================================================================================================
+2026-10-21. Owner ask: "делай скорость оффлайн часть" + target ~15-20s on camera. This closes the
+OFFLINE speed work: the codec agent's FAST (AAN) transforms and chroma passthrough are now wired into
+the shim, the senc-init regression is fixed, and the whole path is validated offline (correctness +
+the speed lever). Real on-camera seconds still need a boot test (NOT yet done — needs owner approval).
+
+WHAT WAS INTEGRATED
+-------------------
+1. FAST transforms (JPEG_XFORM_FAST) on BOTH decoder and encoder:
+   jpeg_sdec_set_xform(&dec,JPEG_XFORM_FAST) + jpeg_senc_set_xform(&se,JPEG_XFORM_FAST).
+   AAN IDCT/FDCT with the quantiser fused into the forward DCT (integer, no FPU).
+2. CHROMA PASSTHROUGH: jpeg_sdec_init_cb_ex(...,JPEG_COEF_CHROMA,...). Cb/Cr are handed to the shim as
+   QUANTISED coefficient blocks (band.coef=1) and re-encoded UNCHANGED — no IDCT/FDCT, no requant, no
+   grain on chroma. Only Y is decoded to pixels, grained, and re-transformed.
+3. grain_stream_band() now skips coef bands:  if(!bands[i].coef) grain_band_comp(...).  With chroma
+   passthrough that means grain runs on Y only (Y.coef=0), which is also where film grain belongs.
+
+THE BUG THAT LOOKED LIKE "grain disappeared" (sigY=0.00)  — ROOT CAUSE: STALE ARTIFACT
+--------------------------------------------------------------------------------------
+Symptom last session: FAST+PT output was a valid NEX-3N JPEG but sigY=0.00 AND chroma MAE=0.0000
+(i.e. output == input, untouched). The shim log said "4c: SKIP senc-init".
+Cause: the new callback ENCODER needs ~10,496 B of scratch (align32(sizeof esctx) + JPEG_WR_BUF 4096
++ 32); g_encarena was 8 KB -> jpeg_senc_init_cb returned JPEG_ERR_ARENA -> roundtrip aborted ->
+pass-through -> zero change. The fix (ENC_SCRATCH 8KB->16KB) was applied and the .so rebuilt, BUT the
+log/output measured afterwards were STALE (log 11:25 was OLDER than the .so 11:27 — the fixed .so was
+never re-run). So "grain gone" was never a grain bug; the 16 KB fix alone resolves it.
+
+FIXES APPLIED (code/grain-shim/grain_hook.c)
+-------------------------------------
+- ENC_SCRATCH 8KB -> 16KB  (callback encoder scratch; measured need ~10.5KB).
+- DEC_SCRATCH 160KB -> 256KB (chroma-passthrough decode scratch; 4:2:2 needs 137,312 B).
+- sdec init switched to *_ex with JPEG_COEF_CHROMA; FAST xform set on dec+enc.
+
+OFFLINE VALIDATION (qemu-arm-static, VM armgrain; fixture DSC09580.JPG = 4912x3264, 4:2:2 hmax2 vmax1)
+-----------------------------------------------------------------------------------------------------
+A. Isolated codec path (code/grain-shim/test_fastpt.c links swjpeg.c + grain_stream.c + grain_tile.S with a
+   host main; no Fsys/dlsym):
+     sdec_init rc=0,  senc_init rc=0 with 16KB scratch  (<< the regression is gone)
+     band0 coef: Y=0 Cb=1 Cr=1   (grain on Y, chroma passed through)
+     408 bands, valid out 5,157,447 B
+     global sigY=3.474, flat-patch sigY=3.333  (style target ~3.5 — LOCKED ultramax400, unchanged)
+     chroma MAE Cb=0.0058 Cr=0.0014  (bit-identical; only PIL YCbCr<->RGB rounding)
+B. End-to-end SHIM (caller4c + LD_PRELOAD=grain_hook_4c.so + fake libInfraFsys, fail-safe landing):
+     log: "4c: GRAIN ok bytes=0x4f5de1 codec_us=0x9bc26 land_us=0xaf1 total_us=0x9d007"
+     -> codec ~638 ms, LAND ~2.8 ms (remove+create+write, no .TMP), total ~643 ms (qemu wall-clock)
+     shim output vs clean:  sigY=3.473,  chroma MAE Cb=0.0058 Cr=0.0014
+     Exif PRESERVED: 12 tags, Make/Model = SONY NEX-3N, APP1(FFE1) spliced right after JFIF APP0.
+
+SPEED LEVER (same machine, ratio is what transfers to the camera)
+-----------------------------------------------------------------
+   FAST+PT        codec_us ~594,000  (out 5.16 MB)
+   ACCURATE+full  codec_us ~900,000  (out 5.37 MB, grain on all 3)
+   -> 1.52x qemu wall-clock. qemu user-mode is wall-clock (JIT dilutes the integer-DCT win); the
+   ARM926 cycle model put FAST+PT at ~1.9x, which is the better predictor for the real BIONZ. Output
+   is also a touch smaller (AAN fused quant). Grain itself is ~free (baked tile, prior record).
+   Camera estimate: baked-tile alone was ~26-30s; the ~1.5-1.9x codec lever puts the FAST+PT build in
+   the ~15-20s neighbourhood — but this is a PROJECTION; only a boot test gives the real number.
+
+CAMERA-READY ARTIFACT
+---------------------
+   grain_hook_4c.so  md5 = 2cf01a99af741527cf6101fc63748acb  (324,812 B)
+   freestanding build: arm-linux-gnueabi-gcc -march=armv5te -shared -fPIC -nostdlib -O2 -ffreestanding
+     -fno-builtin -fno-tree-loop-distribute-patterns -o grain_hook_4c.so \
+     grain_hook_4c.c swjpeg.c grain_stream.c grain_tile.S
+   Undefined externals: only __dlopen, __dlsym (contract holds).
+   NOTE: this SUPERSEDES the last ON-CAMERA-proven build (ea5045391bd6851aa0950fb594536d5a = FAST
+   landing, pre-FAST+PT). 2cf01a99 is OFFLINE-proven only; it has NOT run on the camera yet.
+   (Per-run md5 of the OUTPUT jpeg varies: grain seed = now_us(), per-frame random offsets — expected.)
+
+NEXT (needs owner approval before touching the camera)
+------------------------------------------------------
+- Boot test on camera: stage 2cf01a99 as /setting/grain_hook_4c.so, shoot, read the on-camera
+  codec_us/total_us from /setting/grain_hook_4c.log, confirm the real ~15-20s and the look on a SOOC
+  frame. Camera is currently DISARMED on grain_hook_4a.so.
+BACKLOG (owner roadmap): (switch) on-camera grain toggle (gate on Creative Style / Soft Focus);
+  (styles) colours + names. Speed offline part is now DONE.

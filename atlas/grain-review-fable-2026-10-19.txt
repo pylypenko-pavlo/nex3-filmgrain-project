@@ -1,0 +1,69 @@
+FRESH-EYES REVIEW — NEX-3N grain via sa_sftfcs (read-only; binary c64ce801…, frames E5–E17 re-measured)
+
+Q1. "Hooked tile feeds only a low-res glow; fine grain impossible in sftfcs" — CORRECT, and stronger than stated.
+- VERIFIED (disasm): the main tile function 0x1118 loops over 32-row strips (outer, 0x1244, count=[param+8]/32) and
+  128-px pairs (inner r13, 0x1268, count=[param+4]/64/2). Per pair: fn 0x4c8/0x628 for k=0,1 (0x12ac–0x1306), one
+  launch `bl 0x194` @0x1412 configured ONLY from the k0 struct (0x13b2–0x140e: ports 0x40000..0x40020 = struct+180/184,
+  +0xbc..+0xd4, all k0). fn 0x4c8 (0x4dc/0x4e0) stores x-offset col<<7 and y-offset strip<<5 → tile = 64 px × 32 rows
+  UYVY, matches E-14.
+- VERIFIED (SRAM map from LUTs 0x1e10–0x1e38, fn 0x4c8 0x4fa–0x598): inputs 0x1000 B (0x5000/0x6000, 0x8000/0x9000);
+  everything else is ≤0x800 (0xa000 +0x800, 0xa800/0xac00 +0x400, A/B/C 0xb800/0xba00/0xbb00 = 0x200/0x100/0x100,
+  SRC 0xbc00 +0x50). No 0x1000-sized output buffer exists → the engine never emits a full-res tile.
+- VERIFIED (fn 0xd28): OUT-DMA descriptors (0xe80–0xf58) source A/B/C (desc[4]=(src-1)>>2|0x80000000), dest offsets
+  strip*8·stride + col*8 (struct+40/+36); halo export 0xfde–0x10ac = 4×2 + 2×2 + 2×2 + 4 singles per tile; struct also
+  carries col*4/strip*2 (16×) and col*2/col (32×/64×) offsets → a reduced-resolution pyramid, not pixels.
+- VERIFIED (frames): E-12 fold-128 column profile is a smooth ~sinusoid (band 68 → between 102, transition ≈40 px, not
+  12–20 px as logged); E-14 32-row sawtooth survives at amp ≈11 of ≈80 expected → ≥7× attenuation at 32 px; E-9/E-10
+  per-pixel noise → nothing. Blend weight of the hooked data ≈0.63 in-band, so the sharp image is added elsewhere (HW).
+  Nothing with period <~40 px survives. Dead end for grain; only ≥40-px mottling is possible here.
+
+Q2. Stripes / checkerboard.
+- VERIFIED: r13 = horizontal pairs, pp toggles per launch (0x13b0), toggles per strip = pairs+1 = 39 (odd) → adjacent
+  bands and consecutive strips alternate pp = E-16 checkerboard. E-12 band rows fold-64 are flat (58) → both pp k0
+  writes land. Launch @0x15ac is the per-strip DRAIN (last pair, 0x14b6–0x1654 → b 0x1244), not a "pass2"; E-13 null
+  is expected (it touches only the right-edge pair of each strip).
+- VERIFIED (my FFT at fixed phases 26/88): E-14 32-row ripple band 10.8 / between 0.9; E-15 (k1 written FIRST,
+  descending) between 3.6 (1/3 survives); E-17 (k1 written LAST) between DC 85.7 vs E-12 84.7 → zero. Later = worse.
+  That is the reverse of a DRAM→SRAM overwrite race. ⇒ k1 (0x9000/0x6000) is CONSUMED EARLY — within a few k
+  instructions after the IN-DMA kick 2→0x48218 @0x13aa (which precedes the hook) — while k0 is read late, by the
+  engine itself. The between columns ARE the k1 half; E-17's premise ("write later = survive") was backwards.
+- OPINION: k1 is copied SRAM→engine by that kick; its DRAM fill happens either before the previous hook or during the
+  previous engine run. Decisive 1-flash test E-18 (fits 30 B exactly): leave k0 alone, write Y=r4 (=0x1c, dark) into
+  odd bytes of BOTH other-pp k1 tiles 0x6000–0x7000 and 0x9000–0xa000: mov r1,#0x60; lsl r1,#8; mov r3,#0x90; lsl r3,#8;
+  mov r0,#0x10; lsl r0,#8; add r0,#-1; L: strb r4,[r1,r0]; strb r4,[r3,r0]; add r0,#-2; cmp.eq r0,#-1; bfc L;
+  mov r2,#101; lsl r2,#2; b r2. Between columns go dark ⇒ k1 is injectable one launch ahead (stripes fixable).
+  Nothing ⇒ k1 is refilled during the engine run and consumed at the next kick → only a pre-0x13aa hook can reach it.
+
+Errors in the brief / log (explicit):
+1. "fn 0x628 writes are overwritten later" (E-8): the patched loop 0x684–0x6c2 is the border synthesizer (one colour per
+   row: U=[r7+32+row], Y=[r7+row], V=[r7+64+row]) that runs only under the 0x650–0x680 mode flags; for interior tiles
+   it does not execute. E-8 says nothing about timing. VERIFIED.
+2. "0x2038 = dead code tail": 0x2038–0x20d0 is a coherent function (push r8–r14; loop: 1→0x48218, 1→0x48208, wfi,
+   -2→0x48200, poll [0x1370c]==1, struct = 0x13000+[0x13714]*0xd8, same 0x40000.. config, r5=tile-2, bl 0x39ac).
+   0x1e94–0x2034 is a copy of the 0x1c command table + wrapper. 0x39ac/0x39d8 do not resolve to prologues in image-1
+   at bases 0x2900/0x2b20/0x2c20/0x2f30 (dangling). VERIFIED. OPINION: simplest reading = I-mem/load window ends at
+   0x2000 (8 KB); E-3 failed for that reason, E-7 was a payload bug, and 0x1e62–0x1e6f (14 B) plus the dangling stub
+   0x1e70–0x1e93 (36 B) are probably usable. One NO-OP-chain flash settles it.
+3. Stripe edges ≈40 px, not 12–20 px; "pass2" is a drain launch; E-17's ordering assumption was inverted (above).
+
+Q3. Strategy. OPINION, grounded in the atlas:
+- Injected synthetic grain is blocked on every DSP host by the same wall: sftfcs (low-res glow, proven here), yknr
+  (E-0092 op7 add = null, snoise = uniform marks), pbe (chroma only). Nothing in the atlas suggests a fourth host.
+- The only fine, luma-dominant grain ever PRODUCED on this body is E-0080: yknr ISO-window kill (Backup 0x3004a
+  +0xD2..+0xDC → 0), HP-std 3.2–3.6, chroma clean, "reads as film grain". It was shelved for being ISO-dependent and
+  was measured only at ISO 16000 (above the window, so the kill itself was never exercised). That is the mistake:
+  the in-window result (ISO 1600–6400) is the deliverable candidate and is unmeasured. Shaping (chroma LUT 0x30004/5,
+  coring 0x30106, tone curve) is all Backup, no code (best-angles-2026-10-14).
+- The one unexplored full-res host: sa_jpeg_enc_1unit (av-cam-executors: JPEG = DSP, FuncCode 0xE0). Scalar has 83
+  strb / 160 ldrb, 3 run_engine, dense SRAM tables 0x4200–0x5800 — probably Huffman/header bytes, not MCUs. Prior low
+  (Zima HW codec likely streams from DRAM), but it is the only "every ISO, every mode" candidate; a static trace of its
+  3 input-DMA setups costs 0 flashes.
+- "Select Soft Focus → grain" as a trigger cannot be rescued; the trigger that exists is ISO.
+
+Q4. Wasting time on: the 30-byte cave, the stripe geometry, and k1 races — all inside a module that cannot carry
+grain finer than ~40 px. Ranked by information per flash:
+1. (1–2 flashes) yknr window kill at ISO 1600 / 3200 / 6400 vs stock, same scene; HP-std + crops. Decides whether the
+   project already has its result.
+2. (0 flashes) Static: sa_jpeg_enc_1unit — do pixels stage through SRAM? Yes → the real full-res hook; no → close it.
+3. (1 flash, only if coarse Soft-Focus mottling is still wanted) E-18 above. Otherwise skip, and flash a NO-OP chain
+   to 0x1e62 only if any further sftfcs scalar work is planned.

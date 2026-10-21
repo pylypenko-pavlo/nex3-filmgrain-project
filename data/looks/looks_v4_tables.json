@@ -1,0 +1,798 @@
+{
+ "1": {
+  "name": "Portra 400",
+  "units": {
+   "h0": 6,
+   "h1": 7,
+   "h2": -20,
+   "h3": -40,
+   "s0": 17,
+   "s1": -11,
+   "s2": 7,
+   "s3": -34
+  },
+  "old": {
+   "0": [
+    -34,
+    -38,
+    -4,
+    -28
+   ],
+   "1": [
+    -40,
+    -29,
+    -16,
+    -40
+   ],
+   "2": [
+    -2,
+    12,
+    -44,
+    22
+   ],
+   "3": [
+    4,
+    -9,
+    0,
+    -1
+   ],
+   "4": [
+    -14,
+    4,
+    -44,
+    -10
+   ],
+   "5": [
+    11,
+    -15,
+    0,
+    -14
+   ]
+  },
+  "new": {
+   "0": [
+    -31,
+    -35,
+    -14,
+    -48
+   ],
+   "1": [
+    -32,
+    -35,
+    -13,
+    -57
+   ],
+   "2": [
+    1,
+    16,
+    -54,
+    2
+   ],
+   "3": [
+    13,
+    -14,
+    4,
+    -18
+   ],
+   "4": [
+    -14,
+    4,
+    -44,
+    -10
+   ],
+   "5": [
+    11,
+    -15,
+    0,
+    -14
+   ]
+  },
+  "pred": {
+   "dark skin": {
+    "dh": -0.8,
+    "dC": -0.3,
+    "target_dh": -3.8,
+    "target_cr": 1.32
+   },
+   "light skin": {
+    "dh": -1.0,
+    "dC": -2.3,
+    "target_dh": 3.0,
+    "target_cr": 0.9
+   },
+   "blue sky": {
+    "dh": -1.1,
+    "dC": -0.5,
+    "target_dh": 0.7,
+    "target_cr": 1.13
+   },
+   "foliage": {
+    "dh": 2.3,
+    "dC": -0.6,
+    "target_dh": -10.7,
+    "target_cr": 1.14
+   },
+   "blue flower": {
+    "dh": -7.1,
+    "dC": -3.2,
+    "target_dh": -14.5,
+    "target_cr": 1.0
+   },
+   "bluish green": {
+    "dh": 3.4,
+    "dC": -1.4,
+    "target_dh": 13.1,
+    "target_cr": 1.0
+   },
+   "orange": {
+    "dh": 0.3,
+    "dC": 0.1,
+    "target_dh": 1.5,
+    "target_cr": 0.91
+   },
+   "purplish blue": {
+    "dh": -3.2,
+    "dC": -6.3,
+    "target_dh": -0.7,
+    "target_cr": 0.83
+   },
+   "moderate red": {
+    "dh": -2.7,
+    "dC": 1.7,
+    "target_dh": -8.8,
+    "target_cr": 1.02
+   },
+   "purple": {
+    "dh": -2.6,
+    "dC": -3.0,
+    "target_dh": -0.1,
+    "target_cr": 0.99
+   },
+   "yellow green": {
+    "dh": 1.4,
+    "dC": 0.2,
+    "target_dh": 2.3,
+    "target_cr": 0.92
+   },
+   "orange yellow": {
+    "dh": 0.5,
+    "dC": -1.1,
+    "target_dh": 2.6,
+    "target_cr": 1.08
+   },
+   "blue": {
+    "dh": -1.6,
+    "dC": -2.9,
+    "target_dh": 4.6,
+    "target_cr": 0.91
+   },
+   "green": {
+    "dh": 2.0,
+    "dC": 2.6,
+    "target_dh": -2.1,
+    "target_cr": 1.04
+   },
+   "red": {
+    "dh": -2.3,
+    "dC": 2.9,
+    "target_dh": -4.3,
+    "target_cr": 1.09
+   },
+   "yellow": {
+    "dh": 0.4,
+    "dC": 4.7,
+    "target_dh": 0.2,
+    "target_cr": 1.05
+   },
+   "magenta": {
+    "dh": -3.6,
+    "dC": -1.8,
+    "target_dh": -0.8,
+    "target_cr": 0.81
+   },
+   "cyan": {
+    "dh": 5.1,
+    "dC": -1.6,
+    "target_dh": 4.5,
+    "target_cr": 0.92
+   }
+  }
+ },
+ "3": {
+  "name": "UltraMax 400",
+  "units": {
+   "h0": 5,
+   "h1": 10,
+   "h2": -8,
+   "h3": -15,
+   "s0": 22,
+   "s1": -5,
+   "s2": -15,
+   "s3": -32
+  },
+  "old": {
+   "0": [
+    -30,
+    -32,
+    -4,
+    -28
+   ],
+   "1": [
+    -42,
+    -26,
+    -12,
+    -31
+   ],
+   "2": [
+    -6,
+    12,
+    -44,
+    28
+   ],
+   "3": [
+    2,
+    -12,
+    0,
+    -2
+   ],
+   "4": [
+    -26,
+    6,
+    -44,
+    -6
+   ],
+   "5": [
+    14,
+    -18,
+    -4,
+    -23
+   ]
+  },
+  "new": {
+   "0": [
+    -28,
+    -27,
+    -8,
+    -36
+   ],
+   "1": [
+    -31,
+    -29,
+    -20,
+    -47
+   ],
+   "2": [
+    -3,
+    17,
+    -48,
+    21
+   ],
+   "3": [
+    13,
+    -14,
+    -7,
+    -18
+   ],
+   "4": [
+    -26,
+    6,
+    -44,
+    -6
+   ],
+   "5": [
+    14,
+    -18,
+    -4,
+    -23
+   ]
+  },
+  "pred": {
+   "dark skin": {
+    "dh": -0.2,
+    "dC": 0.1,
+    "target_dh": -1.0,
+    "target_cr": 1.2
+   },
+   "light skin": {
+    "dh": 0.4,
+    "dC": -0.7,
+    "target_dh": 2.0,
+    "target_cr": 1.01
+   },
+   "blue sky": {
+    "dh": -0.3,
+    "dC": -1.7,
+    "target_dh": 4.4,
+    "target_cr": 1.02
+   },
+   "foliage": {
+    "dh": 1.6,
+    "dC": 0.1,
+    "target_dh": 2.4,
+    "target_cr": 1.18
+   },
+   "blue flower": {
+    "dh": -2.6,
+    "dC": -2.9,
+    "target_dh": -4.0,
+    "target_cr": 0.92
+   },
+   "bluish green": {
+    "dh": 1.4,
+    "dC": -1.0,
+    "target_dh": 7.6,
+    "target_cr": 0.89
+   },
+   "orange": {
+    "dh": 1.4,
+    "dC": 0.3,
+    "target_dh": 0.3,
+    "target_cr": 0.94
+   },
+   "purplish blue": {
+    "dh": -1.2,
+    "dC": -4.3,
+    "target_dh": -2.8,
+    "target_cr": 0.84
+   },
+   "moderate red": {
+    "dh": -1.8,
+    "dC": 1.7,
+    "target_dh": -7.4,
+    "target_cr": 1.0
+   },
+   "purple": {
+    "dh": -1.0,
+    "dC": -2.0,
+    "target_dh": -1.9,
+    "target_cr": 1.32
+   },
+   "yellow green": {
+    "dh": 1.5,
+    "dC": 0.6,
+    "target_dh": 2.8,
+    "target_cr": 0.94
+   },
+   "orange yellow": {
+    "dh": 1.7,
+    "dC": -0.4,
+    "target_dh": 3.5,
+    "target_cr": 1.06
+   },
+   "blue": {
+    "dh": -0.6,
+    "dC": -2.3,
+    "target_dh": 2.6,
+    "target_cr": 0.88
+   },
+   "green": {
+    "dh": 1.1,
+    "dC": 1.2,
+    "target_dh": -1.3,
+    "target_cr": 1.01
+   },
+   "red": {
+    "dh": -1.6,
+    "dC": 3.5,
+    "target_dh": 2.5,
+    "target_cr": 1.12
+   },
+   "yellow": {
+    "dh": 1.5,
+    "dC": 2.2,
+    "target_dh": -1.5,
+    "target_cr": 1.04
+   },
+   "magenta": {
+    "dh": -1.5,
+    "dC": -0.7,
+    "target_dh": 0.7,
+    "target_cr": 0.86
+   },
+   "cyan": {
+    "dh": 1.9,
+    "dC": -2.9,
+    "target_dh": -1.4,
+    "target_cr": 0.9
+   }
+  }
+ },
+ "2": {
+  "name": "House",
+  "units": {
+   "h0": -8,
+   "h1": -2,
+   "h2": -11,
+   "h3": 0,
+   "s0": 2,
+   "s1": -6,
+   "s2": -9,
+   "s3": -2
+  },
+  "old": {
+   "0": [
+    -48,
+    -36,
+    6,
+    -14
+   ],
+   "1": [
+    -35,
+    -21,
+    -16,
+    -29
+   ],
+   "2": [
+    -8,
+    12,
+    -38,
+    14
+   ],
+   "3": [
+    3,
+    -11,
+    0,
+    -3
+   ],
+   "4": [
+    -24,
+    4,
+    -46,
+    -22
+   ],
+   "5": [
+    13,
+    -17,
+    0,
+    -17
+   ]
+  },
+  "new": {
+   "0": [
+    -52,
+    -37,
+    0,
+    -14
+   ],
+   "1": [
+    -34,
+    -24,
+    -21,
+    -30
+   ],
+   "2": [
+    -12,
+    11,
+    -43,
+    14
+   ],
+   "3": [
+    4,
+    -14,
+    -4,
+    -4
+   ],
+   "4": [
+    -24,
+    4,
+    -46,
+    -22
+   ],
+   "5": [
+    13,
+    -17,
+    0,
+    -17
+   ]
+  },
+  "pred": {
+   "dark skin": {
+    "dh": 1.2,
+    "dC": -0.2,
+    "target_dh": 3,
+    "target_cr": 1.0
+   },
+   "light skin": {
+    "dh": -0.1,
+    "dC": -1.4,
+    "target_dh": 3,
+    "target_cr": 1.0
+   },
+   "blue sky": {
+    "dh": 2.1,
+    "dC": -0.2,
+    "target_dh": 0,
+    "target_cr": 1.0
+   },
+   "foliage": {
+    "dh": 0.5,
+    "dC": -1.4,
+    "target_dh": -1,
+    "target_cr": 0.93
+   },
+   "blue flower": {
+    "dh": -0.2,
+    "dC": 0.2,
+    "target_dh": 0,
+    "target_cr": 1.0
+   },
+   "bluish green": {
+    "dh": 1.4,
+    "dC": -1.1,
+    "target_dh": 5,
+    "target_cr": 0.95
+   },
+   "orange": {
+    "dh": -0.2,
+    "dC": 0.5,
+    "target_dh": 1,
+    "target_cr": 1.0
+   },
+   "purplish blue": {
+    "dh": 0.2,
+    "dC": 0.3,
+    "target_dh": 0,
+    "target_cr": 1.0
+   },
+   "moderate red": {
+    "dh": 0.7,
+    "dC": -0.6,
+    "target_dh": 1,
+    "target_cr": 1.0
+   },
+   "purple": {
+    "dh": 0.1,
+    "dC": -0.6,
+    "target_dh": 0,
+    "target_cr": 1.0
+   },
+   "yellow green": {
+    "dh": -0.4,
+    "dC": -1.8,
+    "target_dh": -2,
+    "target_cr": 0.93
+   },
+   "orange yellow": {
+    "dh": -0.8,
+    "dC": 0.3,
+    "target_dh": 0,
+    "target_cr": 1.0
+   },
+   "blue": {
+    "dh": 0.0,
+    "dC": 0.6,
+    "target_dh": 0,
+    "target_cr": 1.0
+   },
+   "green": {
+    "dh": 0.8,
+    "dC": -1.8,
+    "target_dh": 0,
+    "target_cr": 0.93
+   },
+   "red": {
+    "dh": 1.5,
+    "dC": 0.7,
+    "target_dh": 0,
+    "target_cr": 1.0
+   },
+   "yellow": {
+    "dh": -0.4,
+    "dC": -0.4,
+    "target_dh": -1,
+    "target_cr": 1.0
+   },
+   "magenta": {
+    "dh": 0.2,
+    "dC": -1.6,
+    "target_dh": 0,
+    "target_cr": 1.0
+   },
+   "cyan": {
+    "dh": 4.8,
+    "dC": -1.4,
+    "target_dh": 5,
+    "target_cr": 0.95
+   }
+  }
+ },
+ "4": {
+  "name": "Phoenix II",
+  "units": {
+   "h0": -8,
+   "h1": -20,
+   "h2": 26,
+   "h3": 41,
+   "s0": 0,
+   "s1": 0,
+   "s2": 0,
+   "s3": 0
+  },
+  "old": {
+   "0": [
+    -44,
+    -28,
+    -22,
+    -26
+   ],
+   "1": [
+    -128,
+    -128,
+    -128,
+    -128
+   ],
+   "2": [
+    2,
+    12,
+    -42,
+    14
+   ],
+   "3": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "4": [
+    -14,
+    6,
+    -38,
+    -6
+   ],
+   "5": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  "new": {
+   "0": [
+    -48,
+    -38,
+    -9,
+    -6
+   ],
+   "1": [
+    -128,
+    -128,
+    -128,
+    -128
+   ],
+   "2": [
+    -2,
+    2,
+    -29,
+    35
+   ],
+   "3": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "4": [
+    -14,
+    6,
+    -38,
+    -6
+   ],
+   "5": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  "pred": {
+   "dark skin": {
+    "dh": -2.8,
+    "dC": 0.1,
+    "target_dh": -2.7,
+    "target_cr": null
+   },
+   "light skin": {
+    "dh": -2.6,
+    "dC": -0.3,
+    "target_dh": -4.5,
+    "target_cr": null
+   },
+   "blue sky": {
+    "dh": -0.1,
+    "dC": -1.7,
+    "target_dh": -1.6,
+    "target_cr": null
+   },
+   "foliage": {
+    "dh": -3.5,
+    "dC": -3.1,
+    "target_dh": -4.1,
+    "target_cr": null
+   },
+   "blue flower": {
+    "dh": 7.4,
+    "dC": 0.4,
+    "target_dh": 4,
+    "target_cr": null
+   },
+   "bluish green": {
+    "dh": -4.2,
+    "dC": 2.1,
+    "target_dh": -3,
+    "target_cr": null
+   },
+   "orange": {
+    "dh": -4.0,
+    "dC": 1.2,
+    "target_dh": -1.6,
+    "target_cr": null
+   },
+   "purplish blue": {
+    "dh": 3.1,
+    "dC": 2.9,
+    "target_dh": 4.2,
+    "target_cr": null
+   },
+   "moderate red": {
+    "dh": 0.1,
+    "dC": -1.1,
+    "target_dh": 0,
+    "target_cr": null
+   },
+   "purple": {
+    "dh": 2.6,
+    "dC": 1.1,
+    "target_dh": 8.4,
+    "target_cr": null
+   },
+   "yellow green": {
+    "dh": -3.5,
+    "dC": -5.2,
+    "target_dh": -5.9,
+    "target_cr": null
+   },
+   "orange yellow": {
+    "dh": -4.0,
+    "dC": -0.6,
+    "target_dh": -3,
+    "target_cr": null
+   },
+   "blue": {
+    "dh": 1.5,
+    "dC": 1.1,
+    "target_dh": 6.2,
+    "target_cr": null
+   },
+   "green": {
+    "dh": -2.3,
+    "dC": -7.0,
+    "target_dh": -3.9,
+    "target_cr": null
+   },
+   "red": {
+    "dh": 1.4,
+    "dC": 0.6,
+    "target_dh": 0,
+    "target_cr": null
+   },
+   "yellow": {
+    "dh": -2.9,
+    "dC": -7.7,
+    "target_dh": -4.1,
+    "target_cr": null
+   },
+   "magenta": {
+    "dh": 3.8,
+    "dC": 0.4,
+    "target_dh": 9.2,
+    "target_cr": null
+   },
+   "cyan": {
+    "dh": -6.8,
+    "dC": 1.4,
+    "target_dh": -6.6,
+    "target_cr": null
+   }
+  }
+ }
+}

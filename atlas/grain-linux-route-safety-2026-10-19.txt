@@ -1,0 +1,124 @@
+NEX-3N LINUX GRAIN ROUTE — RISK ASSESSMENT + STAGED PLAN (read-only static)
+2026-10-19. Analysis only; nothing written to camera. Evidence: atlas _extract/F-q5-dmode-safety.md,
+_extract/L-linux-grain-recon.md, _extract/A-system-boot-delivery.md, 07-open-questions.md, 06-experiment-log.md.
+Each claim marked [VERIFIED code/addr] or [OPINION].
+
+======================================================================
+1) RECOVERABILITY OF A FAILED-PRELOAD BRICK  — THE GATING ANSWER
+======================================================================
+VERDICT: a failed or crashing LD_PRELOAD is POTENTIALLY PERMANENT. No software recovery is proven;
+the only userland-independent net is a HARDWARE jumper that has NEVER been physically tested.
+
+Boot/init trace [VERIFIED]:
+- init check_mode_file @0x8c61 sets the "env" flag on OPEN SUCCESS of /setting/mode/dmode (str r6,[r7]
+  @0x8ca8, before any length/content test) → env.txt is parsed whenever dmode EXISTS, with any content,
+  including empty (F-BOOT-001 / C-BOOT-028). The byte '0' is a SEPARATE flag (+0x4).
+- init main @0x90ad: bl set_oreore_env @0x918a (parses /setting/env.txt, putenv per line) runs BEFORE
+  run_bg_process("/usr/bin/bootin.elf") @0x920a. So LD_PRELOAD put into the environment here is GLOBAL to
+  the whole tree: bootin.elf, busybox sh (system()), im.elf, the appFw that loads libObj/libmpr, and sen.elf
+  all inherit it (F §1.1). [VERIFIED]
+- sonyld (/lib/sonyld.so) _rtld_preload @0x2554 returns −1 on a load failure → main @0x5ac8..0x5adc →
+  _rtld_die @0x56a4 ("Fatal error", exit). A MISSING, unloadable, or constructor-crashing preload kills
+  EVERY dynamically linked process exec'd after init = bootin, sh, im.elf, sen.elf (C-LNX-012 / F-LNX-001).
+  [VERIFIED code]
+
+Why that is unrecoverable by software:
+- (a) senser/FileControl needs appFw to have started sen.elf (smode "UU") — dead if im.elf/appFw never runs
+  (F-BOOT-006, C-BOOT-033). (b) pmca updater switch is issued BY the running firmware (libObj
+  UpdaterWrapper::enableUpdateMode) — dead for the same reason (C-DLV-018). (d) menu reset needs appFw — dead.
+- (c) Loader2 enters the updater on the jumper OR on existence of \updater\mode on p2 (boot_is_updater
+  @0xa01efe50: jumper [0xa0010024]==4 && (0xf3060000>>8 &0xf)==2; else FAT-open \updater\mode), and it is the
+  FIRST check of boot_init_mode @0xa01f00fe, before ssboot/warm; the updater kernel (p1) ignores dmode/env.txt
+  (C-BOOT-035, C-BOOT-037). [VERIFIED code] BUT once userland is dead, NOTHING can create \updater\mode — so
+  the file route only helps if the file is PRE-PLACED before the risky boot, and even that is unproven: the
+  one test (E-0021) created an empty `mode` next to an existing `comp`, pulled the battery, and the camera
+  BOOTED NORMALLY with `mode` consumed (C-SAFE-004). The "delete comp, create mode" variant was never tried
+  (Q-39 OPEN). So the file net is NOT established.
+- The jumper is VERIFIED in Loader2 code only. It has NEVER been exercised, and its physical pin/pad location
+  is NOT documented anywhere in the atlas or the dump. "The jumper will recover a brick" is [OPINION], not
+  VERIFIED, and it requires opening the camera.
+
+Timing twist (makes it worse): Backup 0x00510023==2 + valid WBI + RestReq 0x00510029==0 → ssboot restores RAM
+and init does NOT run (F-BOOT-011). To TEST any env.txt change you must invalidate WBI (cold boot); but the
+bad env.txt then sits on p2 and re-fires on EVERY later cold boot (crash, p3 flash, WBI zero) — a dormant
+brick (C-BOOT-039 / F-BOOT-012). [VERIFIED code; "dormant brick" derived]
+
+Contrast: a bad p3/p8 MODULE is recoverable (28 p3 flashes, 0 bricks — C-SAFE-003) — but ONLY because the
+camera still booted far enough to accept the updater USB request after a battery pull (C-SAFE-014). A
+preload-killed boot removes exactly that precondition. The two are not comparable.
+
+======================================================================
+2) FAIL-SAFE PRELOAD FEASIBILITY + RESIDUAL BRICK RISK
+======================================================================
+Can the shim be made to NEVER kill init's children? Partially — the HOOK LOGIC yes, the LOAD no.
+- You CAN make the constructor a transparent no-op for non-target execs (check argv[0]/getprogname, arm the
+  hook only inside the appFw process) and wrap everything so it never aborts. [OPINION, standard technique]
+- You CANNOT scope the LOAD: env.txt LD_PRELOAD is global (putenv in init), so the .so is mapped into
+  bootin/sh/im.elf/sen.elf regardless (§1). There is no per-binary preload via this p2 mechanism. [VERIFIED]
+- Therefore the irreducible risk is the LOAD ITSELF: if sonyld cannot map the .so or resolve a symbol, it is
+  FATAL to all of them (C-LNX-012). Safest achievable variant = a tiny static raw-syscall .so with ZERO
+  DT_NEEDED, exporting only the one interposed symbol, EABI5/ARMv5TE, no libc calls (L §4). Even then, sonyld
+  is a NetBSD ld.elf_so derivative with uncharacterised acceptance for a /setting preload object; a .so a
+  normal cross-toolchain emits could be rejected → fatal. That acceptance has NEVER been exercised (Q-1
+  step-2 never run).
+- Safer injection than global env.txt LD_PRELOAD? Replacing one leaf p8 binary/.so avoids the global load but
+  p8 is LZPT + Tier-C forbidden and its failure-recovery is disputed and untested (C-SAFE-005 vs C-SAFE-006) —
+  WORSE in brick terms. No p2 mechanism scopes a preload to im.elf only. [VERIFIED/OPINION]
+RESIDUAL BRICK RISK of the safest variant: NON-ZERO and gated on an untested sonyld-acceptance step whose
+failure mode has no software recovery. Not acceptable until a userland-independent net is proven.
+
+======================================================================
+3) DECODE / RE-ENCODE API REALITY
+======================================================================
+- libmpr.so exports MprLib::DecodeStillOnMemory @0x5d52bd, EncodeStillOnMemory @0x5d53f9, and the MprIfMcmd
+  text-console wrappers; debug rodata confirms a VIRTUAL-ADDRESS/SIZE API (srcVirtAddr/srcSize/sizeX/sizeY;
+  dstBufVirtAddr/dstBufSize) — a same-address-space caller can decode→modify Y→encode without IPC
+  (C-LNX-001, L §1). [VERIFIED symbol table + disasm]
+- Codec backend HW vs SW is UNRESOLVED (Q-11 / C-LNX-009); MprLibCore::DecodeStillOnMemory internals not
+  reached. /dev/ldec (major 252, minor 200) exists in the updater device list (C-LNX-008, E-0023) — a
+  possible HW decode path, UNCONFIRMED. Per-shot speed/correctness UNVERIFIED. [VERIFIED node exists; OPINION on use]
+- Who writes the SOOC JPEG, and when: NOT traced to completion. Path is through Fsys_* (libInfraFsys), not
+  POSIX write; DCF template \DCIM\101MSDCF\DSC0%04ld.JPG is in libmpr; completion is an internal MPR event
+  (WriteStillCmp), NOT a filesystem signal; no inotify in any checked binary (L §2). So the hook must
+  interpose Fsys_Close/close — i.e. exactly the boot-critical global interposition of §2. [VERIFIED strings;
+  HYP call site]
+Net: the primitive EXISTS and is verified; the trigger requires the dangerous interposition; backend/perf and
+a working end-to-end userspace caller are UNVERIFIED.
+
+======================================================================
+4) STAGED PLAN  — recovery is NOT established, so a HARD STOP precedes any brick-capable step
+======================================================================
+The first BRICK-CAPABLE camera step (ANY LD_PRELOAD) MUST NOT be taken until a userland-independent recovery
+net is proven on THIS body. What must be established first: that a PRE-PLACED \updater\mode forces an updater
+boot that does NOT depend on the main firmware (Q-39). If that fails, the only net is the untested hardware
+jumper and NO preload step is permissible.
+
+Stage 0 — OFFLINE, zero risk. (a) Static-prove the custom .so against sonyld's loader (EABI5, ELF class,
+PT_INTERP, zero DT_NEEDED, the single exported symbol, _rtld_preload @0x2554 / _rtld_map_object acceptance).
+(b) Disassemble MprLibCore::DecodeStillOnMemory to settle Q-11 and self-containedness. CONFIRM: written proof.
+REVERT: n/a.
+
+Stage 1 — CAMERA, harmless, recoverable. From the UPDATER SHELL write dmode="3\n" (33 0a) + env.txt=
+"TESTVAR=hello\n" (NO LD_*/PATH/MALLOC/bare words), zero WBI sector 0, cold boot. No preload → no exec can die
+(C-SAFE-015). CONFIRM: camera boots normally, USB service + updater still reachable; senser reads TESTVAR in
+/proc/<pid>/environ of im.elf/bootin. REVERT: rm /setting/mode/dmode /setting/env.txt from the updater shell,
+WBI zero, cold boot (stock had no /setting/mode/dmode). Proves mechanism + survival WITHOUT brick-capable content.
+
+Stage 2 — CAMERA, the GATE (Q-39). From the updater shell: save updater/ listing; delete comp; create
+\updater\mode (empty, then one byte if needed); cold boot. CONFIRM: camera enters UPDATER (net exists) — a boot
+loop is broken from the updater shell (the normal Backup channel). If it instead boots normally, the file net
+does NOT exist on this body → STOP: no preload may ever be loaded; only a documented+tested hardware-jumper
+procedure could unblock it. REVERT: delete \updater\mode, restore comp from the updater shell.
+
+Stage 3 — CAMERA, first preload, ONLY if Stage 2 proved the net. PRE-PLACE \updater\mode as the net; load a
+trivial raw-syscall no-op .so from /setting via env.txt that only touches /setting/grain_probe.log; WBI zero;
+cold boot. CONFIRM: camera boots (sonyld loaded the /setting preload) and the log line appears; OR the
+pre-placed net drops it into the updater, from which env.txt is deleted. REVERT: updater boot → rm env.txt →
+remove \updater\mode → reboot to stock.
+
+Stage 4+ — brick-capable grain shim. Only after 0–3 pass. Not designed here.
+
+BOTTOM LINE: do not optimise this route to sound feasible. The decode/encode primitive is real, but a
+preload failure is potentially permanent with no proven software recovery, and the one recovery net that
+would change that (pre-placed \updater\mode, Q-39) is UNTESTED. Stage 2 is make-or-break; the hardware jumper
+is code-only and unverified. Hold at Stage 1 until Stage 2 passes.

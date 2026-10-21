@@ -1,0 +1,131 @@
+STAGE 1 RUNBOOK — harmless env.txt mechanism test (NO preload, NO flash)
+2026-10-19. DOCUMENT ONLY — do not run on camera until owner's final approval.
+Proves: (a) init parses /setting/env.txt when /setting/mode/dmode exists; (b) a benign var reaches
+the boot tree; (c) camera boots normally with dmode="3\n". Zero brick risk (no loadable object).
+Each line: [VERIFIED <cite>] or [UNCERTAIN <what to resolve>].
+
+TOOLING (read from source, not guessed):
+- Senser FileControl (service mode): cam.writeFile/readFile/deleteFile(path,data) — pmca/usb/sony.py
+  _sendFileControlPacket; cam.readBackup/writeBackup/saveBackup/setBackupId1; cam.readMemory.
+  [VERIFIED works on /setting: A-PART-004; deliver_sftfcs.py; state_check.py]
+- Updater busybox shell (recovery kernel): updaterShellCommand -> UsbPlatformBackend.interactiveShell;
+  sh(be,[cmds]) helper runs arbitrary busybox lines. [VERIFIED: wbi_zero.py, bk_check.py, diag_updater.py]
+- WBI invalidation = `dd if=/dev/zero of=/dev/nflasha5 bs=512 count=1; sync` in the updater shell.
+  [VERIFIED: wbi_zero.py; used in E-0022 + all 28 p3 flashes, C-SAFE-003]
+PRECONDITIONS: battery full, Power Save 30 min [C-SAFE-010]; camera STOCK (no dmode/env.txt per
+START-HERE); enter the updater via the existing pmca flow (normal boot -> USB -> updater request ->
+session.sh). The updater is reached THROUGH the running firmware [C-DLV-018], so the camera must boot
+normally first — which it does (stock).
+
+----------------------------------------------------------------------
+STEP 0 — READ-ONLY RECON (updater shell). Safe; establishes the subdir fact.
+----------------------------------------------------------------------
+sh(be,[
+  'cat /proc/mounts | grep nflasha2',          # [VERIFIED] /setting = nflasha2 vfat rw, C-DLV-019/E-0023
+  'ls -la /setting',                           # confirm env.txt ABSENT (stock)
+  'ls -la /setting/mode 2>&1',                 # [UNCERTAIN] does /setting/mode/ exist? decides STEP 1 mkdir
+  'od -An -c /setting/mode/dmode 2>&1',        # expect "No such file" (stock)
+])
+EXPECT: nflasha2 mounted rw; no env.txt; /setting/mode may or may not exist. If it exists and already
+holds a dmode, STOP and report (camera not in the assumed stock state).
+
+----------------------------------------------------------------------
+STEP 1 — WRITE the two files. PRIMARY = updater shell (handles the subdir, rw-proven).
+----------------------------------------------------------------------
+sh(be,[
+  'mkdir -p /setting/mode',                               # [VERIFIED] busybox; no-op if it exists
+  "printf '3\\n'  > /setting/mode/dmode",                 # bytes 33 0a  [VERIFIED C-SAFE-015 only-safe dmode]
+  "printf 'TESTVAR=grainprobe\\n' > /setting/env.txt",    # [VERIFIED F-BOOT-007 grammar: one KEY=VAL putenv]
+  'sync',
+  'od -An -tx1 /setting/mode/dmode',                      # CONFIRM exactly: 33 0a
+  'od -An -c  /setting/env.txt',                          # CONFIRM exactly: T E S T V A R = g r a i n p r o b e \n
+])
+CONFIRM readback: dmode == `33 0a` (2 bytes); env.txt == "TESTVAR=grainprobe\n", with NO
+'#', NO bare word, NO space-in-value, and dmode contains NONE of 0 k K d D e E g G l L w W s S
+[C-SAFE-015 / F-BOOT-002..004]. If any byte differs, DELETE and re-write before proceeding.
+
+ALT (senser, if preferred): cam.writeFile('/setting/mode/dmode', b'3\n');
+  cam.writeFile('/setting/env.txt', b'TESTVAR=grainprobe\n'); then readback via cam.readFile(...).
+  [VERIFIED writeFile works on /setting files] BUT [UNCERTAIN] whether FileControl writeFile CREATES
+  the parent dir /setting/mode when absent — if STEP 0 shows /setting/mode missing, use the updater
+  `mkdir -p` first (or the whole updater path). Prefer the updater path for STEP 1.
+
+----------------------------------------------------------------------
+STEP 2 — FORCE A COLD init RUN (so env.txt is actually parsed, not ssboot-skipped).
+----------------------------------------------------------------------
+WHY: ssboot (Backup 0x00510023==2 + valid WBI sig + RestReq 0x00510029==0) restores RAM and init
+does NOT run [F-BOOT-011]. A dmode/env.txt change acts only on a WBI-invalid cold boot [C-BOOT-039].
+DO (same updater session, exactly the wbi_zero.py command — NO Backup is written):
+sh(be,[
+  'dd if=/dev/zero of=/dev/nflasha5 bs=512 count=1',     # [VERIFIED wbi_zero.py] zero WBI sig (p5 sector 0)
+  'sync',
+  'echo WBI_ZEROED',
+])
+Then exit the updater shell and COLD-BOOT via battery pull [VERIFIED C-SAFE-003 "battery pull"].
+NOTE: nothing is written to Backup. WBI-zero is self-healing (a fresh snapshot is taken at the next
+power-off), so this is not even a persistent change — strictly Tier-A reversible. [VERIFIED]
+Backup fields 0x00510023/0x00510029 are READ-ONLY context here; the raw dd is the proven mechanism —
+do NOT edit Backup 0x0051xxxx (that route, C-SAFE-009, is an untested hypothesis).
+
+----------------------------------------------------------------------
+STEP 3 — CONFIRM after the cold boot.
+----------------------------------------------------------------------
+(c) CAMERA BOOTS NORMALLY [VERIFIED-confirmable]: the camera comes up to a usable state and USB
+    service mode is reachable. Run the state_check.py pattern:
+      senserShellCommand(complete=lambda cam: print('byte597=0x%02x'% cam.readBackup(0x00bd0002)[597]))
+    SUCCESS = senser responds at all (a readBackup returns) => the main firmware booted far enough to
+    accept the service request => "boots normally + all recovery channels intact". [VERIFIED: if the
+    env.txt change had broken boot, senser would be unreachable — that is itself the pass/fail signal.]
+
+(a)/(b) TESTVAR REACHED THE TREE — [UNCERTAIN: confirmation MECHANISM, not a brick risk].
+    init putenv's TESTVAR into pid 1 and every child inherits it, so the value lives in
+    /proc/1/environ (init) and in sen.elf's own /proc/self/environ. The gap is HOW to read it:
+      - cam.readFile('/proc/1/environ', f)  — [UNCERTAIN] senser FileControl is a media-fs protocol
+        (proven on /setting; returns err 130 on read-only mounts, A-PART-012); whether it opens the
+        /proc pseudo-fs at all is unproven. Try it first (read-only, safe); grep the bytes for
+        'TESTVAR=grainprobe' on the host.
+      - senser interactive terminal (cam.shell / transferSenserTerminal) then
+        `cat /proc/1/environ | tr '\0' '\n' | grep TESTVAR` — [UNCERTAIN] the sen.elf service terminal
+        may not be a full busybox with cat/grep/proc access; needs a one-off read-only probe to learn
+        what it accepts.
+    RESOLUTION BEFORE RELYING ON (a)/(b): run these two READ-ONLY attempts (both safe, no writes). If
+    EITHER returns TESTVAR, (a)/(b) are proven. If NEITHER works, Stage 1 still validly proves (c) and
+    the env.txt-parse-gate is then proven transitively at Stage 3 (a preload could not load unless init
+    had parsed env.txt). Do NOT invent a different env var with side effects to force visibility.
+
+----------------------------------------------------------------------
+STEP 4 — REVERT to stock behaviour.
+----------------------------------------------------------------------
+Enter the updater shell again (normal boot still works, so the updater is reachable):
+sh(be,[
+  'rm -f /setting/mode/dmode /setting/env.txt',          # [VERIFIED] stock had neither
+  'rmdir /setting/mode 2>/dev/null; true',               # only if STEP 0 showed it did NOT pre-exist
+  'sync',
+  'ls -la /setting; ls -la /setting/mode 2>&1',          # CONFIRM both files gone
+  'dd if=/dev/zero of=/dev/nflasha5 bs=512 count=1',     # WBI zero so next cold boot is clean stock
+  'sync', 'echo REVERTED',
+])
+Exit, battery-pull cold boot. CONFIRM stock: senser reachable; cam.readFile('/setting/env.txt')
+returns a not-found error; cam.readFile('/setting/mode/dmode') not-found.
+ALT (senser): cam.deleteFile('/setting/env.txt'); cam.deleteFile('/setting/mode/dmode'). [VERIFIED
+deleteFile exists, sony.py] Prefer the updater path (also does the WBI zero + rmdir).
+
+----------------------------------------------------------------------
+STEP 5 — SAFETY REVIEW (why Stage 1 as written cannot brick).
+----------------------------------------------------------------------
+- NO preload / NO loadable object anywhere. env.txt = one KEY=VAL putenv; the _rtld_die path
+  (C-LNX-012) is reached ONLY by an LD_PRELOAD to a missing/bad object — there is none here. [VERIFIED]
+- dmode = "3\n" (33 0a) is the ONLY value that keeps ALL FOUR recovery channels (senser, pmca updater
+  switch, Loader2 file/jumper, menu reset) AND a full normal boot [C-SAFE-015]. It contains none of
+  the dangerous bytes 0/k/d/e/g/l/w/s. [VERIFIED F-BOOT-002..004]
+- env.txt "TESTVAR=grainprobe\n" has no LD_*, no PATH, no bare word (which would unsetenv), no space
+  in value, no '#'. Inert beyond one putenv. [VERIFIED F-BOOT-007]
+- WBI-zero is the proven, self-healing cold-boot trigger (28 flashes, 0 bricks); no Backup is touched.
+  [VERIFIED C-SAFE-003, wbi_zero.py]
+- Worst case (anything unforeseen on the cold boot): the camera still boots normally (dmode 3), so the
+  updater remains reachable and STEP 4 deletes the two files — full recovery with no flash. [VERIFIED
+  C-SAFE-015 keeps the channels]
+- This Stage does NOT approach the Stage-2 gate (Q-39) or any preload; it is strictly the mechanism +
+  survival probe.
+ONE FLAGGED UNCERTAINTY (NOT a brick risk): the STEP-3 (a)/(b) TESTVAR READ mechanism. Resolve with the
+two read-only attempts above before claiming (a)/(b); (c) and overall safety do not depend on it.

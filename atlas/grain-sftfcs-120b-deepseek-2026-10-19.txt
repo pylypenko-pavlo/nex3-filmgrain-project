@@ -1,0 +1,54 @@
+## Q1. Port formulas and values
+
+FACT: Listing A writes ports `0x40000..0x40020` from struct offsets `+0xb4..+0xd4`; each value written is `struct_word - 1` (`add r1,#-1` at 0x13d6/0x13e4/... before each `str`).  
+FACT: Listing E builds `+0xb4..+0xd4` from `T` read by `ldrsb` from table `0x1e38` or `0x1e30` indexed by `r9` (stage 0/1).  
+FACT: Table values are: `0x1e38 = {0x17, 0x1b}` and `0x1e30 = {0x16, 0x1a}` in hex.
+
+The table below shows the **actual port value written** = `raw - 1`.
+
+| Port | struct offset | Listing E raw formula | `0x1e38` idx0 `T=0x17` | `0x1e38` idx1 `T=0x1b` | `0x1e30` idx0 `T=0x16` | `0x1e30` idx1 `T=0x1a` |
+|---:|---:|---|---:|---:|---:|---:|
+| `0x40000` | `+0xb4` | `(T<<11)+1` | `0xB800` | `0xD800` | `0xB000` | `0xD000` |
+| `0x40004` | `+0xb8` | `(((T<<2)+1)<<9)+1` | `0xBA00` | `0xDA00` | `0xB200` | `0xD200` |
+| `0x40008` | `+0xbc` | `(T<<11)+0x0301` | `0xBB00` | `0xDB00` | `0xB300` | `0xD300` |
+| `0x4000c` | `+0xc0` | `((T<<1)+1)<<10` | `0xBBFF` | `0xDBFF` | `0xB3FF` | `0xD3FF` |
+| `0x40010` | `+0xc4` | `(T<<11)+0x0420` | `0xBC1F` | `0xDC1F` | `0xB41F` | `0xD41F` |
+| `0x40014` | `+0xc8` | `(T<<11)+0x0430` | `0xBC2F` | `0xDC2F` | `0xB42F` | `0xD42F` |
+| `0x40018` | `+0xcc` | `(T<<11)+0x0440` | `0xBC3F` | `0xDC3F` | `0xB43F` | `0xD43F` |
+| `0x4001c` | `+0xd0` | `(T<<11)+0x0448` | `0xBC47` | `0xDC47` | `0xB447` | `0xD447` |
+| `0x40020` | `+0xd4` | `(T<<11)+0x044c` | `0xBC4B` | `0xDC4B` | `0xB44B` | `0xD44B` |
+
+Example arithmetic for `T=0x17`: `0x17<<11 = 0xB800`; `+0xb4` raw = `0xB801`, port `0x40000 = 0xB800`.  
+For `0x40004`: `0x17<<2 = 0x5C`; `+1 = 0x5D`; `0x5D<<9 = 0xBA00`; raw = `0xBA01`, port = `0xBA00`.  
+For `0x4000c`: `0x17<<1 = 0x2E`; `+1 = 0x2F`; `0x2F<<10 = 0xBC00`; Listing A subtracts 1, so port = `0xBBFF`.
+
+INFERENCE: The `+1` in some Listing E formulas is exactly cancelled by Listing A’s `-1`; for `0x4000c` there is no Listing-E `+1`, so the `-1` leaves `0xBBFF`, etc.
+
+## Q2. Key question
+
+NO — the 16x downsample is not shown as a scalar-configurable geometry/stride/scale field in `0x40000..0x40020`; those nine values are fixed local-memory addresses/bounds derived only from the 0/1 stage index and constants.
+
+FACT: The nine values written to `0x40000..0x40020` depend only on `T` from `0x1e38`/`0x1e30`, i.e. on the stage index `r9` and constants `0x0301`, `0x0420`, `0x0430`, `0x0440`, `0x0448`, `0x044c`, etc. They do **not** depend on tile width/height, image size, stride, or descriptor fields.
+
+FACT: For `T=0x17`, the port values relative to `T<<11 = 0xB800` are:
+
+`0x000, 0x200, 0x300, 0x3FF, 0x41F, 0x42F, 0x43F, 0x447, 0x44B`
+
+That is not a geometry like 64x32 or 4x2. It is a sequence of small local-SRAM offsets/bounds.
+
+INFERENCE: This offset sequence is consistent with a fixed multi-level buffer cascade / downsampling pyramid baked into the VLIW microprogram or its memory layout, e.g. several successively smaller local buffers. Changing these addresses would only relocate those buffers; it would not change the 16x downsample ratio or produce full-resolution output.
+
+## Q3. Other levers
+
+(a) Writable full-res operand/buffer address: **Not shown.** Listing A only writes the nine local-memory ports from `struct+0xb4..+0xd4`. No full-resolution engine output/operand address is written in this block.
+
+(b) Real input-pixel address: FACT: Listing A leaves `r5 = [struct+0xa4] - 2` live before `bl r2` at `0x1412`. Listing E sets `struct+0xa4` from table `0x1e10` or `0x1e18`: values are `0x0a/0x0c` or `0x10/0x12`, so `struct+0xa4 = T'<<11`. Therefore `r5` is one of `0x4FFE`, `0x5FFE`, `0x7FFE`, `0x8FFE`. INFERENCE: that range looks like engine-local SRAM, not a DRAM full-resolution image pointer. Changing it moves the local input tile, not the downsample ratio.
+
+(c) Blend/mix/gain/readback: No blend or gain weight is written to `0x40000..0x40020` in Listing A. Listing D writes control ports `0x48208 = 0x10000` and `0x48200 = 0xfffeffff`, but from the shown code these are control/status writes, not a pixel blend weight. No code in the shown windows reads back the 4x2 engine output; that consumer, if any, is outside the provided range.
+
+## Q4. Additional window
+
+Nothing in the shown windows makes the 16x downsample configurable; the only engine-facing values are local-memory addresses/bounds.  
+Definitive proof/gainsay requires the VLIW microprogram/command table selected by `run_engine r0 = r4 = 0x1c`; that table is not present in the shown text. If forced to name the next-most-informative shown scalar window, ask for `0x143e..0x1588`, but that still will not directly reveal the microprogram’s downsample ratio.
+
+VERDICT: NO - The 16x downsample is not a scalar-configurable geometry/stride field in the shown `0x40000..0x40020` ports; those are fixed local-memory addresses/bounds derived only from the 0/1 stage index.

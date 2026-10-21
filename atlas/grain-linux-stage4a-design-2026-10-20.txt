@@ -1,0 +1,158 @@
+STAGE 4a DESIGN — Fsys_Close hook (DETECTION ONLY, fail-safe). 2026-10-20.
+Source-only; build/qemu/silicon/boot tests done by coordinator. [VERIFIED addr/bytes] or [OPINION].
+Source: <scratch>/tmp/lnx/vm/grain_hook_4a.c (builds clean; proven ELF shape).
+
+======================================================================
+1) Fsys_Close SIGNATURE + PATH RETRIEVAL
+======================================================================
+From libInfraFsys.so disasm (Thumb) + its own debug format strings [VERIFIED]:
+- Fsys_Close @0x11d01: debug fmt @0x11e81 = "Fsys_Close - %p" -> ONE arg, r0 = the file HANDLE
+  (opaque pointer/token). Prologue `push {r0,...}; sub sp,#0x40` saves arg0 at [sp+0x40] and reloads
+  it; the handle is resolved INTERNALLY (blx 0xdb24) to a file-object, then a field is read via an
+  internal helper (0x11d4c: `ldr r1,[pc+..]; ldr r0,[sp+0x3c]; adds r0,r0,r1; blx 0xd914`).
+  => the PATH is NOT an argument of Fsys_Close and is reachable only through non-exported internal
+     helpers (0xdb24/0xd914) at load-base-relative addresses — NOT safely callable from a shim. [VERIFIED]
+- Fsys_Open @0x143fd: debug fmt @0x14711 = "Fsys_Open - %s, %p, 0x%08lx" -> arg0 (r0) = PATH (%s,
+  const char*), arg1 (r1, %p) = an OUT pointer (zeroed at 0x14450 `str r4,[r0]` then filled), arg2
+  (r2) = flags, arg3 (r3) = mode. A full-body scan shows NO caller stack args (no [sp>=0xa8] access)
+  -> Fsys_Open has <=4 register args, so a 4-arg C interposer forwards r0-r3 exactly. [VERIFIED]
+RESOLUTION: the path is NOT at Fsys_Close; it IS at Fsys_Open (arg0). So the design records
+(handle -> path) at Fsys_Open and matches it at Fsys_Close. [VERIFIED path@Open; the handle key =
+*arg1 after a successful open is an ASSUMPTION — arg1 is the written out-pointer — to be confirmed in
+the zero-brick isolation test; a wrong key only loses a log line, never changes behavior.] [OPINION]
+Fsys handles are opaque tokens, NOT raw fds (Fsys_Close resolves them internally), so matching, not
+raw-fd tricks, is the only route.
+
+======================================================================
+2) PLT-IMPORT CONFIRMATION (so LD_PRELOAD actually interposes)
+======================================================================
+[VERIFIED .dynsym UND imports]:
+  libmpr.so  imports (UND): Fsys_Close, Fsys_Open, Fsys_Write, Fsys_WriteAndFlush, Fsys_Flush
+  libObj.so  imports (UND): Fsys_Close, Fsys_Open, Fsys_Write, Fsys_Flush
+Both are cross-module PLT imports from libInfraFsys.so (which EXPORTS Fsys_Close@0x11d01,
+Fsys_Open@0x143fd, Fsys_Write@0x16cd9). The still-save path runs through libmpr/libObj (the appFw
+still recorder), so a preload-defined Fsys_Close/Fsys_Open interposes those calls. [VERIFIED]
+
+======================================================================
+3) REAL-SYMBOL RESOLUTION — key finding (changes the plan)
+======================================================================
+RTLD_NEXT DOES NOT WORK on the camera sonyld. Tested in qemu under the real normal sonyld
+(df94859e): __dlsym((void*)-1 / 0 / -2 / -3, "close") ALL return 0x00000000. [VERIFIED qemu]
+WHAT WORKS: __dlopen("<lib>.so", 1) + __dlsym(handle, "sym"). Tested:
+  __dlopen("libsonyc.so",1) = 0x3f7c4800 ; __dlsym(h,"close") = 0x3f728208 (the REAL close). [VERIFIED]
+  And it BYPASSES our own interposer: with a preload that itself exports close(), our &close=0x3f7bf438
+  while __dlopen("libsonyc.so")+__dlsym(close)=0x3f728208 (the real one). [VERIFIED scope test]
+=> 4a resolves the real functions via __dlopen("libInfraFsys.so",1) + __dlsym("Fsys_Close"/"Fsys_Open"),
+   cached, lazy, sanity-checked (!= our own address). This is the robust route for ALL future hooks.
+Also [VERIFIED]: a preload with UND imports of __dlopen/__dlsym and ZERO DT_NEEDED loads fine (sonyld
+resolves its own exports; lazy PLT binding, no load-time failure) — the probe shims proved this.
+
+======================================================================
+4a SOURCE SUMMARY (grain_hook_4a.c — builds, proven shape)
+======================================================================
+- Freestanding, zero DT_NEEDED, raw syscalls (open/read/write/close/lseek). Imports only
+  __dlopen/__dlsym (from sonyld). ELF: 2 PT_LOAD + DT_INIT_ARRAY + 1 R_ARM_RELATIVE, exports
+  Fsys_Open + Fsys_Close (GLOBAL FUNC). [VERIFIED readelf]
+- ensure_resolved(): lazy, once; __dlopen("libInfraFsys.so",1)+__dlsym; drops a self-bind; logs result.
+- Fsys_Open(path,outH,flags,mode): calls REAL open (args unchanged), returns its value unchanged; on
+  success + is_dcf_jpg(path) records (*outH -> path) best-effort. is_dcf_jpg = suffix ".JPG"
+  (case-insensitive) AND "DSC" substring (matches the libmpr DCF template \DCIM\101MSDCF\DSC0%04ld.JPG).
+- Fsys_Close(h): calls REAL close FIRST (unchanged), returns its value unchanged; if h was recorded as
+  a DCF-JPG, raw-stat the path for size and append "CLOSE JPG <path> <size>" to
+  /setting/grain_hook_4a.log. Every non-JPG close is a pure passthrough.
+- FAIL-SAFE: real called first + value returned unchanged; logging is additive; if resolution ever
+  returns NULL the interposer returns a benign -1 (MUST be proven impossible in the isolation test,
+  which logs the resolved pointer, BEFORE any boot-path use). The *outH deref is guarded (success +
+  JPG only) and must be confirmed in isolation (a bad deref crashes only the test process).
+VALIDATION ORDER (coordinator): build -> qemu (loads, ctor logs "hook loaded", resolution logs OK) ->
+  isolated updater-shell test (Task-2 harness: confirm resolution non-NULL + a real JPG open/close logs
+  path+size, with ZERO brick risk) -> only then boot-path.
+
+======================================================================
+4b / 4c GRAIN FLOW SKETCH (design only) + THE ALLOCATION PROBLEM
+======================================================================
+After the real Fsys_Close returns, the JPG is complete on disk. Grain flow:
+  1. Re-open + read the JPG bytes (raw open/read on the path -> a src buffer), OR keep in memory.
+  2. DecodeStillOnMemory (MprIf @0x5d52bc -> MprLibCore @0x174be0): 8-field VA/size param block
+     [dstVirtAddr, maxDstSize, srcVirtAddr, srcSize, sizeX, sizeY, resultWidth, resultHeight] — decode
+     JPG(srcVirtAddr,srcSize) -> pixels at dstVirtAddr. Output = single contiguous YUV buffer (log
+     "[MprLib] Dst YUV Address : = <a> , Size = <n>"). [VERIFIED entry disasm + strings]
+  3. Add signed noise to LUMA: runtime-detect layout from Size/(w*h): ==2 -> packed YUYV 4:2:2, Y at
+     even bytes (0,2,4,...); ==1.5 -> planar 4:2:0, Y = first w*h contiguous bytes. Clamp 0..255; leave
+     chroma untouched. [OPINION/strong — format per C-MEM-005; confirm at runtime via Dst Size]
+  4. EncodeStillOnMemory (@0x5d53f8 -> MprLibCore @0x174bf0): [srcVirtAddr, srcSizeX, srcSizeY, dstSizeX,
+     dstSizeY, dstTgtSize, dstBufVirtAddr, dstBufSize] -> re-encoded JPG at dstBufVirtAddr.
+  5. Overwrite the file (raw open O_WRONLY|O_TRUNC + write, or Fsys_Open/Write/Close).
+
+THE ALLOCATION PROBLEM (the hard part — flag for 4b/4c):
+- DecodeStillOnMemory needs a dst PIXEL buffer. Full SOOC is ~16 MP; 4912x3264x2 (4:2:2) ~= 32 MB.
+  EncodeStillOnMemory needs a dst JPG buffer (several MB). WHO allocates these in-shim?
+  (a) libc malloc via __dlopen("libsonyc.so")+__dlsym("malloc") — a 32 MB malloc per shot in the appFw
+      heap; may fail/fragment; adds a libc dependency path. [OPINION]
+  (b) raw mmap(MAP_ANON) ~32 MB on demand, munmap after — no libc, clean, PREFERRED; needs the JPEG
+      dimensions first (parse the SOF0 FFC0 marker for w,h to size the dst). [OPINION, preferred]
+  (c) static 32 MB BSS scratch — bloats memsz and reserves 32 MB resident in EACH of the ~6 preloaded
+      processes -> wasteful / OOM risk. [reject]
+- DECODE needs dst size BEFORE decoding -> parse the JPEG SOF for w,h, allocate w*h*2, then decode.
+- TIMING/SYNCHRONY: this is heavy work done SYNCHRONOUSLY inside Fsys_Close (decode+grain+encode+rewrite
+  per shot). If the codec is HW-assisted/fast (Q-11 indicators: ioctl DMA_TRANSFER_MEM, likely fast) a
+  ~100-300 ms close delay is tolerable; if slow, it risks a watchdog/UI stall. -> MEASURE decode+encode
+  time in the isolated test first. If too slow for the close path, the grain belongs in a different
+  hook (e.g. a post-save worker), not Fsys_Close. [OPINION]
+- RECOMMENDATION: keep 4a (detection) in Fsys_Close; prototype 4b (decode->re-encode->rewrite) with
+  mmap-anon buffers, first in the ISOLATED updater-shell test on a sample JPG (zero brick risk, measures
+  time + proves the decode/grain/encode chain), BEFORE moving grain into the boot-path shim.
+
+BOTTOM LINE 4a: Fsys_Close sees only the handle (path not an arg); Fsys_Open sees the path (arg0,
+VERIFIED). Both are PLT imports from libmpr/libObj (VERIFIED), so the preload interposes them. Real
+symbols resolve via __dlopen+__dlsym (RTLD_NEXT is dead on this sonyld — VERIFIED). The 4a source is
+fail-safe detection-only and built. The grain itself (4b/4c) hinges on buffer allocation (prefer
+mmap-anon) and decode/encode timing, both to be measured in the zero-brick isolation harness first.
+
+======================================================================
+STAGE 4a QEMU INTERPOSER VALIDATION (2026-10-20, VM armgrain, real libInfraFsys)
+======================================================================
+Harness: qemu-arm-static + the normal camera sonyld (df94859e) as interp; sysroot = all p8 /usr/lib
+libs + updater-initrd libs (so libInfraFsys.so + its 5 DT_NEEDED resolve). All outputs observed.
+
+1) RESOLUTION (the -1 brick path) — PROVEN SAFE. [VERIFIED]
+   Probe did __dlopen("libInfraFsys.so",1)+__dlsym under qemu+sonyld, real libInfraFsys+deps present:
+     dlopen(libInfraFsys)  = 0x3f7c4800            (success, non-NULL)
+     REAL Fsys_Close       = 0x3f73cd01            (= base 0x3f72b000 + 0x11d00 Thumb; CORRECT)
+     REAL Fsys_Open        = 0x3f73f3fd            (= base + 0x143fc; CORRECT)
+     OUR  Fsys_Close       = 0x3f299db0  OUR Fsys_Open = 0x3f299cec   (DISTINCT load range)
+   => ensure_resolved() gets non-NULL real pointers, distinct from our own -> the `return -1` path is
+      NOT taken, so the global interposer will not break Fsys_Close in the firmware. In the real appFw
+      libInfraFsys is ALREADY loaded, so __dlopen just returns its handle (even safer than here, where
+      qemu had to load it + run its ctors — which it did; a benign "open /dev/uipc error" aside).
+
+2) PASSTHROUGH + DEREF + LOG — PROVEN end-to-end. [VERIFIED]
+   A caller linked to libInfraFsys called Fsys_Open("/DCIM/100MSDCF/DSC00001.JPG",&h,flags,mode) then
+   Fsys_Close(h), and a non-JPG Open/Close, with LD_PRELOAD=grain_hook_4a.so (success path exercised
+   via a same-SONAME stand-in whose Fsys_Open writes a handle to *outH and returns 0). Log produced:
+     4a: hook loaded
+     4a: resolved Fsys_Close OK
+     CLOSE JPG /DCIM/100MSDCF/DSC00001.JPG 4096          <- DCF-JPG: path + real file size logged
+   The non-JPG close produced NO log (pure passthrough). Caller ran to exit=0, no crash.
+   => Confirmed: interposers FORWARD to the real functions and return values unchanged; the
+      `*(long*)a1` deref is SAFE (a1 = caller's &h, a valid pointer — read handle 0x5a5a0001, no crash);
+      the handle->path table + JPG match + size log work; every non-JPG close is a transparent passthrough.
+   NOTE: the *a1 deref is safe by API contract (arg1 is the out-handle pointer, VERIFIED %p) — in any
+   legit firmware call arg1 is a real pointer, exactly as the caller's &h here.
+
+3) VERDICT — the 4a brick-capable paths are PROVEN SAFE ENOUGH TO BOOT-TEST. [VERIFIED/OPINION]
+   - Resolution->-1: NOT reachable (resolution succeeds with real libInfraFsys; even more certain in the
+     appFw where it is already loaded). [VERIFIED]
+   - Bad deref: the only deref is on arg1 = out-handle pointer, proven safe with a real caller stack
+     pointer; API-guaranteed valid in legit calls. [VERIFIED mechanism; OPINION that all firmware
+     callers obey it — but a wrong arg1 would only mis-record a log, since the deref is guarded behind
+     success + JPG match and never affects the close].
+   RESIDUAL only the boot test can show (all fail-safe — at worst a wrong/missing LOG, never a behavior
+   change): (a) whether the REAL Fsys_Open writes the exact handle Fsys_Close later receives to *arg1
+   (our success stand-in did; the real one writes *arg1 per disasm, but the precise token identity is
+   unprovable without camera fs) -> if off, the CLOSE log just won't fire; (b) multi-process/threaded
+   concurrency across the ~6 preloaded processes (unlocked table -> possible lost/misrecorded log line,
+   never a crash). Neither can break a close.
+   GO: boot-test grain_hook_4a.so. The two paths that could brick are closed; the residuals are
+   log-only. Recommend the isolated updater-shell run first (confirms "resolved Fsys_Close OK" on real
+   silicon), then boot.

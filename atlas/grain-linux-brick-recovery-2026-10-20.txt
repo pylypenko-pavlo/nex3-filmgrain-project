@@ -1,0 +1,91 @@
+PRELOAD-BRICK RECOVERY ANALYSIS — can a userland-brick be recovered without opening the camera?
+2026-10-20. Read-only, no camera. Sources: dump boot/bootrom (Loader1), boot/boot1 (Loader2),
+p1 updater initrd, atlas C-BOOT-*. Each claim [VERIFIED addr/bytes/strings] or [OPINION].
+
+CONTEXT: a bad LD_PRELOAD kills init's children (bootin/im.elf/sen.elf) via sonyld _rtld_die
+(C-LNX-012). This does NOT corrupt any boot stage: Loader1, Loader2 and the Linux kernel all load
+and run normally every cold boot; ONLY userland dies. So the recovery must come from something that
+runs BEFORE/INDEPENDENT of userland. The two userland-independent updater doors are the hardware
+jumper and a pre-placed \updater\mode file — and the file CANNOT be pre-placed (Loader2 checks it
+FIRST, diverting the very boot we need to test) NOR created post-brick (userland dead, /setting
+unreachable). This analysis asks whether any OTHER door exists.
+
+1) AUTO USB-DOWNLOAD / RECOVERY MODE ON EVERY POWER-ON — NO. [VERIFIED]
+- Loader1 (bootrom, "opal Loader1 Ver.01.11", 24 KB): its ONLY strings are NAND/ECC/CRC/timer, a
+  key read "KEY f:%x r:%x", "ERROR: Loader boot failed...", "ERROR: Blinking LED". NO usb/download/
+  serial/uart/recovery string anywhere. [VERIFIED full string dump] Its failure path = blink LED +
+  halt, and it fires only if the NEXT stage (Loader2) fails to load/verify — which a userland-brick
+  does NOT cause. So Loader1 offers no USB recovery and its error path never triggers here.
+- Loader2 (boot1): has USB-MS loader comm ("charon_usb_ms_loader_comm" @0xa01fd4b9, "CA: Stop Sio for
+  updater" @0xa01f622c) but these are the TRANSPORT used INSIDE the updater/adjust modes, reached only
+  via boot_is_updater (jumper/\updater\mode) or a firmware-set Backup flag. [VERIFIED]
+- boot_is_image_update (mode 0xc, @0xa01f12d4): reads its trigger value from register 0xa001081c and
+  enters only if ==2. 0xa001081c is in the 0xa0010000 boot-request block (same block as the jumper's
+  0xa0010024); its value is set by the RUNNING firmware's "reboot-into-update" request (power_get_
+  rebootmem / Backup 0x0051xxxx; atlas: 0x0051000f = boot-mode log). It is NOT a USB-host-detect, and a
+  dead userland cannot set it. [VERIFIED disasm — source is a firmware/Backup-written register]
+- Grep of boot1 for download/host/force-updater/recover/rescue/emergency: NONE. [VERIFIED]
+=> There is NO pmca/host-reachable mode that comes up automatically on every power-on independent of
+   userland. The loader-level USB exists but is gated behind the jumper or a firmware/file trigger.
+
+2) BOOT-FAILURE FALLBACK / WATCHDOG / BOOT-COUNT -> RECOVERY — NO. [VERIFIED]
+- The full Loader2 boot-mode tree (boot_init_mode @0xa01f00fe) checks, in order: updater, adjust(cmode),
+  hotboot, battin_off, image_update, key_chattering, off_load_bi, low_batt, ssboot, cipa, usb_charge,
+  panelon_off, ontimer, warmboot — then falls through to NORMAL boot. [VERIFIED string list + disasm]
+- NONE is a "N-failed-boots -> updater" escalation. There is no boot-fail counter that forces recovery.
+- "Check LSI crash" / "Check RestReq" (RestReq 0x00510029) detect an imaging-LSI watchdog reset; the
+  consequence is a COLD boot (WBI not taken) -> which runs init again -> the preload crashes AGAIN.
+  It loops back into the brick, it does NOT escalate to the updater. [VERIFIED tree: LSI-crash path
+  leads to a normal/cold boot mode, never mode 3] And a preload-brick leaves init (pid 1) alive, so the
+  LSI watchdog may not even fire.
+- WBI/ssboot offers no escape either: testing the preload REQUIRES init to run, which requires WBI
+  INVALID; after the crash no new WBI snapshot is taken (userland never suspends), so WBI stays invalid
+  and every cold boot re-runs init -> re-crashes. A valid WBI can't be both invalid (for the test) and
+  valid (for fallback) on the same boot, and writing WBI needs a live firmware (dead). [VERIFIED logic
+  from F-BOOT-011 + C-BOOT-039]
+
+3) THE JUMPER — register mapped, physical location UNKNOWN.
+- boot_is_updater's jumper sub (@0xa01efe34): `[0xa0010024]==4 && (([0xf3060000]>>8) & 0xf)==2`
+  (ldr from 0xf3060000; lsls#0x14/lsrs#0x1c isolates bits[11:8]; compare 2; gate [0xa0010024]==4).
+  [VERIFIED disasm] => 4 GPIO input pins at 0xf3060000 bits[11:8] must read binary 0010, with the
+  boot-source register 0xa0010024 reading 4.
+- Which physical pads/test-points these are is NOT in the dump or atlas, and no NEX-3N service-manual
+  correlation is on hand. [VERIFIED absence] Locating them needs PCB reverse-engineering (teardown +
+  probing the GPIO block), i.e. opening the camera. [OPINION]
+
+4) OFFICIAL SONY UPDATER PATH — goes THROUGH the running firmware; useless on a userland-brick. [VERIFIED]
+- The official NEX-3N updater (PC app) requires the camera ON and working: the user starts the update,
+  the FIRMWARE (menu/libObj) sets the updater/image_update Backup flag and reboots into the Loader2
+  updater. The loader-level USB transport it then uses (updaterufp.elf / charon_usb_ms_loader_comm) is
+  the SAME interface pmca's updatershell uses. But reaching it depends on the firmware setting the flag
+  (boot_is_image_update reads 0xa001081c; boot_is_updater reads \updater\mode/jumper). A userland-brick
+  cannot set the flag and cannot write \updater\mode -> the official updater cannot engage. Web reports
+  of "recovering a bricked NEX over USB with the Sony updater" apply to cameras that still boot their
+  firmware far enough to enter update mode — NOT to a userland-dead brick. [VERIFIED mechanism; web-
+  precedent reconciliation is OPINION]
+
+======================================================================
+BOTTOM LINE
+======================================================================
+A preload-brick is NOT recoverable by software/USB alone. [VERIFIED]
+- Every boot stage (Loader1/Loader2/kernel) runs fine, so no boot-failure fallback ever fires.
+- Every userland-independent updater door requires EITHER the hardware jumper OR a trigger (\updater\mode
+  file, or the image_update/updater Backup flag) that only a LIVE firmware/userland can place — which is
+  exactly what a preload-brick kills.
+- The only recovery is the HARDWARE JUMPER (0xf3060000[11:8]==2, gated by 0xa0010024==4), whose physical
+  location is undocumented and requires opening the camera and PCB-level strapping to find/use. Whether
+  that jumper actually boots a dead-userland unit into the pmca-reachable updater has NEVER been tested
+  (C-SAFE-005 hypothesis). So even the jumper route is unproven, not just inconvenient.
+
+=> STAGE 3 (a normal-boot env.txt LD_PRELOAD test) RISKS A PERMANENT BRICK with no software recovery.
+   It MUST NOT be attempted until at least one of these is established FIRST:
+   (A) the hardware jumper is physically located AND validated to boot a userland-dead unit into the
+       updater (hardware RE; converts brick -> recoverable); or
+   (B) the owner explicitly accepts possible PERMANENT loss of the camera; or
+   (C) a test design that cannot take down userland replaces the global env.txt preload — but env.txt
+       LD_PRELOAD is inherently GLOBAL and brick-capable on any load failure (C-LNX-012), and the Stage-0.5
+       qemu PASS lowers but does not eliminate the on-camera load-failure probability, so (C) is not
+       currently available with this mechanism.
+The safest honest recommendation: do NOT run Stage 3 as a normal-boot preload test. If the owner still
+wants it, gate it on (A) — locate+validate the jumper first — because without a proven way back, a single
+sonyld load-failure on the real camera is unrecoverable.

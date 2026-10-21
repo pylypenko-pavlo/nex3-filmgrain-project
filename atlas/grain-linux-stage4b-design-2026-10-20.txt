@@ -1,0 +1,224 @@
+STAGE 4b — decode -> re-encode -> writeback ROUNDTRIP (NO grain). DESIGN LANDED 2026-10-20.
+Source: <scratch>/lnx/vm/grain_hook_4b.c (builds; 2 PT_LOAD + DT_INIT_ARRAY + 1 R_ARM_RELATIVE; zero
+DT_NEEDED; exports Fsys_Open/Write/Close; imports __dlopen/__dlsym; qemu-loads "4b: hook loaded").
+Design doc: <scratch>/lnx/stage4b-design.txt. Delivered by lnx agent ae85f0e7b60777ef5.
+
+GOAL OF 4b: prove the full chain read->decode->encode->atomic-writeback end-to-end on the real
+camera and MEASURE codec time (dec_us/enc_us/bytes), with ZERO pixel change yet. 4c adds the grain.
+
+================= WHAT IS SOLID (VERIFIED) =================
+1) Fsys I/O prototypes (from libInfraFsys debug format strings):
+   Fsys_Open  @0x143fd  int  Fsys_Open(const char* path, void** outHandle, unsigned long flags)
+   Fsys_Close @0x11d01  int  Fsys_Close(void* handle)
+   Fsys_Read  @0x150d1  long Fsys_Read(void* h, void* buf, unsigned long len)
+   Fsys_Write @0x16cd9  long Fsys_Write(void* h, const void* buf, unsigned long len)
+   Fsys_Seek  @0x15ecd  int  Fsys_Seek(void* h, long long off, int whence, long long* outpos) [64-bit]
+   Fsys_Rename@0x1593d   Fsys_Remove@0x154b9   Fsys_Stat@0x167bd
+   Resolve via __dlopen("libInfraFsys.so",1)+__dlsym. Paths are Fsys "A:\DCIM\...\DSC*.JPG"
+   namespace -> raw open() fails; read the whole JPEG by looping Fsys_Read to EOF (gives srcSize).
+
+2) FRESH-CAPTURE GATE = "handle was WRITTEN" (no flag decoding, robust):
+   Fsys_Open records handle->path for DCF-JPGs; Fsys_Write marks the handle written; Fsys_Close
+   processes ONLY if (DCF-JPG) AND (written) AND (path not in an 8-entry recently-done ring). A
+   re-read/thumbnail opens read-only + only Fsys_Read -> never marked -> skipped. Idempotent.
+   => fires exactly once on the fresh full-res save (solves 4a's "every close / multiple per file").
+
+3) FAIL-SAFE (absolute, by construction):
+   - Fsys_Close calls the REAL close FIRST, returns its value UNCHANGED; roundtrip runs AFTER and
+     only delays our return by the codec time.
+   - Original JPG untouched until a COMPLETE, SOI-valid re-encoded JPEG exists; writeback goes to a
+     ".TMP" path and only a full successful write is Fsys_Rename'd atomically over the original.
+   - ANY failure (resolve NULL / mmap NULL / open/read/decode/encode/write error / short write /
+     bad SOI / bad w,h) -> original UNTOUCHED, temp removed, all mmaps munmap'd.
+   - No recursion (roundtrip calls the RESOLVED real Fsys_*, and ".TMP" isn't a DCF-JPG).
+
+4) ALLOCATION: raw mmap(MAP_ANON), freed on every exit. src=16MB (JPEG bytes), pix=W*H*2 (4:2:2
+   assumption, SEE BLOCKER), enc=16MB. W,H from the SOF0 marker (SOI-anchored parse_wh()).
+
+================= KEY STRUCTURAL FACT =================
+THE DECODE->ENCODE ROUNDTRIP CANNOT BE TESTED IN ISOLATION. The updater is a recovery Linux with
+NO imaging stack (liro/av-cam can't start; SA-DSP regs not ARM-mapped, C-SYS-006); /dev/ldec is a
+node but the HW codec isn't brought up; MprLib is initialized by the appFw. qemu has no HW codec
+and doesn't emulate the ldec/DMA ioctls. => DecodeStillOnMemory/EncodeStillOnMemory ONLY FUNCTION
+inside the booted appFw. The isolation/qemu harness validates EVERYTHING ELSE (load, Fsys+codec
+symbol resolution non-null, the gate, a fake-Fsys read/write round, SOF parse, mmap, temp+rename,
+fail-safe, timing plumbing) -> the roundtrip itself is BOOT-tested. The fail-safe makes that first
+boot test safe: codec no-op/junk -> original JPG never touched. Codec time measured on-camera via
+gettimeofday() timers -> logged "4b: ROUNDTRIP ok dec_us=.. enc_us=.. bytes=..".
+
+================= TWO BLOCKING TODO-CONFIRM (being resolved by static RE, zero camera) =================
+BLOCKER 1 — Fsys WRITE/READ flag VALUES. In the source both are #defined 0; WRITE_FLAGS=0 (=RDONLY,
+no O_CREAT) means the ".TMP" won't be created -> roundtrip guaranteed no-op. Fsys_Open flags are a
+NON-POSIX internal encoding (normalized at ~0x14452). Need the exact RDONLY value and the
+WRITE+CREATE+TRUNC value (ideally read verbatim from the appFw call site that creates DSC*.JPG).
+
+BLOCKER 2 — codec Mcmd argv order + return conventions. The on-memory codec entries are MprIfMcmd
+TEXT-console handlers (argc,char**) stateful via SetSrc/SetDst/DispParam writing SHARED static
+fields, resolved by mangled name from libmpr:
+  SetDecodeStillOnMemorySetSrc @0x5d59df  (VERIFIED: argv[1..4]=srcVA,srcSize,sizeX,sizeY)
+  SetDecodeStillOnMemorySetDst @0x5d591d  (argv order TODO: dstVA, maxDstSize?)
+  SetDecodeStillOnMemoryDispParam @0x5d5919 (TODO: sizeX,sizeY,format?)
+  DecodeStillOnMemory @0x5d52bd  (return conv TODO; + decoder OUTPUT format = dst byte-size formula,
+     code assumes W*H*2 4:2:2 -> CONFIRM)
+  SetEncodeStillOnMemorySetSrc @0x5d5ca3 / SetDst @0x5d5bb3 ; EncodeStillOnMemory @0x5d53f9
+     (arg order + "returns encoded byte count in r0?" TODO)
+
+OTHER NOTES (not brick-blocking):
+- pix=W*H*2 hardcodes 4:2:2; if the decoder outputs another format the dst may be too small
+  (overflow) -> part of BLOCKER 2 (decoder output format).
+- roundtrip SYNCHRONOUSLY delays the Fsys_Close return by dec+enc time -> may stall the save-path
+  UI; acceptable for the 4b measurement (that's exactly what dec_us/enc_us capture), async later.
+- Burst (two concurrent JPG saves) races the shared static Mcmd state; single-shot test avoids it.
+- CLEANER ALTERNATIVE for 4c (kills the static-state race): param-struct APIs MprIf::EncodeStill
+  @0x16f4b7 / PlayStillImage @0x16ff81 / PlayStillSingleByAddress @0x16fe3d — struct layouts need
+  reversing. DEFERRED to 4c per owner decision; not used in 4b.
+
+================= RISK PROFILE (honest) =================
+Load-level brick risk of 4b ~= already-passed Stage 4a (same ELF shape, same __dlopen+__dlsym resolve
+of the same lib the camera already loads today). New behavior = the roundtrip, which runs only on
+photo-save, AFTER the real close returns, fully fail-safe. Worst realistic outcome: no-op (wrong
+flags/args) or imaging-app crash at save -> battery-pull + revert env.txt. NOT a permanent brick.
+
+================= PLAN / GATE ORDER =================
+DECISION (owner, 2026-10-20): FULL static-RE of both blockers first (zero camera), then build.
+[in progress] lnx agent ae85f0e7b60777ef5 disassembling: (A) libInfraFsys Fsys_Open flag constants
+   @0x14452 + the appFw DSC*.JPG create call site -> READ_FLAGS/WRITE_FLAGS; (B) all libmpr Mcmd
+   setters' argv->field map + return conv + decoder output format.
+THEN: integrate values into grain_hook_4b.c -> build in lima 'armgrain' -> qemu-load-prove ->
+   isolated fake-Fsys harness (confirm "4b: Fsys resolved" + "4b: codec resolved" + gate/SOF/mmap/
+   temp+rename with a sample JPG, zero brick) -> ONLY THEN boot-test the roundtrip (owner cold-boots,
+   shoots 1 frame; read dec_us/enc_us/bytes; inspect the JPG; fail-safe protects the file).
+Camera currently runs the harmless 4a logging hook (env.txt=LD_PRELOAD=/setting/grain_hook_4a.so,
+dmode=3) — unchanged until the 4b boot-test is approved.
+
+================= RE RESOLVED + BUILD + ISOLATION = PASS (2026-10-20) =================
+RE (static disasm, lnx agent): both blockers pinned (full detail in the RE FOLLOW-UP section above).
+  - Fsys_Open flags: bit0=READ,bit1=WRITE,bit4=TRUNC,bit5=CREATE -> READ_FLAGS=0x01, WRITE_FLAGS=0x32
+    [INFERRED; the hook now ALSO logs the firmware's own open flags per DCF-JPG for ground-truth].
+  - codec Mcmd argv: addr/size = BARE hex, dims = BARE decimal (a "0x" prefix makes the parser return 0!);
+    SetEncodeSetDst order = dstSizeX(dec),dstSizeY(dec),dstTgtSize(hex),dstBufVA(hex),dstBufSize(hex).
+    BOTH Decode/EncodeStillOnMemory handlers RETURN 1 ALWAYS -> success+size via OUTPUT validation
+    (SOI 0xFFD8 + scan for EOI 0xFFD9), never the return. decoder format unpinned -> dst=W*H*2 safe over-alloc.
+grain_hook_4b.c updated accordingly (bare-hex/dec formatters + callm(fmt) + output-validation + flag log +
+DispParam SKIPPED for the first attempt). Final build md5 e4cde800e71281bf852e6e91aac97f79
+(host: <scratch>/lnx/grain_hook_4b.so; VM /tmp/lp). Same proven ELF shape: 2 PT_LOAD, zero DT_NEEDED, UND only
+__dlopen/__dlsym, exports Fsys_Open/Write/Close, DT_INIT_ARRAY + R_ARM_RELATIVE.
+
+QEMU LOAD-PROOF (real normal sonyld df94859e as PT_INTERP, under qemu-arm-static): EXIT=0, ctor
+"4b: hook loaded", NO die-string. Negative controls live: junk -> "unrecognized file format1" exit1;
+ET_REL .o -> "unsupported file type" exit1. => brick-critical LOAD level proven (identical shape to the
+silicon-test-passed 4a).
+
+FAKE-Fsys + FAKE-codec ISOLATION HARNESS (/tmp/4bh; sources <scratch>/lnx/vm/fakefsys4b.c, fakempr4b.c,
+caller4b.c): POSIX-backed fake Fsys_Open/Close/Read/Write/Rename/Remove (A:\..\DSC*.JPG -> /tmp/4bh/sd),
+fake libmpr with the 7 mangled MprIfMcmd handlers (bare-hex/dec parsers mirroring the real ones; fake
+encode writes a canned 1046-B valid JPEG into the hook's dst buffer). 4 gate cases. VERDICTS (all PASS):
+  - "4b: Fsys resolved" + "4b: codec resolved" (both libs + the mangled codec symbols resolve non-null).
+  - fresh write (A,D) -> roundtrip ran: "RT got=0x7d W=640 H=480", "ROUNDTRIP ok ... bytes=0x416"; the
+    untouched path DSC00004.JPG on disk = 1046 B FFD8..FFD9 => read->(decode)->encode->.TMP->atomic
+    Fsys_Rename END-TO-END works; no .TMP leftover.
+  - re-write same path (B) -> SKIPPED by the recently_done ring (ROUNDTRIP ok count = exactly 2, not 3).
+  - write-open+close with NO Fsys_Write (C) -> SKIPPED by the "written" gate (DSC00003.JPG stays 0 B).
+  - "4b: OPEN f=0x32 ..." logged for every write-open => the ground-truth flag-capture path works.
+BUG CAUGHT BY THE HARNESS (would have made 4b a silent no-op ON CAMERA too): xmmap tested the mmap2
+return with a SIGNED compare (r>0), but a high mapping address (e.g. 0xf7xxxxxx) is negative as a signed
+long -> a successful mmap was rejected -> "SKIP mmap-src". Fixed to an UNSIGNED compare (r<0xfffff000).
+Re-ran -> PASS. [this is exactly why the isolation gate exists]
+
+WHAT ISOLATION CANNOT COVER (boot-only, per design): the REAL DecodeStillOnMemory/EncodeStillOnMemory
+(no imaging stack in updater, no HW codec in qemu). The roundtrip's codec step is first exercised on the
+boot test; the fail-safe (real close first + unchanged, .TMP+rename, any error -> original untouched)
+makes that first boot test safe, and the rich logging (OPEN flags + RT got/W/H + ROUNDTRIP/SKIP reason)
+makes even a codec no-op informative (captures ground-truth flags + confirms the gate fires on the real
+capture + names the exact skip reason).
+
+NEXT GATES (both need the camera + owner physical actions; shown for approval before any camera write):
+  1. SILICON TEST (zero brick): updater busybox shell loads grain_hook_4b.so under the real df94859e
+     sonyld in isolation (child-process; a load fail kills only the child). Confirms real-hardware LOAD.
+  2. BOOT TEST (brick risk, accepted): deploy 4b as the env.txt boot preload, cold boot, owner shoots 1
+     frame; read dec_us/enc_us/bytes + OPEN flags from /setting/grain_hook_4b.log; inspect the JPG.
+     Fail-safe protects the file; revert = restore env.txt to the 4a hook (or empty) from senser/updater.
+Residual (NOT brick): codec DispParam skipped + dstTgtSize=ENC_CAP + decoder-format guess are the first
+boot test's exploratory unknowns -> worst case a no-op or a recoverable imaging-app hiccup, with the
+exact reason logged for the next iteration. 4c migrates to the struct API (MprIf::EncodeStill @0x16f4b7).
+
+================= BOOT TEST ON THE REAL CAMERA (2026-10-20) — MECHANISM PASS, CODEC CRASH =================
+Silicon test PASS + armed (env.txt->4b, dmode=3, md5 e4cde800 on-camera verified). Owner cold-booted,
+camera BOOTED NORMALLY, shot 1 frame (DSC09787). Log /setting/grain_hook_4b.log:
+  4b: hook loaded x(many)  Fsys resolved  codec resolved
+  4b: OPEN f=0x1 ...DSC09786/5/4/3/2/1/0.JPG   (boot indexing RE-READS old frames -> flags 0x1 = READ)
+  4b: OPEN f=0x7 ...DSC09787.JPG               (THE FRESH CAPTURE -> flags 0x7 = write)
+  4b: RT got=0x390000 W=4912 H=3264            (roundtrip read the full 3.7 MB JPEG, SOF parse correct)
+  <NO "ROUNDTRIP ok", NO "4b: SKIP">            (process CRASHED between "RT got" and the done/logskip)
+
+WHAT PASSED on real silicon (the whole chain up to the codec):
+  - LOAD into ~10 boot processes; camera boots + shoots normally.
+  - __dlopen+__dlsym resolution of Fsys AND the mangled libmpr codec symbols ("codec resolved").
+  - THE GATE IS PERFECT: every old-frame re-read opened READ (0x1) -> not written -> skipped; ONLY the
+    fresh capture opened WRITE (0x7) -> triggered the roundtrip. Exactly once.
+  - Full-res SOF0 parse on the real 16 MP MPO JPEG: W=4912 H=3264; full read got=0x390000 (3,735,552 B).
+  - FAIL-SAFE HELD THROUGH A HARD CRASH: the crash was in the codec, BEFORE step-6 writeback, so the temp
+    was never created and the original was never opened for write. DSC09787.JPG on the card = the intact
+    original: 3,735,552 B (== the read size), SOI ff d8, PIL-valid 4912x3264 MPO, no .TMP left. Photo intact.
+
+GROUND-TRUTH FLAGS CAPTURED (the whole point of the OPEN logging):
+  - WRITE-open (fresh capture) = 0x7  (NOT the inferred 0x32! -> READ_FLAGS=0x01 is right; WRITE_FLAGS=0x7)
+  - READ-open  (re-reads)      = 0x1  (confirms READ_FLAGS=0x01)
+  -> the inferred bit5=CREATE / bit4=TRUNC guess (0x32) was WRONG; firmware uses 0x7 for a fresh write-open.
+
+THE FAILURE: the decode/encode Mcmd call CRASHES the imaging process (no ROUNDTRIP ok, no SKIP -> SIGSEGV
+between "RT got" and the done: logskip). That crash during save finalization is what produced the camera's
+"writing to memory card was not completed correctly / recover?" prompt (owner tapped recover = DB rebuild,
+no data loss). Likely causes (to RE next, NOT yet distinguished):
+  (a) CALLING CONVENTION — the MprIfMcmd handlers may be NON-static C++ methods needing `this` in r0; our
+      fn(argc,argv) would pass argc as `this` -> deref crash. The mangled name does not distinguish static
+      vs non-static; only the disasm (which register holds argv/this) does. [top suspect]
+  (b) DispParam REQUIRED — we skipped it; the decoder may read uninitialized/stale format static state.
+  (c) BUFFER REQUIREMENTS — the HW codec likely DMAs to a PHYSICALLY-CONTIGUOUS / coherent buffer from a
+      specific pool, not an arbitrary anonymous mmap VA -> DMA to a bad address -> crash. [strong suspect]
+  (d) output format/size larger than W*H*2 (32 MB) -> decode overflow.
+STATE: DISARMED — env.txt reverted to grain_hook_4a.so (harmless logger); next cold boot runs 4a, not 4b.
+Camera + card verified intact.
+
+NEXT (decision pending): rather than keep guessing the Mcmd text-handler convention (each wrong guess =
+another recoverable card hiccup for the owner), TRACE THE FIRMWARE'S OWN decode/encode call site in the
+appFw and replicate it exactly — the real calling convention AND where the firmware gets the pixel buffer
+(the codec's required memory pool). The struct API MprIf::EncodeStill @0x16f4b7 / PlayStillImage @0x16ff81
+is the likely cleaner target. This is 4b-codec-RE (static, zero camera) before any next boot test.
+
+================= CRASH ROOT-CAUSED (2026-10-20, static disasm) — it's the BUFFER, not our call =================
+[VERIFIED] CALLING CONVENTION WAS CORRECT: all Set*OnMemory handlers are static-style (prologue mov r4,r1;
+GOT globals; argc guard cmp r0,#N; NO [r0+off] this-deref) => r0=argc, r1=argv, our fn(argc,argv) was right.
+Decode/EncodeStillOnMemory ignore args and load the MprIf instance from a GOT global (mp_mprIf, set by
+MprIfMcmd::SetInstance @0x5d4909 at appFw init). DispParam @0x5d5918 is a `movs r0,#1; bx lr` NO-OP stub
+(skipping it was correct). So the this/argc and DispParam theories are RULED OUT.
+[VERIFIED] THE Mcmd on-memory path is a DEBUG path: the Set*OnMemory names appear ONLY in the Mcmd
+command-name table (strings @0xdbcf-0xde05), reachable from the MPR text console (testcmd/sndcmd), NEVER
+from the normal capture/save. Copying it does not replicate the firmware.
+[VERIFIED allocators; strong-inference causation] THE CRASH = PIXEL BUFFER. The codec operates on DMM-pool
+buffers (physically-contiguous / DMA-coherent, from the reserved imaging DRAM pool, A-MEM-003). Allocators:
+mcmn_dmm_alloc/mcmn_dmm_free (libInfraMediaCommon @0x94cd/@0x9739, imported by libObj); dmm_alloc(size,u16*)
+(libsencore @0x135c5); DmmAccess::DmmAllocate (libmprctrl @0x19d71) + GetExtAdrsFromDmmAlloc (@0xc89f,
+handle->VA). The codec param "VirtAddr" is a VA INTO the DMM-mapped region (which carries the bus/physical
+address the HW codec DMAs to). Our mmap(MAP_ANON) VA = scattered physical pages, no bus mapping => the HW
+codec's DMA (ioctl DMA_TRANSFER_MEM / IOCTL_CMD_SET_PHYS_) hit a bogus physical address => SIGSEGV. That is
+exactly the boot-test crash.
+[VERIFIED] STRUCT API MprIf::EncodeStill @0x16f4b7 / PlayStillImage @0x16ff81 are NON-static members (need a
+MprIf instance, obtainable) and STILL require MPR::BufferArea (DMM) buffers — cleaner return/out-size + no
+shared-static race, but it does NOT remove the DMM-buffer requirement (the real crash).
+
+=> THE STRATEGIC FORK (codec approach for the grain shim):
+  OPTION 1 [agent-recommended] SELF-CONTAINED SOFTWARE JPEG decode->grain->encode embedded in the shim:
+    pure CPU, plain mmap buffers, NO DMM / NO HW codec / NO DMA / NO imaging-pool contention. Sidesteps the
+    exact crash. BIG WIN: fully testable OFF-CAMERA in qemu on the REAL DSC09787.JPG (the HW path can't be).
+    Cost: ~800-1500 lines freestanding baseline-JPEG codec (or adapt a compact single-file decoder+encoder),
+    ~1-3 s per 16 MP save. Design items: preserve EXIF/APP1 (+APP2/MPO) by splicing the original's APPn
+    segments after SOI; grain = luma plane only (matches the film-grain goal with precise spatial control).
+  OPTION 2 HW codec + DMM buffers + struct API: reuse Sony's fast codec; resolve mcmn_dmm_alloc, allocate
+    src/pix/enc from the DMM pool, free after. Fast + native quality, BUT the DMM pool is the LIVE imaging
+    pool — allocating ~64 MB during capture-save risks exhaustion/contention with the in-progress pipeline
+    (another crash/stall class); must be boot-gated; + struct-layout RE. The risky path; NOT off-camera testable.
+  OPTION 3 DCT-coefficient-domain grain: entropy-decode -> perturb luma DCT coeffs -> entropy-recode (same
+    tables). Much less code than a full SW codec, fast, no HW/DMM, off-camera testable; but frequency-domain
+    grain is coarser / quantization-limited / blockiness risk vs precise spatial grain.
+FIX ALREADY APPLIED regardless of option: WRITE_FLAGS 0x32 -> 0x07, READ_FLAGS 0x01 (both camera-confirmed).

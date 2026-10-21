@@ -1,0 +1,39 @@
+{
+ "codes": {
+  "0": 1,
+  "1": 2,
+  "2": 3,
+  "3": 4,
+  "4": 5,
+  "5": 6
+ },
+ "plan": {
+  "Standard": {
+   "record": 0,
+   "offset": "0x100",
+   "zeroed_quads": [
+    0,
+    2,
+    4
+   ]
+  },
+  "Vivid": {
+   "record": 1,
+   "offset": "0x118",
+   "zeroed_quads": [
+    1,
+    2,
+    5
+   ]
+  },
+  "Landscape": {
+   "record": 3,
+   "offset": "0x148",
+   "zeroed_quads": [
+    3,
+    4,
+    5
+   ]
+  }
+ }
+}

@@ -1,0 +1,8140 @@
+{
+ "kodak_portra_160|kodak_portra_endura": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 10.6,
+    "a": -1.4,
+    "b": -2.0
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 29.7,
+    "a": -1.8,
+    "b": -0.5
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.5,
+    "a": -0.2,
+    "b": 0.2
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 68.3,
+    "a": -0.9,
+    "b": -1.6
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 78.2,
+    "a": -1.1,
+    "b": -1.5
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 82.8,
+    "a": -1.2,
+    "b": 0.4
+   }
+  ],
+  "chroma_ratio_mean": 0.958,
+  "chroma_ratio_median": 0.932,
+  "chroma_ratio_sumC": 0.916,
+  "chroma_ratio_by_L": {
+   "L<45": 0.945,
+   "45-65": 0.955,
+   "L>=65": 0.836
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 30.6,
+    "Cref": 19.8,
+    "Cfilm": 28.7,
+    "Cratio": 1.45,
+    "href": 47.5,
+    "dh": -0.1,
+    "dE00": 7.0
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 62.0,
+    "Cref": 24.8,
+    "Cfilm": 25.6,
+    "Cratio": 1.03,
+    "href": 43.4,
+    "dh": 8.3,
+    "dE00": 3.6
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 52.4,
+    "Cref": 22.2,
+    "Cfilm": 28.1,
+    "Cratio": 1.27,
+    "href": 266.9,
+    "dh": -10.2,
+    "dE00": 6.3
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 37.0,
+    "Cref": 27.2,
+    "Cfilm": 28.8,
+    "Cratio": 1.06,
+    "href": 122.6,
+    "dh": -20.7,
+    "dE00": 9.5
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 58.8,
+    "Cref": 27.4,
+    "Cfilm": 27.2,
+    "Cratio": 0.99,
+    "href": 296.3,
+    "dh": -17.4,
+    "dE00": 8.3
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 70.7,
+    "Cref": 31.9,
+    "Cfilm": 22.8,
+    "Cratio": 0.71,
+    "href": 179.9,
+    "dh": 13.2,
+    "dE00": 6.2
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 52.6,
+    "Cref": 65.0,
+    "Cfilm": 60.8,
+    "Cratio": 0.94,
+    "href": 59.1,
+    "dh": -2.1,
+    "dE00": 8.9
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 43.2,
+    "Cref": 47.3,
+    "Cfilm": 38.3,
+    "Cratio": 0.81,
+    "href": 290.1,
+    "dh": -19.2,
+    "dE00": 9.1
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 43.4,
+    "Cref": 50.6,
+    "Cfilm": 46.9,
+    "Cratio": 0.93,
+    "href": 18.0,
+    "dh": 2.8,
+    "dE00": 6.7
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 25.4,
+    "Cref": 32.1,
+    "Cfilm": 34.2,
+    "Cratio": 1.06,
+    "href": 319.4,
+    "dh": -15.7,
+    "dE00": 7.7
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 65.4,
+    "Cref": 65.3,
+    "Cfilm": 57.9,
+    "Cratio": 0.89,
+    "href": 115.8,
+    "dh": -21.2,
+    "dE00": 14.0
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 61.6,
+    "Cref": 68.8,
+    "Cfilm": 61.4,
+    "Cratio": 0.89,
+    "href": 77.6,
+    "dh": -6.5,
+    "dE00": 9.2
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 32.8,
+    "Cref": 53.3,
+    "Cfilm": 38.1,
+    "Cratio": 0.71,
+    "href": 294.0,
+    "dh": -17.2,
+    "dE00": 8.1
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 49.7,
+    "Cref": 53.9,
+    "Cfilm": 48.3,
+    "Cratio": 0.9,
+    "href": 142.4,
+    "dh": -12.4,
+    "dE00": 7.3
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 34.2,
+    "Cref": 57.3,
+    "Cfilm": 55.9,
+    "Cratio": 0.98,
+    "href": 28.5,
+    "dh": 7.3,
+    "dE00": 7.8
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 68.9,
+    "Cref": 80.9,
+    "Cfilm": 64.4,
+    "Cratio": 0.8,
+    "href": 91.3,
+    "dh": -10.5,
+    "dE00": 12.7
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 48.1,
+    "Cref": 54.5,
+    "Cfilm": 48.4,
+    "Cratio": 0.89,
+    "href": 344.2,
+    "dh": -10.9,
+    "dE00": 5.5
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 53.8,
+    "Cref": 31.7,
+    "Cfilm": 29.6,
+    "Cratio": 0.94,
+    "href": 234.4,
+    "dh": 0.3,
+    "dE00": 2.7
+   }
+  ],
+  "mean_abs_dh": 10.9,
+  "dE00_mean": 6.9,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 4.017419877730034,
+    "dE00_max": 6.172284504896664,
+    "dE00_chrom_mean": 3.9171589816809984
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 2.6382398748087357,
+    "dE00_max": 4.623488585429923,
+    "dE00_chrom_mean": 2.3083526728919495
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 2.4195446079239216,
+    "dE00_max": 4.102830492445161,
+    "dE00_chrom_mean": 2.135257727829338
+   },
+   "raw_dE00_mean": 6.921924159748461
+  },
+  "matrixA_1024": [
+   [
+    737,
+    263,
+    -148
+   ],
+   [
+    -26,
+    727,
+    154
+   ],
+   [
+    -22,
+    -33,
+    957
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ]
+  ],
+  "curveB": [
+   0.799,
+   4305.672,
+   -0.051
+  ]
+ },
+ "kodak_portra_400|kodak_portra_endura": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 9.7,
+    "a": -1.4,
+    "b": -0.4
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 29.3,
+    "a": -1.2,
+    "b": -0.4
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.4,
+    "a": -0.3,
+    "b": 0.2
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 68.0,
+    "a": -1.3,
+    "b": -1.1
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 78.0,
+    "a": -0.8,
+    "b": -0.9
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 82.9,
+    "a": -0.7,
+    "b": 1.0
+   }
+  ],
+  "chroma_ratio_mean": 1.003,
+  "chroma_ratio_median": 0.965,
+  "chroma_ratio_sumC": 0.954,
+  "chroma_ratio_by_L": {
+   "L<45": 1.013,
+   "45-65": 0.987,
+   "L>=65": 0.854
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 30.4,
+    "Cref": 19.8,
+    "Cfilm": 32.9,
+    "Cratio": 1.66,
+    "href": 47.5,
+    "dh": 0.6,
+    "dE00": 8.3
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 62.4,
+    "Cref": 24.8,
+    "Cfilm": 26.1,
+    "Cratio": 1.05,
+    "href": 43.4,
+    "dh": 5.6,
+    "dE00": 2.7
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 51.5,
+    "Cref": 22.2,
+    "Cfilm": 27.6,
+    "Cratio": 1.24,
+    "href": 266.9,
+    "dh": -10.0,
+    "dE00": 5.7
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 36.8,
+    "Cref": 27.2,
+    "Cfilm": 32.0,
+    "Cratio": 1.18,
+    "href": 122.6,
+    "dh": -19.8,
+    "dE00": 9.6
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 57.9,
+    "Cref": 27.4,
+    "Cfilm": 27.5,
+    "Cratio": 1.01,
+    "href": 296.3,
+    "dh": -13.8,
+    "dE00": 6.6
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 70.5,
+    "Cref": 31.9,
+    "Cfilm": 24.5,
+    "Cratio": 0.77,
+    "href": 179.9,
+    "dh": 9.3,
+    "dE00": 4.6
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 53.1,
+    "Cref": 65.0,
+    "Cfilm": 62.6,
+    "Cratio": 0.96,
+    "href": 59.1,
+    "dh": -2.5,
+    "dE00": 8.5
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 41.1,
+    "Cref": 47.3,
+    "Cfilm": 39.8,
+    "Cratio": 0.84,
+    "href": 290.1,
+    "dh": -15.7,
+    "dE00": 7.5
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 42.8,
+    "Cref": 50.6,
+    "Cfilm": 49.3,
+    "Cratio": 0.98,
+    "href": 18.0,
+    "dh": -0.4,
+    "dE00": 7.1
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 23.8,
+    "Cref": 32.1,
+    "Cfilm": 37.1,
+    "Cratio": 1.16,
+    "href": 319.4,
+    "dh": -8.8,
+    "dE00": 6.4
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 64.7,
+    "Cref": 65.3,
+    "Cfilm": 58.7,
+    "Cratio": 0.9,
+    "href": 115.8,
+    "dh": -19.4,
+    "dE00": 13.2
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 61.7,
+    "Cref": 68.8,
+    "Cfilm": 62.5,
+    "Cratio": 0.91,
+    "href": 77.6,
+    "dh": -7.2,
+    "dE00": 9.3
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 30.2,
+    "Cref": 53.3,
+    "Cfilm": 40.1,
+    "Cratio": 0.75,
+    "href": 294.0,
+    "dh": -13.0,
+    "dE00": 6.1
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 49.4,
+    "Cref": 53.9,
+    "Cfilm": 50.8,
+    "Cratio": 0.94,
+    "href": 142.4,
+    "dh": -13.3,
+    "dE00": 7.7
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 34.3,
+    "Cref": 57.3,
+    "Cfilm": 58.1,
+    "Cratio": 1.02,
+    "href": 28.5,
+    "dh": 8.0,
+    "dE00": 8.0
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 69.1,
+    "Cref": 80.9,
+    "Cfilm": 65.2,
+    "Cratio": 0.81,
+    "href": 91.3,
+    "dh": -10.6,
+    "dE00": 12.6
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 45.9,
+    "Cref": 54.5,
+    "Cfilm": 52.6,
+    "Cratio": 0.97,
+    "href": 344.2,
+    "dh": -9.2,
+    "dE00": 6.0
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 52.6,
+    "Cref": 31.7,
+    "Cfilm": 29.2,
+    "Cratio": 0.92,
+    "href": 234.4,
+    "dh": -1.1,
+    "dE00": 1.8
+   }
+  ],
+  "mean_abs_dh": 9.3,
+  "dE00_mean": 6.5,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 4.117968488819373,
+    "dE00_max": 6.73851590284095,
+    "dE00_chrom_mean": 3.9883559696448945
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 2.51502192317584,
+    "dE00_max": 4.70467634657756,
+    "dE00_chrom_mean": 2.166494219832248
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 2.4567725320740057,
+    "dE00_max": 4.968398665347946,
+    "dE00_chrom_mean": 2.131090068984787
+   },
+   "raw_dE00_mean": 6.532840406492137
+  },
+  "matrixA_1024": [
+   [
+    774,
+    236,
+    -162
+   ],
+   [
+    -36,
+    761,
+    103
+   ],
+   [
+    -21,
+    -36,
+    916
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ]
+  ],
+  "curveB": [
+   0.768,
+   3350.506,
+   -0.066
+  ]
+ },
+ "kodak_portra_800|kodak_portra_endura": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 10.6,
+    "a": -1.1,
+    "b": -0.3
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 29.6,
+    "a": -1.1,
+    "b": -0.4
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.4,
+    "a": -0.3,
+    "b": 0.3
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 67.1,
+    "a": -1.2,
+    "b": -0.5
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 77.0,
+    "a": -1.0,
+    "b": -0.4
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 82.1,
+    "a": -1.0,
+    "b": 1.1
+   }
+  ],
+  "chroma_ratio_mean": 0.988,
+  "chroma_ratio_median": 0.938,
+  "chroma_ratio_sumC": 0.942,
+  "chroma_ratio_by_L": {
+   "L<45": 1.019,
+   "45-65": 0.964,
+   "L>=65": 0.837
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 31.5,
+    "Cref": 19.8,
+    "Cfilm": 32.8,
+    "Cratio": 1.66,
+    "href": 47.5,
+    "dh": 1.1,
+    "dE00": 7.7
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 62.5,
+    "Cref": 24.8,
+    "Cfilm": 25.3,
+    "Cratio": 1.02,
+    "href": 43.4,
+    "dh": 8.0,
+    "dE00": 3.3
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 50.5,
+    "Cref": 22.2,
+    "Cfilm": 26.6,
+    "Cratio": 1.2,
+    "href": 266.9,
+    "dh": -10.1,
+    "dE00": 5.1
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 37.8,
+    "Cref": 27.2,
+    "Cfilm": 31.3,
+    "Cratio": 1.15,
+    "href": 122.6,
+    "dh": -13.0,
+    "dE00": 7.1
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 57.0,
+    "Cref": 27.4,
+    "Cfilm": 25.8,
+    "Cratio": 0.94,
+    "href": 296.3,
+    "dh": -10.7,
+    "dE00": 4.7
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 69.0,
+    "Cref": 31.9,
+    "Cfilm": 24.4,
+    "Cratio": 0.76,
+    "href": 179.9,
+    "dh": 12.9,
+    "dE00": 5.8
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 54.4,
+    "Cref": 65.0,
+    "Cfilm": 61.1,
+    "Cratio": 0.94,
+    "href": 59.1,
+    "dh": 0.3,
+    "dE00": 7.0
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 39.5,
+    "Cref": 47.3,
+    "Cfilm": 40.7,
+    "Cratio": 0.86,
+    "href": 290.1,
+    "dh": -12.8,
+    "dE00": 6.2
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 43.2,
+    "Cref": 50.6,
+    "Cfilm": 49.1,
+    "Cratio": 0.97,
+    "href": 18.0,
+    "dh": 2.6,
+    "dE00": 6.8
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 24.2,
+    "Cref": 32.1,
+    "Cfilm": 36.0,
+    "Cratio": 1.12,
+    "href": 319.4,
+    "dh": -5.5,
+    "dE00": 5.2
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 64.7,
+    "Cref": 65.3,
+    "Cfilm": 57.1,
+    "Cratio": 0.87,
+    "href": 115.8,
+    "dh": -15.5,
+    "dE00": 10.9
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 62.7,
+    "Cref": 68.8,
+    "Cfilm": 61.3,
+    "Cratio": 0.89,
+    "href": 77.6,
+    "dh": -4.0,
+    "dE00": 7.5
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 27.9,
+    "Cref": 53.3,
+    "Cfilm": 42.2,
+    "Cratio": 0.79,
+    "href": 294.0,
+    "dh": -9.2,
+    "dE00": 4.6
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 49.1,
+    "Cref": 53.9,
+    "Cfilm": 50.4,
+    "Cratio": 0.94,
+    "href": 142.4,
+    "dh": -6.7,
+    "dE00": 6.1
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 35.2,
+    "Cref": 57.3,
+    "Cfilm": 58.5,
+    "Cratio": 1.02,
+    "href": 28.5,
+    "dh": 8.5,
+    "dE00": 7.7
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 69.7,
+    "Cref": 80.9,
+    "Cfilm": 64.1,
+    "Cratio": 0.79,
+    "href": 91.3,
+    "dh": -7.5,
+    "dE00": 10.9
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 45.4,
+    "Cref": 54.5,
+    "Cfilm": 50.9,
+    "Cratio": 0.93,
+    "href": 344.2,
+    "dh": -6.4,
+    "dE00": 5.7
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 51.1,
+    "Cref": 31.7,
+    "Cfilm": 28.8,
+    "Cratio": 0.91,
+    "href": 234.4,
+    "dh": -0.3,
+    "dE00": 1.2
+   }
+  ],
+  "mean_abs_dh": 7.5,
+  "dE00_mean": 5.8,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 3.7292170746328956,
+    "dE00_max": 6.529572107514806,
+    "dE00_chrom_mean": 3.6526484844648497
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 2.3586347210993064,
+    "dE00_max": 4.379152786509057,
+    "dE00_chrom_mean": 2.0498066454603308
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 2.321147195397883,
+    "dE00_max": 4.906608004123881,
+    "dE00_chrom_mean": 1.9996925202537632
+   },
+   "raw_dE00_mean": 5.756473082792669
+  },
+  "matrixA_1024": [
+   [
+    779,
+    157,
+    -113
+   ],
+   [
+    -23,
+    767,
+    72
+   ],
+   [
+    -25,
+    -11,
+    874
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ]
+  ],
+  "curveB": [
+   0.734,
+   2235.84,
+   -0.07
+  ]
+ },
+ "kodak_ektar_100|kodak_portra_endura": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 9.1,
+    "a": -0.7,
+    "b": -1.0
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 27.5,
+    "a": -1.9,
+    "b": -1.6
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.4,
+    "a": -0.3,
+    "b": 0.2
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 68.3,
+    "a": -0.9,
+    "b": -1.8
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 78.0,
+    "a": -0.7,
+    "b": -1.9
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 82.7,
+    "a": -0.8,
+    "b": -0.1
+   }
+  ],
+  "chroma_ratio_mean": 1.047,
+  "chroma_ratio_median": 0.998,
+  "chroma_ratio_sumC": 0.985,
+  "chroma_ratio_by_L": {
+   "L<45": 1.052,
+   "45-65": 1.033,
+   "L>=65": 0.856
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 29.2,
+    "Cref": 19.8,
+    "Cfilm": 36.0,
+    "Cratio": 1.82,
+    "href": 47.5,
+    "dh": -2.4,
+    "dE00": 9.9
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 62.0,
+    "Cref": 24.8,
+    "Cfilm": 29.3,
+    "Cratio": 1.18,
+    "href": 43.4,
+    "dh": 8.7,
+    "dE00": 4.3
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 51.6,
+    "Cref": 22.2,
+    "Cfilm": 29.6,
+    "Cratio": 1.33,
+    "href": 266.9,
+    "dh": -12.4,
+    "dE00": 7.1
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 36.1,
+    "Cref": 27.2,
+    "Cfilm": 32.5,
+    "Cratio": 1.2,
+    "href": 122.6,
+    "dh": -15.9,
+    "dE00": 9.0
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 58.2,
+    "Cref": 27.4,
+    "Cfilm": 28.7,
+    "Cratio": 1.05,
+    "href": 296.3,
+    "dh": -13.6,
+    "dE00": 7.0
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 70.0,
+    "Cref": 31.9,
+    "Cfilm": 25.9,
+    "Cratio": 0.81,
+    "href": 179.9,
+    "dh": 17.1,
+    "dE00": 6.6
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 51.7,
+    "Cref": 65.0,
+    "Cfilm": 63.0,
+    "Cratio": 0.97,
+    "href": 59.1,
+    "dh": -3.9,
+    "dE00": 9.9
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 41.0,
+    "Cref": 47.3,
+    "Cfilm": 38.4,
+    "Cratio": 0.81,
+    "href": 290.1,
+    "dh": -18.8,
+    "dE00": 8.6
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 40.8,
+    "Cref": 50.6,
+    "Cfilm": 52.1,
+    "Cratio": 1.03,
+    "href": 18.0,
+    "dh": 3.4,
+    "dE00": 9.0
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 22.8,
+    "Cref": 32.1,
+    "Cfilm": 40.7,
+    "Cratio": 1.27,
+    "href": 319.4,
+    "dh": -9.4,
+    "dE00": 7.7
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 63.4,
+    "Cref": 65.3,
+    "Cfilm": 58.4,
+    "Cratio": 0.89,
+    "href": 115.8,
+    "dh": -21.5,
+    "dE00": 14.9
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 60.6,
+    "Cref": 68.8,
+    "Cfilm": 62.5,
+    "Cratio": 0.91,
+    "href": 77.6,
+    "dh": -8.4,
+    "dE00": 10.5
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 31.1,
+    "Cref": 53.3,
+    "Cfilm": 41.8,
+    "Cratio": 0.78,
+    "href": 294.0,
+    "dh": -12.2,
+    "dE00": 6.1
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 47.6,
+    "Cref": 53.9,
+    "Cfilm": 53.0,
+    "Cratio": 0.98,
+    "href": 142.4,
+    "dh": -8.7,
+    "dE00": 7.8
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 34.3,
+    "Cref": 57.3,
+    "Cfilm": 59.7,
+    "Cratio": 1.04,
+    "href": 28.5,
+    "dh": 8.9,
+    "dE00": 8.4
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 67.4,
+    "Cref": 80.9,
+    "Cfilm": 64.7,
+    "Cratio": 0.8,
+    "href": 91.3,
+    "dh": -12.2,
+    "dE00": 14.3
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 44.3,
+    "Cref": 54.5,
+    "Cfilm": 55.2,
+    "Cratio": 1.01,
+    "href": 344.2,
+    "dh": -8.8,
+    "dE00": 7.1
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 52.2,
+    "Cref": 31.7,
+    "Cfilm": 29.9,
+    "Cratio": 0.94,
+    "href": 234.4,
+    "dh": -1.2,
+    "dE00": 1.3
+   }
+  ],
+  "mean_abs_dh": 10.4,
+  "dE00_mean": 7.4,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 4.0633521730862325,
+    "dE00_max": 7.04453763884245,
+    "dE00_chrom_mean": 3.839703730079507
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 4.108803047555438,
+    "dE00_max": 8.007928556470594,
+    "dE00_chrom_mean": 3.8379147767424615
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 3.443839780527037,
+    "dE00_max": 6.4607556283801575,
+    "dE00_chrom_mean": 3.172076555291258
+   },
+   "raw_dE00_mean": 7.425336106610409
+  },
+  "matrixA_1024": [
+   [
+    747,
+    164,
+    -124
+   ],
+   [
+    -57,
+    686,
+    166
+   ],
+   [
+    -73,
+    -169,
+    1091
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    1,
+    0,
+    0
+   ],
+   [
+    0,
+    1,
+    0
+   ],
+   [
+    0,
+    0,
+    2
+   ]
+  ],
+  "curveB": [
+   0.965,
+   440.49,
+   0.006
+  ]
+ },
+ "kodak_gold_200|kodak_portra_endura": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 9.7,
+    "a": -1.5,
+    "b": 0.4
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 28.6,
+    "a": -1.6,
+    "b": 0.3
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.5,
+    "a": -0.3,
+    "b": 0.2
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 68.0,
+    "a": -1.2,
+    "b": -0.7
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 77.9,
+    "a": -0.9,
+    "b": -0.3
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 82.7,
+    "a": -0.8,
+    "b": 1.2
+   }
+  ],
+  "chroma_ratio_mean": 1.005,
+  "chroma_ratio_median": 0.948,
+  "chroma_ratio_sumC": 0.957,
+  "chroma_ratio_by_L": {
+   "L<45": 1.033,
+   "45-65": 0.986,
+   "L>=65": 0.846
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 30.7,
+    "Cref": 19.8,
+    "Cfilm": 35.5,
+    "Cratio": 1.8,
+    "href": 47.5,
+    "dh": 0.5,
+    "dE00": 8.9
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 62.7,
+    "Cref": 24.8,
+    "Cfilm": 27.4,
+    "Cratio": 1.11,
+    "href": 43.4,
+    "dh": 6.2,
+    "dE00": 3.0
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 51.5,
+    "Cref": 22.2,
+    "Cfilm": 26.2,
+    "Cratio": 1.18,
+    "href": 266.9,
+    "dh": -11.1,
+    "dE00": 5.5
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 36.4,
+    "Cref": 27.2,
+    "Cfilm": 31.9,
+    "Cratio": 1.18,
+    "href": 122.6,
+    "dh": -9.8,
+    "dE00": 7.4
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 58.4,
+    "Cref": 27.4,
+    "Cfilm": 24.3,
+    "Cratio": 0.89,
+    "href": 296.3,
+    "dh": -9.3,
+    "dE00": 4.7
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 69.7,
+    "Cref": 31.9,
+    "Cfilm": 24.9,
+    "Cratio": 0.78,
+    "href": 179.9,
+    "dh": 15.2,
+    "dE00": 6.2
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 53.4,
+    "Cref": 65.0,
+    "Cfilm": 62.8,
+    "Cratio": 0.97,
+    "href": 59.1,
+    "dh": -2.2,
+    "dE00": 8.1
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 41.7,
+    "Cref": 47.3,
+    "Cfilm": 40.3,
+    "Cratio": 0.85,
+    "href": 290.1,
+    "dh": -13.1,
+    "dE00": 6.4
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 43.1,
+    "Cref": 50.6,
+    "Cfilm": 52.9,
+    "Cratio": 1.05,
+    "href": 18.0,
+    "dh": 6.4,
+    "dE00": 7.6
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 24.7,
+    "Cref": 32.1,
+    "Cfilm": 34.0,
+    "Cratio": 1.06,
+    "href": 319.4,
+    "dh": -1.1,
+    "dE00": 4.2
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 63.8,
+    "Cref": 65.3,
+    "Cfilm": 57.7,
+    "Cratio": 0.88,
+    "href": 115.8,
+    "dh": -14.4,
+    "dE00": 10.7
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 62.0,
+    "Cref": 68.8,
+    "Cfilm": 62.0,
+    "Cratio": 0.9,
+    "href": 77.6,
+    "dh": -5.7,
+    "dE00": 8.5
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 29.2,
+    "Cref": 53.3,
+    "Cfilm": 41.7,
+    "Cratio": 0.78,
+    "href": 294.0,
+    "dh": -10.1,
+    "dE00": 4.9
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 48.3,
+    "Cref": 53.9,
+    "Cfilm": 52.2,
+    "Cratio": 0.97,
+    "href": 142.4,
+    "dh": -6.9,
+    "dE00": 6.7
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 35.8,
+    "Cref": 57.3,
+    "Cfilm": 61.3,
+    "Cratio": 1.07,
+    "href": 28.5,
+    "dh": 9.6,
+    "dE00": 7.9
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 69.1,
+    "Cref": 80.9,
+    "Cfilm": 64.4,
+    "Cratio": 0.8,
+    "href": 91.3,
+    "dh": -8.1,
+    "dE00": 11.5
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 46.6,
+    "Cref": 54.5,
+    "Cfilm": 50.7,
+    "Cratio": 0.93,
+    "href": 344.2,
+    "dh": -2.1,
+    "dE00": 4.1
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 52.6,
+    "Cref": 31.7,
+    "Cfilm": 28.9,
+    "Cratio": 0.91,
+    "href": 234.4,
+    "dh": -0.6,
+    "dE00": 1.8
+   }
+  ],
+  "mean_abs_dh": 7.4,
+  "dE00_mean": 6.0,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 3.788449373511765,
+    "dE00_max": 6.763670754267669,
+    "dE00_chrom_mean": 3.578483544133102
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 2.559643628482592,
+    "dE00_max": 4.427950257929522,
+    "dE00_chrom_mean": 2.2081282516782013
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 2.4922430772712767,
+    "dE00_max": 5.140111356692581,
+    "dE00_chrom_mean": 2.13858212647966
+   },
+   "raw_dE00_mean": 5.98649433435786
+  },
+  "matrixA_1024": [
+   [
+    773,
+    115,
+    -49
+   ],
+   [
+    -48,
+    760,
+    114
+   ],
+   [
+    -69,
+    -15,
+    929
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ]
+  ],
+  "curveB": [
+   0.786,
+   4337.08,
+   -0.069
+  ]
+ },
+ "kodak_ultramax_400|kodak_portra_endura": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 10.5,
+    "a": -1.3,
+    "b": -0.2
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 29.4,
+    "a": -1.2,
+    "b": -0.5
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.5,
+    "a": -0.3,
+    "b": 0.2
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 67.5,
+    "a": -1.2,
+    "b": -0.4
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 77.3,
+    "a": -0.9,
+    "b": -0.5
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 82.3,
+    "a": -0.9,
+    "b": 1.1
+   }
+  ],
+  "chroma_ratio_mean": 1.002,
+  "chroma_ratio_median": 0.947,
+  "chroma_ratio_sumC": 0.955,
+  "chroma_ratio_by_L": {
+   "L<45": 1.042,
+   "45-65": 0.977,
+   "L>=65": 0.843
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 31.8,
+    "Cref": 19.8,
+    "Cfilm": 33.2,
+    "Cratio": 1.68,
+    "href": 47.5,
+    "dh": 1.4,
+    "dE00": 7.7
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 63.0,
+    "Cref": 24.8,
+    "Cfilm": 25.9,
+    "Cratio": 1.05,
+    "href": 43.4,
+    "dh": 8.6,
+    "dE00": 3.4
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 50.3,
+    "Cref": 22.2,
+    "Cfilm": 27.1,
+    "Cratio": 1.22,
+    "href": 266.9,
+    "dh": -8.4,
+    "dE00": 4.7
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 37.7,
+    "Cref": 27.2,
+    "Cfilm": 31.7,
+    "Cratio": 1.17,
+    "href": 122.6,
+    "dh": -11.2,
+    "dE00": 6.7
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 56.9,
+    "Cref": 27.4,
+    "Cfilm": 26.6,
+    "Cratio": 0.97,
+    "href": 296.3,
+    "dh": -8.9,
+    "dE00": 4.0
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 69.1,
+    "Cref": 31.9,
+    "Cfilm": 24.4,
+    "Cratio": 0.76,
+    "href": 179.9,
+    "dh": 13.1,
+    "dE00": 5.8
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 54.9,
+    "Cref": 65.0,
+    "Cfilm": 61.5,
+    "Cratio": 0.95,
+    "href": 59.1,
+    "dh": 0.6,
+    "dE00": 6.5
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 38.8,
+    "Cref": 47.3,
+    "Cfilm": 42.4,
+    "Cratio": 0.9,
+    "href": 290.1,
+    "dh": -10.4,
+    "dE00": 5.4
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 43.7,
+    "Cref": 50.6,
+    "Cfilm": 49.9,
+    "Cratio": 0.99,
+    "href": 18.0,
+    "dh": 3.3,
+    "dE00": 6.4
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 24.4,
+    "Cref": 32.1,
+    "Cfilm": 35.8,
+    "Cratio": 1.12,
+    "href": 319.4,
+    "dh": -4.3,
+    "dE00": 5.0
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 64.8,
+    "Cref": 65.3,
+    "Cfilm": 57.6,
+    "Cratio": 0.88,
+    "href": 115.8,
+    "dh": -14.7,
+    "dE00": 10.4
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 63.4,
+    "Cref": 68.8,
+    "Cfilm": 61.7,
+    "Cratio": 0.9,
+    "href": 77.6,
+    "dh": -3.3,
+    "dE00": 6.8
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 27.0,
+    "Cref": 53.3,
+    "Cfilm": 44.3,
+    "Cratio": 0.83,
+    "href": 294.0,
+    "dh": -6.9,
+    "dE00": 3.9
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 49.2,
+    "Cref": 53.9,
+    "Cfilm": 51.0,
+    "Cratio": 0.95,
+    "href": 142.4,
+    "dh": -7.5,
+    "dE00": 6.1
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 35.8,
+    "Cref": 57.3,
+    "Cfilm": 59.5,
+    "Cratio": 1.04,
+    "href": 28.5,
+    "dh": 8.9,
+    "dE00": 7.5
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 70.1,
+    "Cref": 80.9,
+    "Cfilm": 64.5,
+    "Cratio": 0.8,
+    "href": 91.3,
+    "dh": -6.7,
+    "dE00": 10.3
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 45.7,
+    "Cref": 54.5,
+    "Cfilm": 51.5,
+    "Cratio": 0.94,
+    "href": 344.2,
+    "dh": -5.7,
+    "dE00": 5.3
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 51.0,
+    "Cref": 31.7,
+    "Cfilm": 28.9,
+    "Cratio": 0.91,
+    "href": 234.4,
+    "dh": 1.3,
+    "dE00": 1.3
+   }
+  ],
+  "mean_abs_dh": 7.0,
+  "dE00_mean": 5.5,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 3.7708692307588856,
+    "dE00_max": 6.516541729305782,
+    "dE00_chrom_mean": 3.64059431785954
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 3.3271642969757416,
+    "dE00_max": 5.391076617631335,
+    "dE00_chrom_mean": 3.169824941281897
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 3.2986277894907574,
+    "dE00_max": 5.9673300662437025,
+    "dE00_chrom_mean": 2.947551875978734
+   },
+   "raw_dE00_mean": 5.502758138264437
+  },
+  "matrixA_1024": [
+   [
+    796,
+    149,
+    -112
+   ],
+   [
+    -20,
+    785,
+    54
+   ],
+   [
+    -26,
+    -10,
+    877
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ]
+  ],
+  "curveB": [
+   0.885,
+   2389.653,
+   -0.035
+  ]
+ },
+ "kodak_vision3_250d|kodak_portra_endura": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 11.3,
+    "a": 0.4,
+    "b": -0.2
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 29.8,
+    "a": 0.1,
+    "b": -0.5
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.3,
+    "a": -0.4,
+    "b": 0.2
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 66.3,
+    "a": -2.0,
+    "b": -0.3
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 75.9,
+    "a": -2.3,
+    "b": 0.1
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 81.3,
+    "a": -2.7,
+    "b": 1.9
+   }
+  ],
+  "chroma_ratio_mean": 0.949,
+  "chroma_ratio_median": 0.893,
+  "chroma_ratio_sumC": 0.909,
+  "chroma_ratio_by_L": {
+   "L<45": 1.007,
+   "45-65": 0.908,
+   "L>=65": 0.817
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 31.7,
+    "Cref": 19.8,
+    "Cfilm": 31.2,
+    "Cratio": 1.58,
+    "href": 47.5,
+    "dh": 1.6,
+    "dE00": 7.1
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 62.4,
+    "Cref": 24.8,
+    "Cfilm": 22.3,
+    "Cratio": 0.9,
+    "href": 43.4,
+    "dh": 13.9,
+    "dE00": 5.6
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 49.9,
+    "Cref": 22.2,
+    "Cfilm": 25.2,
+    "Cratio": 1.14,
+    "href": 266.9,
+    "dh": -9.2,
+    "dE00": 4.2
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 38.4,
+    "Cref": 27.2,
+    "Cfilm": 30.8,
+    "Cratio": 1.13,
+    "href": 122.6,
+    "dh": -14.6,
+    "dE00": 7.1
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 56.3,
+    "Cref": 27.4,
+    "Cfilm": 23.7,
+    "Cratio": 0.86,
+    "href": 296.3,
+    "dh": -11.5,
+    "dE00": 4.6
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 67.8,
+    "Cref": 31.9,
+    "Cfilm": 22.8,
+    "Cratio": 0.71,
+    "href": 179.9,
+    "dh": 12.6,
+    "dE00": 6.4
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 54.9,
+    "Cref": 65.0,
+    "Cfilm": 58.7,
+    "Cratio": 0.9,
+    "href": 59.1,
+    "dh": 3.9,
+    "dE00": 7.2
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 38.4,
+    "Cref": 47.3,
+    "Cfilm": 41.1,
+    "Cratio": 0.87,
+    "href": 290.1,
+    "dh": -10.5,
+    "dE00": 5.2
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 42.9,
+    "Cref": 50.6,
+    "Cfilm": 45.3,
+    "Cratio": 0.9,
+    "href": 18.0,
+    "dh": 2.0,
+    "dE00": 7.2
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 24.3,
+    "Cref": 32.1,
+    "Cfilm": 35.5,
+    "Cratio": 1.11,
+    "href": 319.4,
+    "dh": -6.4,
+    "dE00": 5.3
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 64.1,
+    "Cref": 65.3,
+    "Cfilm": 56.1,
+    "Cratio": 0.86,
+    "href": 115.8,
+    "dh": -15.3,
+    "dE00": 11.1
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 62.8,
+    "Cref": 68.8,
+    "Cfilm": 59.8,
+    "Cratio": 0.87,
+    "href": 77.6,
+    "dh": -1.0,
+    "dE00": 7.0
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 26.3,
+    "Cref": 53.3,
+    "Cfilm": 44.5,
+    "Cratio": 0.83,
+    "href": 294.0,
+    "dh": -5.9,
+    "dE00": 3.7
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 48.7,
+    "Cref": 53.9,
+    "Cfilm": 48.6,
+    "Cratio": 0.9,
+    "href": 142.4,
+    "dh": -7.6,
+    "dE00": 6.7
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 34.7,
+    "Cref": 57.3,
+    "Cfilm": 55.4,
+    "Cratio": 0.97,
+    "href": 28.5,
+    "dh": 8.3,
+    "dE00": 7.9
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 69.3,
+    "Cref": 80.9,
+    "Cfilm": 63.1,
+    "Cratio": 0.78,
+    "href": 91.3,
+    "dh": -5.6,
+    "dE00": 10.6
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 44.9,
+    "Cref": 54.5,
+    "Cfilm": 47.8,
+    "Cratio": 0.88,
+    "href": 344.2,
+    "dh": -7.4,
+    "dE00": 6.6
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 50.1,
+    "Cref": 31.7,
+    "Cfilm": 28.2,
+    "Cratio": 0.89,
+    "href": 234.4,
+    "dh": 0.7,
+    "dE00": 1.9
+   }
+  ],
+  "mean_abs_dh": 7.7,
+  "dE00_mean": 5.9,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 3.7067228209988605,
+    "dE00_max": 6.585714439030912,
+    "dE00_chrom_mean": 3.654696587739812
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 3.2123876238052933,
+    "dE00_max": 5.322248881884392,
+    "dE00_chrom_mean": 3.1072960195520665
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 3.1823672535847103,
+    "dE00_max": 5.533739023319578,
+    "dE00_chrom_mean": 2.946875972120497
+   },
+   "raw_dE00_mean": 5.91783014047181
+  },
+  "matrixA_1024": [
+   [
+    720,
+    210,
+    -117
+   ],
+   [
+    -8,
+    782,
+    42
+   ],
+   [
+    -19,
+    17,
+    824
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    639,
+    169,
+    -83
+   ],
+   [
+    13,
+    642,
+    52
+   ],
+   [
+    5,
+    43,
+    663
+   ]
+  ],
+  "curveB": [
+   0.839,
+   1.103,
+   -0.038
+  ]
+ },
+ "kodak_vision3_500t|kodak_portra_endura": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 11.4,
+    "a": 0.4,
+    "b": -0.2
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 30.0,
+    "a": 0.3,
+    "b": -0.3
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.4,
+    "a": -0.3,
+    "b": 0.2
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 66.5,
+    "a": -1.9,
+    "b": -0.2
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 76.1,
+    "a": -2.3,
+    "b": 0.3
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 81.4,
+    "a": -2.6,
+    "b": 2.0
+   }
+  ],
+  "chroma_ratio_mean": 0.923,
+  "chroma_ratio_median": 0.87,
+  "chroma_ratio_sumC": 0.893,
+  "chroma_ratio_by_L": {
+   "L<45": 1.012,
+   "45-65": 0.884,
+   "L>=65": 0.79
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 30.2,
+    "Cref": 19.8,
+    "Cfilm": 28.0,
+    "Cratio": 1.42,
+    "href": 47.5,
+    "dh": 3.7,
+    "dE00": 7.1
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 61.4,
+    "Cref": 24.8,
+    "Cfilm": 20.9,
+    "Cratio": 0.84,
+    "href": 43.4,
+    "dh": 16.9,
+    "dE00": 7.0
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 50.9,
+    "Cref": 22.2,
+    "Cfilm": 23.5,
+    "Cratio": 1.06,
+    "href": 266.9,
+    "dh": -5.0,
+    "dE00": 2.6
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 38.1,
+    "Cref": 27.2,
+    "Cfilm": 30.7,
+    "Cratio": 1.13,
+    "href": 122.6,
+    "dh": -20.3,
+    "dE00": 9.0
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 56.9,
+    "Cref": 27.4,
+    "Cfilm": 23.3,
+    "Cratio": 0.85,
+    "href": 296.3,
+    "dh": -12.6,
+    "dE00": 5.1
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 69.2,
+    "Cref": 31.9,
+    "Cfilm": 17.6,
+    "Cratio": 0.55,
+    "href": 179.9,
+    "dh": 9.1,
+    "dE00": 7.8
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 53.0,
+    "Cref": 65.0,
+    "Cfilm": 56.9,
+    "Cratio": 0.87,
+    "href": 59.1,
+    "dh": 4.0,
+    "dE00": 9.0
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 40.2,
+    "Cref": 47.3,
+    "Cfilm": 42.6,
+    "Cratio": 0.9,
+    "href": 290.1,
+    "dh": -7.4,
+    "dE00": 3.6
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 40.7,
+    "Cref": 50.6,
+    "Cfilm": 43.0,
+    "Cratio": 0.85,
+    "href": 18.0,
+    "dh": 3.5,
+    "dE00": 9.4
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 23.8,
+    "Cref": 32.1,
+    "Cfilm": 38.5,
+    "Cratio": 1.2,
+    "href": 319.4,
+    "dh": -12.3,
+    "dE00": 7.7
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 63.5,
+    "Cref": 65.3,
+    "Cfilm": 56.5,
+    "Cratio": 0.86,
+    "href": 115.8,
+    "dh": -18.8,
+    "dE00": 13.2
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 61.2,
+    "Cref": 68.8,
+    "Cfilm": 58.6,
+    "Cratio": 0.85,
+    "href": 77.6,
+    "dh": -1.0,
+    "dE00": 8.3
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 27.3,
+    "Cref": 53.3,
+    "Cfilm": 47.4,
+    "Cratio": 0.89,
+    "href": 294.0,
+    "dh": -3.8,
+    "dE00": 2.5
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 49.6,
+    "Cref": 53.9,
+    "Cfilm": 45.4,
+    "Cratio": 0.84,
+    "href": 142.4,
+    "dh": -18.6,
+    "dE00": 9.7
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 32.4,
+    "Cref": 57.3,
+    "Cfilm": 52.6,
+    "Cratio": 0.92,
+    "href": 28.5,
+    "dh": 9.2,
+    "dE00": 9.7
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 68.3,
+    "Cref": 80.9,
+    "Cfilm": 62.4,
+    "Cratio": 0.77,
+    "href": 91.3,
+    "dh": -5.8,
+    "dE00": 11.4
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 44.0,
+    "Cref": 54.5,
+    "Cfilm": 51.4,
+    "Cratio": 0.94,
+    "href": 344.2,
+    "dh": -16.8,
+    "dE00": 9.7
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 52.6,
+    "Cref": 31.7,
+    "Cfilm": 27.2,
+    "Cratio": 0.86,
+    "href": 234.4,
+    "dh": 5.2,
+    "dE00": 3.0
+   }
+  ],
+  "mean_abs_dh": 9.7,
+  "dE00_mean": 6.8,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 4.355869195197257,
+    "dE00_max": 6.925594263612856,
+    "dE00_chrom_mean": 4.349151783208008
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 3.0012369717223124,
+    "dE00_max": 5.5914838902656445,
+    "dE00_chrom_mean": 2.7998596321811005
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 2.9067832055413834,
+    "dE00_max": 5.762550187116327,
+    "dE00_chrom_mean": 2.7604916509198767
+   },
+   "raw_dE00_mean": 6.755649966507914
+  },
+  "matrixA_1024": [
+   [
+    587,
+    382,
+    -146
+   ],
+   [
+    -25,
+    789,
+    43
+   ],
+   [
+    -30,
+    -1,
+    857
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ]
+  ],
+  "curveB": [
+   0.757,
+   2931.782,
+   -0.066
+  ]
+ },
+ "kodak_vision3_50d|kodak_portra_endura": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 11.3,
+    "a": -0.2,
+    "b": -1.1
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 30.4,
+    "a": 0.0,
+    "b": -1.1
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.5,
+    "a": -0.3,
+    "b": 0.3
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 67.3,
+    "a": -2.2,
+    "b": -0.1
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 77.2,
+    "a": -2.5,
+    "b": 0.0
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 82.3,
+    "a": -2.6,
+    "b": 1.6
+   }
+  ],
+  "chroma_ratio_mean": 0.969,
+  "chroma_ratio_median": 0.924,
+  "chroma_ratio_sumC": 0.93,
+  "chroma_ratio_by_L": {
+   "L<45": 1.021,
+   "45-65": 0.936,
+   "L>=65": 0.837
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 32.1,
+    "Cref": 19.8,
+    "Cfilm": 29.1,
+    "Cratio": 1.47,
+    "href": 47.5,
+    "dh": 3.2,
+    "dE00": 6.3
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 63.0,
+    "Cref": 24.8,
+    "Cfilm": 23.2,
+    "Cratio": 0.94,
+    "href": 43.4,
+    "dh": 15.0,
+    "dE00": 5.7
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 50.0,
+    "Cref": 22.2,
+    "Cfilm": 26.8,
+    "Cratio": 1.21,
+    "href": 266.9,
+    "dh": -4.0,
+    "dE00": 3.3
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 38.9,
+    "Cref": 27.2,
+    "Cfilm": 30.5,
+    "Cratio": 1.12,
+    "href": 122.6,
+    "dh": -12.9,
+    "dE00": 6.3
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 56.2,
+    "Cref": 27.4,
+    "Cfilm": 26.5,
+    "Cratio": 0.97,
+    "href": 296.3,
+    "dh": -8.7,
+    "dE00": 3.8
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 69.1,
+    "Cref": 31.9,
+    "Cfilm": 23.7,
+    "Cratio": 0.74,
+    "href": 179.9,
+    "dh": 12.4,
+    "dE00": 5.8
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 55.6,
+    "Cref": 65.0,
+    "Cfilm": 58.9,
+    "Cratio": 0.91,
+    "href": 59.1,
+    "dh": 4.6,
+    "dE00": 6.8
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 38.2,
+    "Cref": 47.3,
+    "Cfilm": 44.9,
+    "Cratio": 0.95,
+    "href": 290.1,
+    "dh": -6.7,
+    "dE00": 4.1
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 43.7,
+    "Cref": 50.6,
+    "Cfilm": 45.5,
+    "Cratio": 0.9,
+    "href": 18.0,
+    "dh": 3.1,
+    "dE00": 6.5
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 24.2,
+    "Cref": 32.1,
+    "Cfilm": 35.4,
+    "Cratio": 1.1,
+    "href": 319.4,
+    "dh": -6.5,
+    "dE00": 5.4
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 66.0,
+    "Cref": 65.3,
+    "Cfilm": 57.8,
+    "Cratio": 0.89,
+    "href": 115.8,
+    "dh": -13.6,
+    "dE00": 9.4
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 64.2,
+    "Cref": 68.8,
+    "Cfilm": 60.7,
+    "Cratio": 0.88,
+    "href": 77.6,
+    "dh": 0.5,
+    "dE00": 5.8
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 26.2,
+    "Cref": 53.3,
+    "Cfilm": 46.6,
+    "Cratio": 0.87,
+    "href": 294.0,
+    "dh": -4.5,
+    "dE00": 3.3
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 50.3,
+    "Cref": 53.9,
+    "Cfilm": 50.4,
+    "Cratio": 0.94,
+    "href": 142.4,
+    "dh": -6.6,
+    "dE00": 5.0
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 34.8,
+    "Cref": 57.3,
+    "Cfilm": 55.3,
+    "Cratio": 0.97,
+    "href": 28.5,
+    "dh": 8.3,
+    "dE00": 7.8
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 71.0,
+    "Cref": 80.9,
+    "Cfilm": 64.4,
+    "Cratio": 0.8,
+    "href": 91.3,
+    "dh": -4.1,
+    "dE00": 8.9
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 45.5,
+    "Cref": 54.5,
+    "Cfilm": 48.5,
+    "Cratio": 0.89,
+    "href": 344.2,
+    "dh": -7.2,
+    "dE00": 6.0
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 50.7,
+    "Cref": 31.7,
+    "Cfilm": 28.9,
+    "Cratio": 0.91,
+    "href": 234.4,
+    "dh": 4.1,
+    "dE00": 1.9
+   }
+  ],
+  "mean_abs_dh": 7.0,
+  "dE00_mean": 5.3,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 3.508180674812485,
+    "dE00_max": 6.235144260647797,
+    "dE00_chrom_mean": 3.3675534922221875
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 2.382462430214069,
+    "dE00_max": 5.157263226039837,
+    "dE00_chrom_mean": 2.1352940125773032
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 2.3416165390921253,
+    "dE00_max": 5.513428639036615,
+    "dE00_chrom_mean": 2.0315847587673606
+   },
+   "raw_dE00_mean": 5.310587961874251
+  },
+  "matrixA_1024": [
+   [
+    726,
+    182,
+    -82
+   ],
+   [
+    -7,
+    803,
+    38
+   ],
+   [
+    -25,
+    -8,
+    886
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ]
+  ],
+  "curveB": [
+   0.786,
+   3977.481,
+   -0.057
+  ]
+ },
+ "kodak_vision3_200t|kodak_portra_endura": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 11.6,
+    "a": -0.2,
+    "b": -0.3
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 30.7,
+    "a": 0.1,
+    "b": -0.5
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.5,
+    "a": -0.3,
+    "b": 0.3
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 66.5,
+    "a": -2.1,
+    "b": 0.0
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 76.2,
+    "a": -2.6,
+    "b": 0.4
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 81.6,
+    "a": -3.0,
+    "b": 2.2
+   }
+  ],
+  "chroma_ratio_mean": 0.959,
+  "chroma_ratio_median": 0.913,
+  "chroma_ratio_sumC": 0.925,
+  "chroma_ratio_by_L": {
+   "L<45": 1.058,
+   "45-65": 0.914,
+   "L>=65": 0.813
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 31.1,
+    "Cref": 19.8,
+    "Cfilm": 28.0,
+    "Cratio": 1.42,
+    "href": 47.5,
+    "dh": 5.6,
+    "dE00": 6.7
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 61.7,
+    "Cref": 24.8,
+    "Cfilm": 20.7,
+    "Cratio": 0.83,
+    "href": 43.4,
+    "dh": 16.7,
+    "dE00": 6.9
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 50.6,
+    "Cref": 22.2,
+    "Cfilm": 24.8,
+    "Cratio": 1.12,
+    "href": 266.9,
+    "dh": -1.3,
+    "dE00": 1.8
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 39.0,
+    "Cref": 27.2,
+    "Cfilm": 33.4,
+    "Cratio": 1.23,
+    "href": 122.6,
+    "dh": -20.9,
+    "dE00": 9.2
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 56.2,
+    "Cref": 27.4,
+    "Cfilm": 25.8,
+    "Cratio": 0.94,
+    "href": 296.3,
+    "dh": -9.6,
+    "dE00": 4.0
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 69.4,
+    "Cref": 31.9,
+    "Cfilm": 18.8,
+    "Cratio": 0.59,
+    "href": 179.9,
+    "dh": 2.0,
+    "dE00": 6.6
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 53.9,
+    "Cref": 65.0,
+    "Cfilm": 57.4,
+    "Cratio": 0.88,
+    "href": 59.1,
+    "dh": 5.2,
+    "dE00": 8.5
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 39.4,
+    "Cref": 47.3,
+    "Cfilm": 45.8,
+    "Cratio": 0.97,
+    "href": 290.1,
+    "dh": -4.4,
+    "dE00": 2.6
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 41.2,
+    "Cref": 50.6,
+    "Cfilm": 42.8,
+    "Cratio": 0.85,
+    "href": 18.0,
+    "dh": -0.2,
+    "dE00": 8.8
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 23.9,
+    "Cref": 32.1,
+    "Cfilm": 40.7,
+    "Cratio": 1.27,
+    "href": 319.4,
+    "dh": -11.2,
+    "dE00": 7.7
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 64.2,
+    "Cref": 65.3,
+    "Cfilm": 58.4,
+    "Cratio": 0.89,
+    "href": 115.8,
+    "dh": -19.1,
+    "dE00": 13.2
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 62.3,
+    "Cref": 68.8,
+    "Cfilm": 59.8,
+    "Cratio": 0.87,
+    "href": 77.6,
+    "dh": -0.0,
+    "dE00": 7.4
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 26.7,
+    "Cref": 53.3,
+    "Cfilm": 49.9,
+    "Cratio": 0.94,
+    "href": 294.0,
+    "dh": -2.2,
+    "dE00": 2.2
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 50.0,
+    "Cref": 53.9,
+    "Cfilm": 48.7,
+    "Cratio": 0.9,
+    "href": 142.4,
+    "dh": -21.1,
+    "dE00": 10.4
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 32.6,
+    "Cref": 57.3,
+    "Cfilm": 52.9,
+    "Cratio": 0.92,
+    "href": 28.5,
+    "dh": 8.5,
+    "dE00": 9.3
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 69.1,
+    "Cref": 80.9,
+    "Cfilm": 63.8,
+    "Cratio": 0.79,
+    "href": 91.3,
+    "dh": -5.5,
+    "dE00": 10.6
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 43.7,
+    "Cref": 54.5,
+    "Cfilm": 53.8,
+    "Cratio": 0.99,
+    "href": 344.2,
+    "dh": -16.9,
+    "dE00": 10.0
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 52.3,
+    "Cref": 31.7,
+    "Cfilm": 27.5,
+    "Cratio": 0.87,
+    "href": 234.4,
+    "dh": 6.8,
+    "dE00": 3.2
+   }
+  ],
+  "mean_abs_dh": 8.7,
+  "dE00_mean": 6.5,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 4.290051731217855,
+    "dE00_max": 6.547477374499405,
+    "dE00_chrom_mean": 4.222316474029233
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 2.5678104288599863,
+    "dE00_max": 4.755060412477091,
+    "dE00_chrom_mean": 2.317541884668991
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 2.4104212426027494,
+    "dE00_max": 4.824867704603603,
+    "dE00_chrom_mean": 2.2132643647268653
+   },
+   "raw_dE00_mean": 6.452326423275896
+  },
+  "matrixA_1024": [
+   [
+    593,
+    406,
+    -161
+   ],
+   [
+    -26,
+    826,
+    16
+   ],
+   [
+    -25,
+    -21,
+    878
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ]
+  ],
+  "curveB": [
+   0.715,
+   1734.341,
+   -0.069
+  ]
+ },
+ "fujifilm_c200|kodak_portra_endura": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 8.7,
+    "a": -0.2,
+    "b": -0.4
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 25.8,
+    "a": -1.0,
+    "b": 1.7
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.5,
+    "a": -0.2,
+    "b": 0.2
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 70.1,
+    "a": 0.7,
+    "b": -2.7
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 79.7,
+    "a": 1.3,
+    "b": -2.1
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 84.0,
+    "a": 0.5,
+    "b": 0.3
+   }
+  ],
+  "chroma_ratio_mean": 1.141,
+  "chroma_ratio_median": 1.079,
+  "chroma_ratio_sumC": 1.072,
+  "chroma_ratio_by_L": {
+   "L<45": 1.2,
+   "45-65": 1.114,
+   "L>=65": 0.893
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 29.9,
+    "Cref": 19.8,
+    "Cfilm": 35.2,
+    "Cratio": 1.78,
+    "href": 47.5,
+    "dh": 1.1,
+    "dE00": 9.2
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 64.2,
+    "Cref": 24.8,
+    "Cfilm": 34.2,
+    "Cratio": 1.38,
+    "href": 43.4,
+    "dh": 16.2,
+    "dE00": 7.6
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 49.6,
+    "Cref": 22.2,
+    "Cfilm": 34.0,
+    "Cratio": 1.53,
+    "href": 266.9,
+    "dh": -0.7,
+    "dE00": 5.4
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 38.5,
+    "Cref": 27.2,
+    "Cfilm": 34.8,
+    "Cratio": 1.28,
+    "href": 122.6,
+    "dh": -13.8,
+    "dE00": 7.4
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 56.2,
+    "Cref": 27.4,
+    "Cfilm": 35.1,
+    "Cratio": 1.28,
+    "href": 296.3,
+    "dh": -7.2,
+    "dE00": 5.8
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 71.7,
+    "Cref": 31.9,
+    "Cfilm": 25.0,
+    "Cratio": 0.78,
+    "href": 179.9,
+    "dh": 23.5,
+    "dE00": 8.7
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 57.8,
+    "Cref": 65.0,
+    "Cfilm": 64.0,
+    "Cratio": 0.99,
+    "href": 59.1,
+    "dh": 1.9,
+    "dE00": 4.0
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 34.8,
+    "Cref": 47.3,
+    "Cfilm": 51.0,
+    "Cratio": 1.08,
+    "href": 290.1,
+    "dh": -2.7,
+    "dE00": 5.3
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 42.0,
+    "Cref": 50.6,
+    "Cfilm": 56.3,
+    "Cratio": 1.11,
+    "href": 18.0,
+    "dh": 10.7,
+    "dE00": 9.8
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 20.8,
+    "Cref": 32.1,
+    "Cfilm": 43.3,
+    "Cratio": 1.35,
+    "href": 319.4,
+    "dh": -12.0,
+    "dE00": 9.9
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 69.1,
+    "Cref": 65.3,
+    "Cfilm": 62.3,
+    "Cratio": 0.95,
+    "href": 115.8,
+    "dh": -21.1,
+    "dE00": 13.4
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 67.4,
+    "Cref": 68.8,
+    "Cfilm": 65.2,
+    "Cratio": 0.95,
+    "href": 77.6,
+    "dh": -2.1,
+    "dE00": 3.4
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 24.2,
+    "Cref": 53.3,
+    "Cfilm": 58.3,
+    "Cratio": 1.09,
+    "href": 294.0,
+    "dh": 2.3,
+    "dE00": 4.0
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 50.2,
+    "Cref": 53.9,
+    "Cfilm": 54.3,
+    "Cratio": 1.01,
+    "href": 142.4,
+    "dh": -10.1,
+    "dE00": 6.1
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 36.3,
+    "Cref": 57.3,
+    "Cfilm": 61.8,
+    "Cratio": 1.08,
+    "href": 28.5,
+    "dh": 9.5,
+    "dE00": 7.6
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 73.5,
+    "Cref": 80.9,
+    "Cfilm": 68.0,
+    "Cratio": 0.84,
+    "href": 91.3,
+    "dh": -7.7,
+    "dE00": 8.7
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 43.2,
+    "Cref": 54.5,
+    "Cfilm": 58.4,
+    "Cratio": 1.07,
+    "href": 344.2,
+    "dh": -9.3,
+    "dE00": 8.2
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 51.1,
+    "Cref": 31.7,
+    "Cfilm": 31.2,
+    "Cratio": 0.98,
+    "href": 234.4,
+    "dh": 8.6,
+    "dE00": 2.8
+   }
+  ],
+  "mean_abs_dh": 8.9,
+  "dE00_mean": 6.6,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 4.5460760651187835,
+    "dE00_max": 7.949134064883432,
+    "dE00_chrom_mean": 4.272978366846466
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 3.3154786252696837,
+    "dE00_max": 6.370639180741254,
+    "dE00_chrom_mean": 3.0839013707017515
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 3.2988289563817736,
+    "dE00_max": 5.765988507962109,
+    "dE00_chrom_mean": 2.9390150403560713
+   },
+   "raw_dE00_mean": 6.641397122419942
+  },
+  "matrixA_1024": [
+   [
+    815,
+    260,
+    -230
+   ],
+   [
+    -29,
+    834,
+    3
+   ],
+   [
+    -78,
+    -155,
+    1100
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ]
+  ],
+  "curveB": [
+   0.838,
+   7123.33,
+   -0.052
+  ]
+ },
+ "fujifilm_pro_400h|kodak_portra_endura": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 9.8,
+    "a": -1.1,
+    "b": 0.8
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 28.8,
+    "a": -1.4,
+    "b": 0.8
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.6,
+    "a": -0.2,
+    "b": 0.2
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 67.8,
+    "a": -0.2,
+    "b": -1.4
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 77.5,
+    "a": 0.2,
+    "b": -1.5
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 82.4,
+    "a": 0.1,
+    "b": 0.2
+   }
+  ],
+  "chroma_ratio_mean": 1.016,
+  "chroma_ratio_median": 0.947,
+  "chroma_ratio_sumC": 0.966,
+  "chroma_ratio_by_L": {
+   "L<45": 1.077,
+   "45-65": 0.979,
+   "L>=65": 0.842
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 30.7,
+    "Cref": 19.8,
+    "Cfilm": 32.7,
+    "Cratio": 1.66,
+    "href": 47.5,
+    "dh": 5.1,
+    "dE00": 8.2
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 63.1,
+    "Cref": 24.8,
+    "Cfilm": 24.6,
+    "Cratio": 0.99,
+    "href": 43.4,
+    "dh": 12.0,
+    "dE00": 4.6
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 50.2,
+    "Cref": 22.2,
+    "Cfilm": 28.5,
+    "Cratio": 1.28,
+    "href": 266.9,
+    "dh": -5.2,
+    "dE00": 4.4
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 38.0,
+    "Cref": 27.2,
+    "Cfilm": 33.5,
+    "Cratio": 1.24,
+    "href": 122.6,
+    "dh": -21.2,
+    "dE00": 9.7
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 56.5,
+    "Cref": 27.4,
+    "Cfilm": 28.5,
+    "Cratio": 1.04,
+    "href": 296.3,
+    "dh": -10.7,
+    "dE00": 5.2
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 69.6,
+    "Cref": 31.9,
+    "Cfilm": 21.8,
+    "Cratio": 0.68,
+    "href": 179.9,
+    "dh": 16.3,
+    "dE00": 7.2
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 54.2,
+    "Cref": 65.0,
+    "Cfilm": 61.4,
+    "Cratio": 0.94,
+    "href": 59.1,
+    "dh": 1.0,
+    "dE00": 7.3
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 37.5,
+    "Cref": 47.3,
+    "Cfilm": 44.3,
+    "Cratio": 0.94,
+    "href": 290.1,
+    "dh": -8.5,
+    "dE00": 5.2
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 42.1,
+    "Cref": 50.6,
+    "Cfilm": 48.0,
+    "Cratio": 0.95,
+    "href": 18.0,
+    "dh": 4.4,
+    "dE00": 8.0
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 22.0,
+    "Cref": 32.1,
+    "Cfilm": 39.3,
+    "Cratio": 1.22,
+    "href": 319.4,
+    "dh": -11.9,
+    "dE00": 8.6
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 64.7,
+    "Cref": 65.3,
+    "Cfilm": 58.8,
+    "Cratio": 0.9,
+    "href": 115.8,
+    "dh": -23.1,
+    "dE00": 15.5
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 62.2,
+    "Cref": 68.8,
+    "Cfilm": 62.4,
+    "Cratio": 0.91,
+    "href": 77.6,
+    "dh": -5.5,
+    "dE00": 8.3
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 25.6,
+    "Cref": 53.3,
+    "Cfilm": 48.2,
+    "Cratio": 0.9,
+    "href": 294.0,
+    "dh": -3.5,
+    "dE00": 3.3
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 48.6,
+    "Cref": 53.9,
+    "Cfilm": 49.7,
+    "Cratio": 0.92,
+    "href": 142.4,
+    "dh": -14.0,
+    "dE00": 8.5
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 33.9,
+    "Cref": 57.3,
+    "Cfilm": 57.0,
+    "Cratio": 1.0,
+    "href": 28.5,
+    "dh": 9.9,
+    "dE00": 9.0
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 68.6,
+    "Cref": 80.9,
+    "Cfilm": 65.1,
+    "Cratio": 0.8,
+    "href": 91.3,
+    "dh": -11.3,
+    "dE00": 13.3
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 44.2,
+    "Cref": 54.5,
+    "Cfilm": 52.9,
+    "Cratio": 0.97,
+    "href": 344.2,
+    "dh": -10.5,
+    "dE00": 7.7
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 50.6,
+    "Cref": 31.7,
+    "Cfilm": 29.4,
+    "Cratio": 0.93,
+    "href": 234.4,
+    "dh": 4.2,
+    "dE00": 1.8
+   }
+  ],
+  "mean_abs_dh": 9.9,
+  "dE00_mean": 6.8,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 4.663618353263698,
+    "dE00_max": 7.561244172334555,
+    "dE00_chrom_mean": 4.567337203854708
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 3.0138844695510674,
+    "dE00_max": 5.564695820885207,
+    "dE00_chrom_mean": 2.676833571827979
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 2.9620266975312304,
+    "dE00_max": 5.513874169323583,
+    "dE00_chrom_mean": 2.625300636775676
+   },
+   "raw_dE00_mean": 6.781379879536736
+  },
+  "matrixA_1024": [
+   [
+    740,
+    332,
+    -245
+   ],
+   [
+    -18,
+    777,
+    29
+   ],
+   [
+    -26,
+    -22,
+    876
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ]
+  ],
+  "curveB": [
+   0.778,
+   3440.104,
+   -0.058
+  ]
+ },
+ "fujifilm_xtra_400|kodak_portra_endura": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 7.6,
+    "a": -0.7,
+    "b": -1.1
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 24.5,
+    "a": -0.4,
+    "b": 1.7
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.8,
+    "a": -0.3,
+    "b": 0.2
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 71.1,
+    "a": 0.0,
+    "b": -4.0
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 80.6,
+    "a": 0.8,
+    "b": -3.1
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 84.6,
+    "a": 0.7,
+    "b": -0.5
+   }
+  ],
+  "chroma_ratio_mean": 1.202,
+  "chroma_ratio_median": 1.141,
+  "chroma_ratio_sumC": 1.122,
+  "chroma_ratio_by_L": {
+   "L<45": 1.274,
+   "45-65": 1.168,
+   "L>=65": 0.915
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 28.7,
+    "Cref": 19.8,
+    "Cfilm": 36.0,
+    "Cratio": 1.82,
+    "href": 47.5,
+    "dh": -0.6,
+    "dE00": 10.1
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 64.7,
+    "Cref": 24.8,
+    "Cfilm": 36.6,
+    "Cratio": 1.48,
+    "href": 43.4,
+    "dh": 19.3,
+    "dE00": 9.3
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 49.4,
+    "Cref": 22.2,
+    "Cfilm": 36.5,
+    "Cratio": 1.65,
+    "href": 266.9,
+    "dh": 1.9,
+    "dE00": 5.7
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 39.6,
+    "Cref": 27.2,
+    "Cfilm": 37.1,
+    "Cratio": 1.37,
+    "href": 122.6,
+    "dh": -14.4,
+    "dE00": 7.6
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 55.5,
+    "Cref": 27.4,
+    "Cfilm": 39.1,
+    "Cratio": 1.43,
+    "href": 296.3,
+    "dh": -5.7,
+    "dE00": 6.6
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 73.1,
+    "Cref": 31.9,
+    "Cfilm": 25.5,
+    "Cratio": 0.8,
+    "href": 179.9,
+    "dh": 24.6,
+    "dE00": 9.2
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 58.8,
+    "Cref": 65.0,
+    "Cfilm": 65.0,
+    "Cratio": 1.0,
+    "href": 59.1,
+    "dh": 2.2,
+    "dE00": 3.3
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 32.5,
+    "Cref": 47.3,
+    "Cfilm": 55.0,
+    "Cratio": 1.16,
+    "href": 290.1,
+    "dh": 0.5,
+    "dE00": 6.7
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 40.7,
+    "Cref": 50.6,
+    "Cfilm": 58.0,
+    "Cratio": 1.15,
+    "href": 18.0,
+    "dh": 11.7,
+    "dE00": 11.2
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 19.7,
+    "Cref": 32.1,
+    "Cfilm": 48.6,
+    "Cratio": 1.51,
+    "href": 319.4,
+    "dh": -13.3,
+    "dE00": 11.8
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 70.9,
+    "Cref": 65.3,
+    "Cfilm": 64.5,
+    "Cratio": 0.99,
+    "href": 115.8,
+    "dh": -22.0,
+    "dE00": 14.0
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 69.1,
+    "Cref": 68.8,
+    "Cfilm": 66.6,
+    "Cratio": 0.97,
+    "href": 77.6,
+    "dh": -1.1,
+    "dE00": 1.7
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 23.1,
+    "Cref": 53.3,
+    "Cfilm": 63.1,
+    "Cratio": 1.18,
+    "href": 294.0,
+    "dh": 4.5,
+    "dE00": 5.5
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 51.5,
+    "Cref": 53.9,
+    "Cfilm": 56.6,
+    "Cratio": 1.05,
+    "href": 142.4,
+    "dh": -12.5,
+    "dE00": 6.4
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 35.7,
+    "Cref": 57.3,
+    "Cfilm": 62.0,
+    "Cratio": 1.08,
+    "href": 28.5,
+    "dh": 9.3,
+    "dE00": 7.9
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 75.2,
+    "Cref": 80.9,
+    "Cfilm": 69.5,
+    "Cratio": 0.86,
+    "href": 91.3,
+    "dh": -7.0,
+    "dE00": 7.4
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 41.4,
+    "Cref": 54.5,
+    "Cfilm": 61.9,
+    "Cratio": 1.13,
+    "href": 344.2,
+    "dh": -12.4,
+    "dE00": 10.5
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 51.4,
+    "Cref": 31.7,
+    "Cfilm": 31.7,
+    "Cratio": 1.0,
+    "href": 234.4,
+    "dh": 9.3,
+    "dE00": 3.0
+   }
+  ],
+  "mean_abs_dh": 9.6,
+  "dE00_mean": 7.2,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 4.952241134292848,
+    "dE00_max": 9.085168140888449,
+    "dE00_chrom_mean": 4.649424427011648
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 3.4863613468928265,
+    "dE00_max": 7.37153931247453,
+    "dE00_chrom_mean": 3.22100749758239
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 3.5027247986546226,
+    "dE00_max": 6.625906119518232,
+    "dE00_chrom_mean": 3.1604917533300596
+   },
+   "raw_dE00_mean": 7.186475530920018
+  },
+  "matrixA_1024": [
+   [
+    819,
+    328,
+    -293
+   ],
+   [
+    -35,
+    892,
+    -35
+   ],
+   [
+    -82,
+    -179,
+    1151
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ]
+  ],
+  "curveB": [
+   0.83,
+   7560.147,
+   -0.065
+  ]
+ },
+ "kodak_portra_160|fujifilm_crystal_archive_typeii": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 7.8,
+    "a": -4.7,
+    "b": -2.6
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 27.8,
+    "a": -3.6,
+    "b": -1.5
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.7,
+    "a": -0.2,
+    "b": 0.3
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 68.5,
+    "a": -1.0,
+    "b": 1.4
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 78.9,
+    "a": -1.4,
+    "b": 2.8
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 83.8,
+    "a": -1.8,
+    "b": 4.3
+   }
+  ],
+  "chroma_ratio_mean": 0.991,
+  "chroma_ratio_median": 0.952,
+  "chroma_ratio_sumC": 0.952,
+  "chroma_ratio_by_L": {
+   "L<45": 0.974,
+   "45-65": 0.995,
+   "L>=65": 0.874
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 29.0,
+    "Cref": 19.8,
+    "Cfilm": 30.9,
+    "Cratio": 1.56,
+    "href": 47.5,
+    "dh": -2.7,
+    "dE00": 8.7
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 62.4,
+    "Cref": 24.8,
+    "Cfilm": 26.4,
+    "Cratio": 1.06,
+    "href": 43.4,
+    "dh": 4.6,
+    "dE00": 2.4
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 51.8,
+    "Cref": 22.2,
+    "Cfilm": 26.0,
+    "Cratio": 1.17,
+    "href": 266.9,
+    "dh": -15.6,
+    "dE00": 6.8
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 37.9,
+    "Cref": 27.2,
+    "Cfilm": 31.8,
+    "Cratio": 1.17,
+    "href": 122.6,
+    "dh": -12.1,
+    "dE00": 6.8
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 58.0,
+    "Cref": 27.4,
+    "Cfilm": 24.5,
+    "Cratio": 0.89,
+    "href": 296.3,
+    "dh": -14.6,
+    "dE00": 6.3
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 72.7,
+    "Cref": 31.9,
+    "Cfilm": 26.1,
+    "Cratio": 0.82,
+    "href": 179.9,
+    "dh": 0.8,
+    "dE00": 3.0
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 53.6,
+    "Cref": 65.0,
+    "Cfilm": 62.2,
+    "Cratio": 0.96,
+    "href": 59.1,
+    "dh": -2.3,
+    "dE00": 7.9
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 41.0,
+    "Cref": 47.3,
+    "Cfilm": 36.6,
+    "Cratio": 0.77,
+    "href": 290.1,
+    "dh": -20.4,
+    "dE00": 8.7
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 41.9,
+    "Cref": 50.6,
+    "Cfilm": 51.8,
+    "Cratio": 1.02,
+    "href": 18.0,
+    "dh": 1.5,
+    "dE00": 7.9
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 22.1,
+    "Cref": 32.1,
+    "Cfilm": 35.4,
+    "Cratio": 1.1,
+    "href": 319.4,
+    "dh": -14.3,
+    "dE00": 8.7
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 69.3,
+    "Cref": 65.3,
+    "Cfilm": 61.3,
+    "Cratio": 0.94,
+    "href": 115.8,
+    "dh": -14.8,
+    "dE00": 9.2
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 64.3,
+    "Cref": 68.8,
+    "Cfilm": 62.3,
+    "Cratio": 0.91,
+    "href": 77.6,
+    "dh": -3.3,
+    "dE00": 6.1
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 30.1,
+    "Cref": 53.3,
+    "Cfilm": 36.9,
+    "Cratio": 0.69,
+    "href": 294.0,
+    "dh": -16.3,
+    "dE00": 7.0
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 53.4,
+    "Cref": 53.9,
+    "Cfilm": 57.0,
+    "Cratio": 1.06,
+    "href": 142.4,
+    "dh": -6.9,
+    "dE00": 3.4
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 33.9,
+    "Cref": 57.3,
+    "Cfilm": 59.1,
+    "Cratio": 1.03,
+    "href": 28.5,
+    "dh": 6.6,
+    "dE00": 7.9
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 72.6,
+    "Cref": 80.9,
+    "Cfilm": 66.2,
+    "Cratio": 0.82,
+    "href": 91.3,
+    "dh": -5.4,
+    "dE00": 8.2
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 45.7,
+    "Cref": 54.5,
+    "Cfilm": 51.6,
+    "Cratio": 0.95,
+    "href": 344.2,
+    "dh": -5.1,
+    "dE00": 5.2
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 53.8,
+    "Cref": 31.7,
+    "Cfilm": 29.0,
+    "Cratio": 0.92,
+    "href": 234.4,
+    "dh": -7.4,
+    "dE00": 3.6
+   }
+  ],
+  "mean_abs_dh": 8.6,
+  "dE00_mean": 6.2,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 4.049872969983435,
+    "dE00_max": 9.025183628275078,
+    "dE00_chrom_mean": 3.772447735132231
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 3.3665033306294823,
+    "dE00_max": 5.538065691521757,
+    "dE00_chrom_mean": 3.2698488951052616
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 3.250259010845531,
+    "dE00_max": 6.447807837828501,
+    "dE00_chrom_mean": 3.0397398564471487
+   },
+   "raw_dE00_mean": 6.176668924474675
+  },
+  "matrixA_1024": [
+   [
+    797,
+    175,
+    -127
+   ],
+   [
+    -48,
+    826,
+    101
+   ],
+   [
+    -20,
+    -28,
+    895
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    557,
+    139,
+    -86
+   ],
+   [
+    -4,
+    549,
+    87
+   ],
+   [
+    11,
+    27,
+    572
+   ]
+  ],
+  "curveB": [
+   0.906,
+   1.461,
+   -0.038
+  ]
+ },
+ "kodak_portra_400|fujifilm_crystal_archive_typeii": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 7.2,
+    "a": -4.5,
+    "b": -1.3
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 27.3,
+    "a": -2.9,
+    "b": -1.3
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.7,
+    "a": -0.3,
+    "b": 0.2
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 68.3,
+    "a": -1.4,
+    "b": 1.7
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 78.8,
+    "a": -1.2,
+    "b": 3.2
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 83.9,
+    "a": -1.2,
+    "b": 4.7
+   }
+  ],
+  "chroma_ratio_mean": 1.026,
+  "chroma_ratio_median": 0.99,
+  "chroma_ratio_sumC": 0.982,
+  "chroma_ratio_by_L": {
+   "L<45": 1.023,
+   "45-65": 1.02,
+   "L>=65": 0.891
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 28.9,
+    "Cref": 19.8,
+    "Cfilm": 35.0,
+    "Cratio": 1.77,
+    "href": 47.5,
+    "dh": -2.2,
+    "dE00": 9.8
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 62.8,
+    "Cref": 24.8,
+    "Cfilm": 27.1,
+    "Cratio": 1.09,
+    "href": 43.4,
+    "dh": 1.4,
+    "dE00": 1.8
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 51.0,
+    "Cref": 22.2,
+    "Cfilm": 25.2,
+    "Cratio": 1.13,
+    "href": 266.9,
+    "dh": -16.6,
+    "dE00": 6.6
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 38.0,
+    "Cref": 27.2,
+    "Cfilm": 34.9,
+    "Cratio": 1.29,
+    "href": 122.6,
+    "dh": -10.9,
+    "dE00": 7.0
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 57.1,
+    "Cref": 27.4,
+    "Cfilm": 24.0,
+    "Cratio": 0.88,
+    "href": 296.3,
+    "dh": -11.1,
+    "dE00": 4.7
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 72.6,
+    "Cref": 31.9,
+    "Cfilm": 28.2,
+    "Cratio": 0.88,
+    "href": 179.9,
+    "dh": -0.7,
+    "dE00": 2.2
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 54.0,
+    "Cref": 65.0,
+    "Cfilm": 64.0,
+    "Cratio": 0.98,
+    "href": 59.1,
+    "dh": -3.1,
+    "dE00": 7.7
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 38.8,
+    "Cref": 47.3,
+    "Cfilm": 37.1,
+    "Cratio": 0.79,
+    "href": 290.1,
+    "dh": -17.7,
+    "dE00": 7.6
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 41.5,
+    "Cref": 50.6,
+    "Cfilm": 54.2,
+    "Cratio": 1.07,
+    "href": 18.0,
+    "dh": 0.4,
+    "dE00": 8.3
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 20.7,
+    "Cref": 32.1,
+    "Cfilm": 35.6,
+    "Cratio": 1.11,
+    "href": 319.4,
+    "dh": -6.2,
+    "dE00": 7.6
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 68.6,
+    "Cref": 65.3,
+    "Cfilm": 62.1,
+    "Cratio": 0.95,
+    "href": 115.8,
+    "dh": -13.0,
+    "dE00": 8.2
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 64.3,
+    "Cref": 68.8,
+    "Cfilm": 63.3,
+    "Cratio": 0.92,
+    "href": 77.6,
+    "dh": -4.3,
+    "dE00": 6.3
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 27.3,
+    "Cref": 53.3,
+    "Cfilm": 38.4,
+    "Cratio": 0.72,
+    "href": 294.0,
+    "dh": -12.4,
+    "dE00": 5.7
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 53.2,
+    "Cref": 53.9,
+    "Cfilm": 59.0,
+    "Cratio": 1.09,
+    "href": 142.4,
+    "dh": -7.5,
+    "dE00": 3.9
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 34.4,
+    "Cref": 57.3,
+    "Cfilm": 61.4,
+    "Cratio": 1.07,
+    "href": 28.5,
+    "dh": 7.3,
+    "dE00": 7.9
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 72.6,
+    "Cref": 80.9,
+    "Cfilm": 66.7,
+    "Cratio": 0.82,
+    "href": 91.3,
+    "dh": -5.8,
+    "dE00": 8.3
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 43.7,
+    "Cref": 54.5,
+    "Cfilm": 54.3,
+    "Cratio": 1.0,
+    "href": 344.2,
+    "dh": -2.2,
+    "dE00": 6.7
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 52.7,
+    "Cref": 31.7,
+    "Cfilm": 28.7,
+    "Cratio": 0.91,
+    "href": 234.4,
+    "dh": -9.5,
+    "dE00": 3.5
+   }
+  ],
+  "mean_abs_dh": 7.3,
+  "dE00_mean": 6.0,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 4.065274971097808,
+    "dE00_max": 9.047116525989129,
+    "dE00_chrom_mean": 3.76371823303424
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 2.8689072255992536,
+    "dE00_max": 7.343754446340407,
+    "dE00_chrom_mean": 2.5879860365372416
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 2.8731751558379464,
+    "dE00_max": 7.343754446340407,
+    "dE00_chrom_mean": 2.37211683369881
+   },
+   "raw_dE00_mean": 6.027636696985226
+  },
+  "matrixA_1024": [
+   [
+    808,
+    156,
+    -120
+   ],
+   [
+    -79,
+    872,
+    63
+   ],
+   [
+    -28,
+    -13,
+    842
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    786,
+    161,
+    -39
+   ],
+   [
+    -19,
+    773,
+    153
+   ],
+   [
+    30,
+    42,
+    801
+   ]
+  ],
+  "curveB": [
+   0.853,
+   1.071,
+   -0.068
+  ]
+ },
+ "kodak_portra_800|fujifilm_crystal_archive_typeii": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 7.8,
+    "a": -4.6,
+    "b": -1.2
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 27.7,
+    "a": -2.8,
+    "b": -1.3
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.6,
+    "a": -0.4,
+    "b": 0.3
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 67.5,
+    "a": -1.2,
+    "b": 2.1
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 77.7,
+    "a": -1.1,
+    "b": 3.5
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 83.1,
+    "a": -1.4,
+    "b": 5.0
+   }
+  ],
+  "chroma_ratio_mean": 1.004,
+  "chroma_ratio_median": 0.966,
+  "chroma_ratio_sumC": 0.962,
+  "chroma_ratio_by_L": {
+   "L<45": 1.023,
+   "45-65": 0.984,
+   "L>=65": 0.874
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 30.0,
+    "Cref": 19.8,
+    "Cfilm": 34.9,
+    "Cratio": 1.77,
+    "href": 47.5,
+    "dh": -1.8,
+    "dE00": 9.2
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 62.9,
+    "Cref": 24.8,
+    "Cfilm": 25.9,
+    "Cratio": 1.04,
+    "href": 43.4,
+    "dh": 3.2,
+    "dE00": 1.7
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 49.9,
+    "Cref": 22.2,
+    "Cfilm": 24.2,
+    "Cratio": 1.09,
+    "href": 266.9,
+    "dh": -17.3,
+    "dE00": 6.4
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 39.1,
+    "Cref": 27.2,
+    "Cfilm": 35.0,
+    "Cratio": 1.29,
+    "href": 122.6,
+    "dh": -3.9,
+    "dE00": 5.2
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 56.1,
+    "Cref": 27.4,
+    "Cfilm": 22.1,
+    "Cratio": 0.81,
+    "href": 296.3,
+    "dh": -7.0,
+    "dE00": 3.3
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 71.0,
+    "Cref": 31.9,
+    "Cfilm": 27.5,
+    "Cratio": 0.86,
+    "href": 179.9,
+    "dh": 2.6,
+    "dE00": 2.1
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 55.6,
+    "Cref": 65.0,
+    "Cfilm": 62.2,
+    "Cratio": 0.96,
+    "href": 59.1,
+    "dh": 0.2,
+    "dE00": 5.9
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 36.8,
+    "Cref": 47.3,
+    "Cfilm": 37.4,
+    "Cratio": 0.79,
+    "href": 290.1,
+    "dh": -14.9,
+    "dE00": 6.9
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 41.9,
+    "Cref": 50.6,
+    "Cfilm": 54.0,
+    "Cratio": 1.07,
+    "href": 18.0,
+    "dh": 2.6,
+    "dE00": 8.1
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 21.2,
+    "Cref": 32.1,
+    "Cfilm": 34.0,
+    "Cratio": 1.06,
+    "href": 319.4,
+    "dh": -1.5,
+    "dE00": 6.7
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 68.5,
+    "Cref": 65.3,
+    "Cfilm": 60.5,
+    "Cratio": 0.93,
+    "href": 115.8,
+    "dh": -9.0,
+    "dE00": 5.9
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 65.3,
+    "Cref": 68.8,
+    "Cfilm": 62.1,
+    "Cratio": 0.9,
+    "href": 77.6,
+    "dh": -1.0,
+    "dE00": 4.9
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 24.3,
+    "Cref": 53.3,
+    "Cfilm": 39.5,
+    "Cratio": 0.74,
+    "href": 294.0,
+    "dh": -8.7,
+    "dE00": 5.5
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 52.6,
+    "Cref": 53.9,
+    "Cfilm": 55.1,
+    "Cratio": 1.02,
+    "href": 142.4,
+    "dh": -0.9,
+    "dE00": 1.8
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 34.9,
+    "Cref": 57.3,
+    "Cfilm": 61.5,
+    "Cratio": 1.07,
+    "href": 28.5,
+    "dh": 7.6,
+    "dE00": 7.6
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 73.1,
+    "Cref": 80.9,
+    "Cfilm": 65.7,
+    "Cratio": 0.81,
+    "href": 91.3,
+    "dh": -2.7,
+    "dE00": 7.1
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 43.2,
+    "Cref": 54.5,
+    "Cfilm": 53.1,
+    "Cratio": 0.97,
+    "href": 344.2,
+    "dh": 0.5,
+    "dE00": 7.0
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 50.9,
+    "Cref": 31.7,
+    "Cfilm": 28.1,
+    "Cratio": 0.89,
+    "href": 234.4,
+    "dh": -9.2,
+    "dE00": 3.2
+   }
+  ],
+  "mean_abs_dh": 5.3,
+  "dE00_mean": 5.4,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 3.7696285267027867,
+    "dE00_max": 8.755267039741197,
+    "dE00_chrom_mean": 3.396516120361203
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 2.936357095385596,
+    "dE00_max": 5.80838784781843,
+    "dE00_chrom_mean": 2.7221308319559925
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 2.8659660069687334,
+    "dE00_max": 5.382316654186304,
+    "dE00_chrom_mean": 2.578208454029166
+   },
+   "raw_dE00_mean": 5.426410024931978
+  },
+  "matrixA_1024": [
+   [
+    853,
+    103,
+    -105
+   ],
+   [
+    -44,
+    907,
+    11
+   ],
+   [
+    -28,
+    68,
+    764
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    611,
+    57,
+    -41
+   ],
+   [
+    -5,
+    585,
+    53
+   ],
+   [
+    5,
+    40,
+    549
+   ]
+  ],
+  "curveB": [
+   0.873,
+   1.338,
+   -0.04
+  ]
+ },
+ "kodak_ektar_100|fujifilm_crystal_archive_typeii": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 6.6,
+    "a": -3.7,
+    "b": -1.9
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 25.2,
+    "a": -4.1,
+    "b": -2.8
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.6,
+    "a": -0.3,
+    "b": 0.3
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 68.6,
+    "a": -0.9,
+    "b": 1.4
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 78.8,
+    "a": -1.0,
+    "b": 2.4
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 83.7,
+    "a": -1.2,
+    "b": 3.9
+   }
+  ],
+  "chroma_ratio_mean": 1.071,
+  "chroma_ratio_median": 1.01,
+  "chroma_ratio_sumC": 1.012,
+  "chroma_ratio_by_L": {
+   "L<45": 1.069,
+   "45-65": 1.058,
+   "L>=65": 0.898
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 27.7,
+    "Cref": 19.8,
+    "Cfilm": 38.3,
+    "Cratio": 1.94,
+    "href": 47.5,
+    "dh": -5.2,
+    "dE00": 11.4
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 62.6,
+    "Cref": 24.8,
+    "Cfilm": 30.0,
+    "Cratio": 1.21,
+    "href": 43.4,
+    "dh": 4.4,
+    "dE00": 3.2
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 50.8,
+    "Cref": 22.2,
+    "Cfilm": 27.3,
+    "Cratio": 1.23,
+    "href": 266.9,
+    "dh": -19.4,
+    "dE00": 8.1
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 37.9,
+    "Cref": 27.2,
+    "Cfilm": 36.8,
+    "Cratio": 1.36,
+    "href": 122.6,
+    "dh": -5.2,
+    "dE00": 6.5
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 57.2,
+    "Cref": 27.4,
+    "Cfilm": 25.3,
+    "Cratio": 0.92,
+    "href": 296.3,
+    "dh": -10.3,
+    "dE00": 4.5
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 72.2,
+    "Cref": 31.9,
+    "Cfilm": 29.2,
+    "Cratio": 0.91,
+    "href": 179.9,
+    "dh": 5.3,
+    "dE00": 2.6
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 53.2,
+    "Cref": 65.0,
+    "Cfilm": 64.4,
+    "Cratio": 0.99,
+    "href": 59.1,
+    "dh": -4.0,
+    "dE00": 8.6
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 38.6,
+    "Cref": 47.3,
+    "Cfilm": 36.1,
+    "Cratio": 0.76,
+    "href": 290.1,
+    "dh": -20.3,
+    "dE00": 8.5
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 39.9,
+    "Cref": 50.6,
+    "Cfilm": 56.7,
+    "Cratio": 1.12,
+    "href": 18.0,
+    "dh": 4.3,
+    "dE00": 10.1
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 19.6,
+    "Cref": 32.1,
+    "Cfilm": 38.5,
+    "Cratio": 1.2,
+    "href": 319.4,
+    "dh": -7.2,
+    "dE00": 8.7
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 68.2,
+    "Cref": 65.3,
+    "Cfilm": 62.5,
+    "Cratio": 0.96,
+    "href": 115.8,
+    "dh": -13.9,
+    "dE00": 8.9
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 64.2,
+    "Cref": 68.8,
+    "Cfilm": 63.4,
+    "Cratio": 0.92,
+    "href": 77.6,
+    "dh": -4.0,
+    "dE00": 6.3
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 27.9,
+    "Cref": 53.3,
+    "Cfilm": 40.8,
+    "Cratio": 0.76,
+    "href": 294.0,
+    "dh": -10.7,
+    "dE00": 5.1
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 52.0,
+    "Cref": 53.9,
+    "Cfilm": 59.9,
+    "Cratio": 1.11,
+    "href": 142.4,
+    "dh": -2.9,
+    "dE00": 3.1
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 34.6,
+    "Cref": 57.3,
+    "Cfilm": 62.7,
+    "Cratio": 1.09,
+    "href": 28.5,
+    "dh": 7.8,
+    "dE00": 7.9
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 72.2,
+    "Cref": 80.9,
+    "Cfilm": 66.7,
+    "Cratio": 0.82,
+    "href": 91.3,
+    "dh": -5.8,
+    "dE00": 8.6
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 42.1,
+    "Cref": 54.5,
+    "Cfilm": 56.2,
+    "Cratio": 1.03,
+    "href": 344.2,
+    "dh": -1.6,
+    "dE00": 8.1
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 52.3,
+    "Cref": 31.7,
+    "Cfilm": 29.3,
+    "Cratio": 0.92,
+    "href": 234.4,
+    "dh": -9.0,
+    "dE00": 3.2
+   }
+  ],
+  "mean_abs_dh": 7.8,
+  "dE00_mean": 6.5,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 4.455787017719918,
+    "dE00_max": 8.488802505938112,
+    "dE00_chrom_mean": 4.057970048753173
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 2.6644462146538923,
+    "dE00_max": 6.217325563480831,
+    "dE00_chrom_mean": 2.3988030336796458
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 2.4461293591707025,
+    "dE00_max": 3.973822249092609,
+    "dE00_chrom_mean": 2.1993819076596304
+   },
+   "raw_dE00_mean": 6.483583949471064
+  },
+  "matrixA_1024": [
+   [
+    800,
+    84,
+    -92
+   ],
+   [
+    -87,
+    813,
+    103
+   ],
+   [
+    -67,
+    -118,
+    978
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ]
+  ],
+  "curveB": [
+   0.666,
+   1371.371,
+   -0.125
+  ]
+ },
+ "kodak_gold_200|fujifilm_crystal_archive_typeii": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 7.2,
+    "a": -4.6,
+    "b": -0.8
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 26.6,
+    "a": -3.6,
+    "b": -0.6
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.7,
+    "a": -0.3,
+    "b": 0.2
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 68.3,
+    "a": -1.2,
+    "b": 2.0
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 78.6,
+    "a": -1.3,
+    "b": 3.8
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 83.7,
+    "a": -1.4,
+    "b": 5.1
+   }
+  ],
+  "chroma_ratio_mean": 1.023,
+  "chroma_ratio_median": 0.981,
+  "chroma_ratio_sumC": 0.979,
+  "chroma_ratio_by_L": {
+   "L<45": 1.037,
+   "45-65": 1.007,
+   "L>=65": 0.887
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 29.3,
+    "Cref": 19.8,
+    "Cfilm": 37.6,
+    "Cratio": 1.9,
+    "href": 47.5,
+    "dh": -2.5,
+    "dE00": 10.3
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 63.0,
+    "Cref": 24.8,
+    "Cfilm": 28.1,
+    "Cratio": 1.13,
+    "href": 43.4,
+    "dh": 1.6,
+    "dE00": 2.0
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 50.9,
+    "Cref": 22.2,
+    "Cfilm": 23.7,
+    "Cratio": 1.07,
+    "href": 266.9,
+    "dh": -18.7,
+    "dE00": 6.8
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 38.0,
+    "Cref": 27.2,
+    "Cfilm": 36.5,
+    "Cratio": 1.34,
+    "href": 122.6,
+    "dh": 0.3,
+    "dE00": 6.1
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 57.5,
+    "Cref": 27.4,
+    "Cfilm": 20.5,
+    "Cratio": 0.75,
+    "href": 296.3,
+    "dh": -4.5,
+    "dE00": 4.0
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 71.8,
+    "Cref": 31.9,
+    "Cfilm": 28.1,
+    "Cratio": 0.88,
+    "href": 179.9,
+    "dh": 4.5,
+    "dE00": 2.5
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 54.6,
+    "Cref": 65.0,
+    "Cfilm": 63.9,
+    "Cratio": 0.98,
+    "href": 59.1,
+    "dh": -2.3,
+    "dE00": 7.0
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 39.1,
+    "Cref": 47.3,
+    "Cfilm": 37.0,
+    "Cratio": 0.78,
+    "href": 290.1,
+    "dh": -15.4,
+    "dE00": 6.4
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 41.8,
+    "Cref": 50.6,
+    "Cfilm": 57.8,
+    "Cratio": 1.14,
+    "href": 18.0,
+    "dh": 6.7,
+    "dE00": 8.9
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 21.8,
+    "Cref": 32.1,
+    "Cfilm": 31.9,
+    "Cratio": 0.99,
+    "href": 319.4,
+    "dh": 4.8,
+    "dE00": 6.5
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 68.3,
+    "Cref": 65.3,
+    "Cfilm": 62.0,
+    "Cratio": 0.95,
+    "href": 115.8,
+    "dh": -7.1,
+    "dE00": 4.9
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 65.0,
+    "Cref": 68.8,
+    "Cfilm": 62.8,
+    "Cratio": 0.91,
+    "href": 77.6,
+    "dh": -2.0,
+    "dE00": 5.2
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 25.3,
+    "Cref": 53.3,
+    "Cfilm": 38.4,
+    "Cratio": 0.72,
+    "href": 294.0,
+    "dh": -10.3,
+    "dE00": 5.5
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 52.4,
+    "Cref": 53.9,
+    "Cfilm": 56.8,
+    "Cratio": 1.05,
+    "href": 142.4,
+    "dh": -0.8,
+    "dE00": 2.1
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 35.8,
+    "Cref": 57.3,
+    "Cfilm": 64.2,
+    "Cratio": 1.12,
+    "href": 28.5,
+    "dh": 8.2,
+    "dE00": 7.5
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 73.2,
+    "Cref": 80.9,
+    "Cfilm": 66.3,
+    "Cratio": 0.82,
+    "href": 91.3,
+    "dh": -2.4,
+    "dE00": 7.0
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 44.3,
+    "Cref": 54.5,
+    "Cfilm": 53.4,
+    "Cratio": 0.98,
+    "href": 344.2,
+    "dh": 5.0,
+    "dE00": 6.4
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 52.5,
+    "Cref": 31.7,
+    "Cfilm": 28.3,
+    "Cratio": 0.89,
+    "href": 234.4,
+    "dh": -9.8,
+    "dE00": 3.6
+   }
+  ],
+  "mean_abs_dh": 5.9,
+  "dE00_mean": 5.6,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 4.15786682117336,
+    "dE00_max": 9.231225865919068,
+    "dE00_chrom_mean": 3.814351842994268
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 3.1317487043202346,
+    "dE00_max": 7.349684064614242,
+    "dE00_chrom_mean": 2.8944538246383615
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 3.0068468658294365,
+    "dE00_max": 7.349684064614242,
+    "dE00_chrom_mean": 2.4840649041604648
+   },
+   "raw_dE00_mean": 5.6367259465479975
+  },
+  "matrixA_1024": [
+   [
+    915,
+    23,
+    -62
+   ],
+   [
+    -48,
+    906,
+    26
+   ],
+   [
+    -32,
+    71,
+    763
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    155,
+    8,
+    4
+   ],
+   [
+    -2,
+    143,
+    25
+   ],
+   [
+    4,
+    11,
+    141
+   ]
+  ],
+  "curveB": [
+   0.855,
+   4.501,
+   -0.063
+  ]
+ },
+ "kodak_ultramax_400|fujifilm_crystal_archive_typeii": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 7.9,
+    "a": -4.8,
+    "b": -1.1
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 27.5,
+    "a": -3.0,
+    "b": -1.3
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.7,
+    "a": -0.4,
+    "b": 0.3
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 67.8,
+    "a": -1.3,
+    "b": 2.1
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 78.0,
+    "a": -1.1,
+    "b": 3.4
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 83.3,
+    "a": -1.3,
+    "b": 4.8
+   }
+  ],
+  "chroma_ratio_mean": 1.02,
+  "chroma_ratio_median": 0.972,
+  "chroma_ratio_sumC": 0.977,
+  "chroma_ratio_by_L": {
+   "L<45": 1.048,
+   "45-65": 0.998,
+   "L>=65": 0.881
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 30.3,
+    "Cref": 19.8,
+    "Cfilm": 35.3,
+    "Cratio": 1.78,
+    "href": 47.5,
+    "dh": -1.3,
+    "dE00": 9.1
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 63.4,
+    "Cref": 24.8,
+    "Cfilm": 26.4,
+    "Cratio": 1.06,
+    "href": 43.4,
+    "dh": 3.8,
+    "dE00": 1.7
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 49.6,
+    "Cref": 22.2,
+    "Cfilm": 24.6,
+    "Cratio": 1.11,
+    "href": 266.9,
+    "dh": -15.0,
+    "dE00": 5.8
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 39.2,
+    "Cref": 27.2,
+    "Cfilm": 35.8,
+    "Cratio": 1.32,
+    "href": 122.6,
+    "dh": -2.0,
+    "dE00": 5.2
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 55.9,
+    "Cref": 27.4,
+    "Cfilm": 23.0,
+    "Cratio": 0.84,
+    "href": 296.3,
+    "dh": -4.7,
+    "dE00": 2.5
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 71.1,
+    "Cref": 31.9,
+    "Cfilm": 27.5,
+    "Cratio": 0.86,
+    "href": 179.9,
+    "dh": 2.9,
+    "dE00": 2.2
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 56.2,
+    "Cref": 65.0,
+    "Cfilm": 62.5,
+    "Cratio": 0.96,
+    "href": 59.1,
+    "dh": 0.9,
+    "dE00": 5.3
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 35.9,
+    "Cref": 47.3,
+    "Cfilm": 39.3,
+    "Cratio": 0.83,
+    "href": 290.1,
+    "dh": -11.8,
+    "dE00": 6.3
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 42.3,
+    "Cref": 50.6,
+    "Cfilm": 54.8,
+    "Cratio": 1.08,
+    "href": 18.0,
+    "dh": 3.2,
+    "dE00": 7.7
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 21.4,
+    "Cref": 32.1,
+    "Cfilm": 33.7,
+    "Cratio": 1.05,
+    "href": 319.4,
+    "dh": 0.2,
+    "dE00": 6.5
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 68.9,
+    "Cref": 65.3,
+    "Cfilm": 61.4,
+    "Cratio": 0.94,
+    "href": 115.8,
+    "dh": -7.9,
+    "dE00": 5.2
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 66.1,
+    "Cref": 68.8,
+    "Cfilm": 62.5,
+    "Cratio": 0.91,
+    "href": 77.6,
+    "dh": 0.1,
+    "dE00": 4.2
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 23.2,
+    "Cref": 53.3,
+    "Cfilm": 41.6,
+    "Cratio": 0.78,
+    "href": 294.0,
+    "dh": -6.1,
+    "dE00": 5.5
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 53.0,
+    "Cref": 53.9,
+    "Cfilm": 56.3,
+    "Cratio": 1.04,
+    "href": 142.4,
+    "dh": -1.7,
+    "dE00": 1.7
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 35.6,
+    "Cref": 57.3,
+    "Cfilm": 62.5,
+    "Cratio": 1.09,
+    "href": 28.5,
+    "dh": 7.8,
+    "dE00": 7.4
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 73.8,
+    "Cref": 80.9,
+    "Cfilm": 66.3,
+    "Cratio": 0.82,
+    "href": 91.3,
+    "dh": -1.7,
+    "dE00": 6.4
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 43.5,
+    "Cref": 54.5,
+    "Cfilm": 53.6,
+    "Cratio": 0.98,
+    "href": 344.2,
+    "dh": 1.2,
+    "dE00": 6.8
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 50.8,
+    "Cref": 31.7,
+    "Cfilm": 28.0,
+    "Cratio": 0.89,
+    "href": 234.4,
+    "dh": -7.5,
+    "dE00": 2.8
+   }
+  ],
+  "mean_abs_dh": 4.4,
+  "dE00_mean": 5.2,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 3.7746658778995994,
+    "dE00_max": 8.954889833063618,
+    "dE00_chrom_mean": 3.3784184739230767
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 3.0010602567525186,
+    "dE00_max": 7.828251239932335,
+    "dE00_chrom_mean": 2.7352882397148326
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 3.022318438264799,
+    "dE00_max": 7.828251239932335,
+    "dE00_chrom_mean": 2.537825932317899
+   },
+   "raw_dE00_mean": 5.171163448447423
+  },
+  "matrixA_1024": [
+   [
+    869,
+    86,
+    -95
+   ],
+   [
+    -41,
+    927,
+    -7
+   ],
+   [
+    -29,
+    69,
+    769
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    667,
+    54,
+    -12
+   ],
+   [
+    10,
+    621,
+    75
+   ],
+   [
+    17,
+    42,
+    610
+   ]
+  ],
+  "curveB": [
+   0.855,
+   1.268,
+   -0.057
+  ]
+ },
+ "kodak_vision3_250d|fujifilm_crystal_archive_typeii": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 8.5,
+    "a": -3.2,
+    "b": -1.2
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 28.0,
+    "a": -1.0,
+    "b": -1.4
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.6,
+    "a": -0.4,
+    "b": 0.2
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 66.7,
+    "a": -2.3,
+    "b": 2.2
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 76.6,
+    "a": -3.2,
+    "b": 4.0
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 82.4,
+    "a": -3.9,
+    "b": 6.1
+   }
+  ],
+  "chroma_ratio_mean": 0.953,
+  "chroma_ratio_median": 0.906,
+  "chroma_ratio_sumC": 0.92,
+  "chroma_ratio_by_L": {
+   "L<45": 0.995,
+   "45-65": 0.92,
+   "L>=65": 0.847
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 30.2,
+    "Cref": 19.8,
+    "Cfilm": 33.2,
+    "Cratio": 1.68,
+    "href": 47.5,
+    "dh": -1.7,
+    "dE00": 8.5
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 62.8,
+    "Cref": 24.8,
+    "Cfilm": 22.0,
+    "Cratio": 0.89,
+    "href": 43.4,
+    "dh": 9.7,
+    "dE00": 4.1
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 49.4,
+    "Cref": 22.2,
+    "Cfilm": 22.5,
+    "Cratio": 1.01,
+    "href": 266.9,
+    "dh": -16.8,
+    "dE00": 5.8
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 39.7,
+    "Cref": 27.2,
+    "Cfilm": 33.6,
+    "Cratio": 1.24,
+    "href": 122.6,
+    "dh": -5.9,
+    "dE00": 4.8
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 55.6,
+    "Cref": 27.4,
+    "Cfilm": 19.3,
+    "Cratio": 0.71,
+    "href": 296.3,
+    "dh": -8.4,
+    "dE00": 4.5
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 69.6,
+    "Cref": 31.9,
+    "Cfilm": 25.7,
+    "Cratio": 0.8,
+    "href": 179.9,
+    "dh": 2.8,
+    "dE00": 3.1
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 56.1,
+    "Cref": 65.0,
+    "Cfilm": 59.2,
+    "Cratio": 0.91,
+    "href": 59.1,
+    "dh": 4.4,
+    "dE00": 6.3
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 35.6,
+    "Cref": 47.3,
+    "Cfilm": 37.1,
+    "Cratio": 0.79,
+    "href": 290.1,
+    "dh": -13.0,
+    "dE00": 6.5
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 41.3,
+    "Cref": 50.6,
+    "Cfilm": 50.3,
+    "Cratio": 0.99,
+    "href": 18.0,
+    "dh": 2.0,
+    "dE00": 8.5
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 21.2,
+    "Cref": 32.1,
+    "Cfilm": 32.7,
+    "Cratio": 1.02,
+    "href": 319.4,
+    "dh": -1.6,
+    "dE00": 6.6
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 67.7,
+    "Cref": 65.3,
+    "Cfilm": 58.8,
+    "Cratio": 0.9,
+    "href": 115.8,
+    "dh": -8.6,
+    "dE00": 6.1
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 65.1,
+    "Cref": 68.8,
+    "Cfilm": 60.4,
+    "Cratio": 0.88,
+    "href": 77.6,
+    "dh": 2.2,
+    "dE00": 5.4
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 22.2,
+    "Cref": 53.3,
+    "Cfilm": 40.6,
+    "Cratio": 0.76,
+    "href": 294.0,
+    "dh": -5.9,
+    "dE00": 6.1
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 52.1,
+    "Cref": 53.9,
+    "Cfilm": 53.0,
+    "Cratio": 0.98,
+    "href": 142.4,
+    "dh": -1.1,
+    "dE00": 2.3
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 34.0,
+    "Cref": 57.3,
+    "Cfilm": 58.5,
+    "Cratio": 1.02,
+    "href": 28.5,
+    "dh": 7.3,
+    "dE00": 8.0
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 72.6,
+    "Cref": 80.9,
+    "Cfilm": 64.4,
+    "Cratio": 0.8,
+    "href": 91.3,
+    "dh": -0.7,
+    "dE00": 7.4
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 42.5,
+    "Cref": 54.5,
+    "Cfilm": 49.7,
+    "Cratio": 0.91,
+    "href": 344.2,
+    "dh": 0.3,
+    "dE00": 7.8
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 50.0,
+    "Cref": 31.7,
+    "Cfilm": 27.4,
+    "Cratio": 0.86,
+    "href": 234.4,
+    "dh": -9.0,
+    "dE00": 3.5
+   }
+  ],
+  "mean_abs_dh": 5.6,
+  "dE00_mean": 5.8,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 3.591238345445563,
+    "dE00_max": 7.714740160412138,
+    "dE00_chrom_mean": 3.3410657331155136
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 2.8480758360724914,
+    "dE00_max": 5.533178894690155,
+    "dE00_chrom_mean": 2.6587546417122083
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 2.8296243020241625,
+    "dE00_max": 4.482412875189035,
+    "dE00_chrom_mean": 2.6315467914808477
+   },
+   "raw_dE00_mean": 5.777020894462818
+  },
+  "matrixA_1024": [
+   [
+    759,
+    151,
+    -87
+   ],
+   [
+    -34,
+    897,
+    0
+   ],
+   [
+    -29,
+    79,
+    732
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    584,
+    79,
+    -39
+   ],
+   [
+    0,
+    601,
+    40
+   ],
+   [
+    4,
+    43,
+    546
+   ]
+  ],
+  "curveB": [
+   0.838,
+   1.237,
+   -0.041
+  ]
+ },
+ "kodak_vision3_500t|fujifilm_crystal_archive_typeii": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 8.5,
+    "a": -3.2,
+    "b": -1.2
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 28.1,
+    "a": -0.6,
+    "b": -1.3
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.6,
+    "a": -0.3,
+    "b": 0.3
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 66.8,
+    "a": -2.2,
+    "b": 2.3
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 76.8,
+    "a": -3.2,
+    "b": 4.4
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 82.5,
+    "a": -3.8,
+    "b": 6.3
+   }
+  ],
+  "chroma_ratio_mean": 0.911,
+  "chroma_ratio_median": 0.888,
+  "chroma_ratio_sumC": 0.889,
+  "chroma_ratio_by_L": {
+   "L<45": 0.98,
+   "45-65": 0.881,
+   "L>=65": 0.814
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 28.6,
+    "Cref": 19.8,
+    "Cfilm": 29.4,
+    "Cratio": 1.49,
+    "href": 47.5,
+    "dh": 0.2,
+    "dE00": 8.4
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 61.9,
+    "Cref": 24.8,
+    "Cfilm": 20.4,
+    "Cratio": 0.82,
+    "href": 43.4,
+    "dh": 12.8,
+    "dE00": 5.7
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 50.5,
+    "Cref": 22.2,
+    "Cfilm": 20.2,
+    "Cratio": 0.91,
+    "href": 266.9,
+    "dh": -12.1,
+    "dE00": 4.0
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 39.0,
+    "Cref": 27.2,
+    "Cfilm": 32.2,
+    "Cratio": 1.19,
+    "href": 122.6,
+    "dh": -12.4,
+    "dE00": 6.3
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 56.2,
+    "Cref": 27.4,
+    "Cfilm": 18.4,
+    "Cratio": 0.67,
+    "href": 296.3,
+    "dh": -10.5,
+    "dE00": 5.3
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 70.7,
+    "Cref": 31.9,
+    "Cfilm": 20.1,
+    "Cratio": 0.63,
+    "href": 179.9,
+    "dh": -1.8,
+    "dE00": 5.8
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 53.9,
+    "Cref": 65.0,
+    "Cfilm": 57.3,
+    "Cratio": 0.88,
+    "href": 59.1,
+    "dh": 4.2,
+    "dE00": 8.2
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 37.6,
+    "Cref": 47.3,
+    "Cfilm": 38.2,
+    "Cratio": 0.81,
+    "href": 290.1,
+    "dh": -9.5,
+    "dE00": 4.4
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 39.1,
+    "Cref": 50.6,
+    "Cfilm": 47.9,
+    "Cratio": 0.95,
+    "href": 18.0,
+    "dh": 4.1,
+    "dE00": 10.6
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 20.4,
+    "Cref": 32.1,
+    "Cfilm": 34.4,
+    "Cratio": 1.07,
+    "href": 319.4,
+    "dh": -9.3,
+    "dE00": 8.2
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 66.7,
+    "Cref": 65.3,
+    "Cfilm": 58.5,
+    "Cratio": 0.89,
+    "href": 115.8,
+    "dh": -12.7,
+    "dE00": 8.6
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 63.3,
+    "Cref": 68.8,
+    "Cfilm": 59.0,
+    "Cratio": 0.86,
+    "href": 77.6,
+    "dh": 1.9,
+    "dE00": 6.8
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 23.0,
+    "Cref": 53.3,
+    "Cfilm": 42.3,
+    "Cratio": 0.79,
+    "href": 294.0,
+    "dh": -4.6,
+    "dE00": 5.4
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 52.6,
+    "Cref": 53.9,
+    "Cfilm": 50.3,
+    "Cratio": 0.93,
+    "href": 142.4,
+    "dh": -11.3,
+    "dE00": 5.4
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 31.7,
+    "Cref": 57.3,
+    "Cfilm": 55.6,
+    "Cratio": 0.97,
+    "href": 28.5,
+    "dh": 8.0,
+    "dE00": 9.8
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 71.3,
+    "Cref": 80.9,
+    "Cfilm": 63.5,
+    "Cratio": 0.78,
+    "href": 91.3,
+    "dh": -1.4,
+    "dE00": 8.4
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 41.3,
+    "Cref": 54.5,
+    "Cfilm": 50.3,
+    "Cratio": 0.92,
+    "href": 344.2,
+    "dh": -7.6,
+    "dE00": 9.4
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 52.5,
+    "Cref": 31.7,
+    "Cfilm": 26.0,
+    "Cratio": 0.82,
+    "href": 234.4,
+    "dh": -5.5,
+    "dE00": 3.2
+   }
+  ],
+  "mean_abs_dh": 7.2,
+  "dE00_mean": 6.5,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 3.868354882066757,
+    "dE00_max": 7.54889482600877,
+    "dE00_chrom_mean": 3.6924608781411234
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 3.0950475050274946,
+    "dE00_max": 5.0707558982786525,
+    "dE00_chrom_mean": 2.8763396068872877
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 3.034007056142862,
+    "dE00_max": 4.580739904790776,
+    "dE00_chrom_mean": 2.846233451496326
+   },
+   "raw_dE00_mean": 6.535097521281032
+  },
+  "matrixA_1024": [
+   [
+    637,
+    341,
+    -130
+   ],
+   [
+    -44,
+    912,
+    -6
+   ],
+   [
+    -35,
+    88,
+    732
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    483,
+    226,
+    -52
+   ],
+   [
+    -5,
+    622,
+    43
+   ],
+   [
+    2,
+    52,
+    559
+   ]
+  ],
+  "curveB": [
+   0.886,
+   1.284,
+   -0.036
+  ]
+ },
+ "kodak_vision3_50d|fujifilm_crystal_archive_typeii": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 8.5,
+    "a": -3.8,
+    "b": -1.8
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 28.5,
+    "a": -1.1,
+    "b": -2.0
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.7,
+    "a": -0.4,
+    "b": 0.3
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 67.6,
+    "a": -2.5,
+    "b": 2.4
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 77.9,
+    "a": -3.4,
+    "b": 4.2
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 83.3,
+    "a": -3.7,
+    "b": 5.7
+   }
+  ],
+  "chroma_ratio_mean": 0.975,
+  "chroma_ratio_median": 0.928,
+  "chroma_ratio_sumC": 0.943,
+  "chroma_ratio_by_L": {
+   "L<45": 1.013,
+   "45-65": 0.945,
+   "L>=65": 0.872
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 30.7,
+    "Cref": 19.8,
+    "Cfilm": 30.9,
+    "Cratio": 1.56,
+    "href": 47.5,
+    "dh": -0.0,
+    "dE00": 7.6
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 63.5,
+    "Cref": 24.8,
+    "Cfilm": 23.1,
+    "Cratio": 0.93,
+    "href": 43.4,
+    "dh": 10.7,
+    "dE00": 4.1
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 49.3,
+    "Cref": 22.2,
+    "Cfilm": 23.7,
+    "Cratio": 1.07,
+    "href": 266.9,
+    "dh": -10.2,
+    "dE00": 4.0
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 40.1,
+    "Cref": 27.2,
+    "Cfilm": 33.5,
+    "Cratio": 1.23,
+    "href": 122.6,
+    "dh": -4.3,
+    "dE00": 4.2
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 55.3,
+    "Cref": 27.4,
+    "Cfilm": 22.4,
+    "Cratio": 0.82,
+    "href": 296.3,
+    "dh": -4.9,
+    "dE00": 2.7
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 71.0,
+    "Cref": 31.9,
+    "Cfilm": 26.9,
+    "Cratio": 0.84,
+    "href": 179.9,
+    "dh": 2.2,
+    "dE00": 2.4
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 56.9,
+    "Cref": 65.0,
+    "Cfilm": 59.5,
+    "Cratio": 0.92,
+    "href": 59.1,
+    "dh": 5.3,
+    "dE00": 6.0
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 35.0,
+    "Cref": 47.3,
+    "Cfilm": 41.4,
+    "Cratio": 0.88,
+    "href": 290.1,
+    "dh": -7.8,
+    "dE00": 5.6
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 42.2,
+    "Cref": 50.6,
+    "Cfilm": 50.6,
+    "Cratio": 1.0,
+    "href": 18.0,
+    "dh": 2.6,
+    "dE00": 7.7
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 21.1,
+    "Cref": 32.1,
+    "Cfilm": 32.8,
+    "Cratio": 1.02,
+    "href": 319.4,
+    "dh": -2.0,
+    "dE00": 6.8
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 69.9,
+    "Cref": 65.3,
+    "Cfilm": 61.0,
+    "Cratio": 0.93,
+    "href": 115.8,
+    "dh": -6.8,
+    "dE00": 4.3
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 66.8,
+    "Cref": 68.8,
+    "Cfilm": 61.4,
+    "Cratio": 0.89,
+    "href": 77.6,
+    "dh": 4.0,
+    "dE00": 4.8
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 22.0,
+    "Cref": 53.3,
+    "Cfilm": 43.0,
+    "Cratio": 0.81,
+    "href": 294.0,
+    "dh": -4.1,
+    "dE00": 5.9
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 53.9,
+    "Cref": 53.9,
+    "Cfilm": 54.4,
+    "Cratio": 1.01,
+    "href": 142.4,
+    "dh": -0.3,
+    "dE00": 0.5
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 34.1,
+    "Cref": 57.3,
+    "Cfilm": 58.5,
+    "Cratio": 1.02,
+    "href": 28.5,
+    "dh": 7.4,
+    "dE00": 8.0
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 74.5,
+    "Cref": 80.9,
+    "Cfilm": 66.1,
+    "Cratio": 0.82,
+    "href": 91.3,
+    "dh": 1.0,
+    "dE00": 5.9
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 43.1,
+    "Cref": 54.5,
+    "Cfilm": 50.5,
+    "Cratio": 0.93,
+    "href": 344.2,
+    "dh": 0.4,
+    "dE00": 7.2
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 50.3,
+    "Cref": 31.7,
+    "Cfilm": 27.8,
+    "Cratio": 0.88,
+    "href": 234.4,
+    "dh": -5.2,
+    "dE00": 2.4
+   }
+  ],
+  "mean_abs_dh": 4.4,
+  "dE00_mean": 5.1,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 3.4358187561413076,
+    "dE00_max": 7.984310158718568,
+    "dE00_chrom_mean": 3.095220442562292
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 2.8244552009443353,
+    "dE00_max": 4.892794265990762,
+    "dE00_chrom_mean": 2.624808751357674
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 2.7844540886874327,
+    "dE00_max": 4.979203573300464,
+    "dE00_chrom_mean": 2.5486068416362913
+   },
+   "raw_dE00_mean": 5.118486620059476
+  },
+  "matrixA_1024": [
+   [
+    783,
+    133,
+    -69
+   ],
+   [
+    -29,
+    943,
+    -20
+   ],
+   [
+    -30,
+    77,
+    772
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    756,
+    98,
+    -28
+   ],
+   [
+    3,
+    819,
+    41
+   ],
+   [
+    3,
+    59,
+    744
+   ]
+  ],
+  "curveB": [
+   0.884,
+   1.039,
+   -0.036
+  ]
+ },
+ "kodak_vision3_200t|fujifilm_crystal_archive_typeii": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 8.8,
+    "a": -3.8,
+    "b": -1.1
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 28.9,
+    "a": -1.0,
+    "b": -1.3
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.7,
+    "a": -0.3,
+    "b": 0.3
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 66.8,
+    "a": -2.4,
+    "b": 2.4
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 76.9,
+    "a": -3.4,
+    "b": 4.2
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 82.6,
+    "a": -4.1,
+    "b": 6.3
+   }
+  ],
+  "chroma_ratio_mean": 0.961,
+  "chroma_ratio_median": 0.925,
+  "chroma_ratio_sumC": 0.935,
+  "chroma_ratio_by_L": {
+   "L<45": 1.046,
+   "45-65": 0.921,
+   "L>=65": 0.849
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 29.6,
+    "Cref": 19.8,
+    "Cfilm": 29.4,
+    "Cratio": 1.49,
+    "href": 47.5,
+    "dh": 2.7,
+    "dE00": 7.8
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 62.1,
+    "Cref": 24.8,
+    "Cfilm": 20.3,
+    "Cratio": 0.82,
+    "href": 43.4,
+    "dh": 13.0,
+    "dE00": 5.6
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 49.9,
+    "Cref": 22.2,
+    "Cfilm": 21.7,
+    "Cratio": 0.98,
+    "href": 266.9,
+    "dh": -6.1,
+    "dE00": 2.1
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 40.4,
+    "Cref": 27.2,
+    "Cfilm": 35.9,
+    "Cratio": 1.32,
+    "href": 122.6,
+    "dh": -12.9,
+    "dE00": 6.6
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 55.3,
+    "Cref": 27.4,
+    "Cfilm": 21.8,
+    "Cratio": 0.8,
+    "href": 296.3,
+    "dh": -6.0,
+    "dE00": 3.0
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 71.0,
+    "Cref": 31.9,
+    "Cfilm": 21.9,
+    "Cratio": 0.68,
+    "href": 179.9,
+    "dh": -6.8,
+    "dE00": 5.3
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 55.1,
+    "Cref": 65.0,
+    "Cfilm": 57.9,
+    "Cratio": 0.89,
+    "href": 59.1,
+    "dh": 6.3,
+    "dE00": 7.8
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 36.5,
+    "Cref": 47.3,
+    "Cfilm": 42.9,
+    "Cratio": 0.91,
+    "href": 290.1,
+    "dh": -4.7,
+    "dE00": 3.7
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 39.5,
+    "Cref": 50.6,
+    "Cfilm": 47.6,
+    "Cratio": 0.94,
+    "href": 18.0,
+    "dh": 0.3,
+    "dE00": 10.0
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 20.6,
+    "Cref": 32.1,
+    "Cfilm": 37.5,
+    "Cratio": 1.17,
+    "href": 319.4,
+    "dh": -8.3,
+    "dE00": 8.2
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 68.0,
+    "Cref": 65.3,
+    "Cfilm": 61.7,
+    "Cratio": 0.94,
+    "href": 115.8,
+    "dh": -12.4,
+    "dE00": 8.0
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 64.9,
+    "Cref": 68.8,
+    "Cfilm": 60.6,
+    "Cratio": 0.88,
+    "href": 77.6,
+    "dh": 3.9,
+    "dE00": 6.0
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 22.4,
+    "Cref": 53.3,
+    "Cfilm": 46.2,
+    "Cratio": 0.87,
+    "href": 294.0,
+    "dh": -1.8,
+    "dE00": 5.3
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 53.6,
+    "Cref": 53.9,
+    "Cfilm": 55.1,
+    "Cratio": 1.02,
+    "href": 142.4,
+    "dh": -14.4,
+    "dE00": 6.6
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 31.9,
+    "Cref": 57.3,
+    "Cfilm": 55.9,
+    "Cratio": 0.98,
+    "href": 28.5,
+    "dh": 7.6,
+    "dE00": 9.5
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 72.6,
+    "Cref": 80.9,
+    "Cfilm": 65.6,
+    "Cratio": 0.81,
+    "href": 91.3,
+    "dh": -0.2,
+    "dE00": 7.2
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 41.0,
+    "Cref": 54.5,
+    "Cfilm": 53.2,
+    "Cratio": 0.98,
+    "href": 344.2,
+    "dh": -8.9,
+    "dE00": 9.8
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 52.1,
+    "Cref": 31.7,
+    "Cfilm": 26.3,
+    "Cratio": 0.83,
+    "href": 234.4,
+    "dh": -2.8,
+    "dE00": 2.6
+   }
+  ],
+  "mean_abs_dh": 6.6,
+  "dE00_mean": 6.2,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 3.810391592917203,
+    "dE00_max": 7.755365618966574,
+    "dE00_chrom_mean": 3.596878007245531
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 2.954874606356108,
+    "dE00_max": 5.515511134924828,
+    "dE00_chrom_mean": 2.681126595472896
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 2.92552140608625,
+    "dE00_max": 5.11409871166887,
+    "dE00_chrom_mean": 2.612658373871108
+   },
+   "raw_dE00_mean": 6.171600347529583
+  },
+  "matrixA_1024": [
+   [
+    643,
+    314,
+    -115
+   ],
+   [
+    -39,
+    915,
+    -23
+   ],
+   [
+    -21,
+    13,
+    788
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    504,
+    244,
+    -54
+   ],
+   [
+    -5,
+    678,
+    24
+   ],
+   [
+    6,
+    39,
+    602
+   ]
+  ],
+  "curveB": [
+   0.887,
+   1.25,
+   -0.037
+  ]
+ },
+ "fujifilm_c200|fujifilm_crystal_archive_typeii": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 6.3,
+    "a": -3.2,
+    "b": -1.6
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 23.5,
+    "a": -3.0,
+    "b": 0.2
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.8,
+    "a": -0.3,
+    "b": 0.3
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 70.3,
+    "a": 0.6,
+    "b": 1.1
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 80.5,
+    "a": 1.1,
+    "b": 2.6
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 84.9,
+    "a": -0.1,
+    "b": 4.0
+   }
+  ],
+  "chroma_ratio_mean": 1.164,
+  "chroma_ratio_median": 1.123,
+  "chroma_ratio_sumC": 1.1,
+  "chroma_ratio_by_L": {
+   "L<45": 1.233,
+   "45-65": 1.133,
+   "L>=65": 0.93
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 28.4,
+    "Cref": 19.8,
+    "Cfilm": 37.0,
+    "Cratio": 1.87,
+    "href": 47.5,
+    "dh": -2.1,
+    "dE00": 10.5
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 65.0,
+    "Cref": 24.8,
+    "Cfilm": 34.3,
+    "Cratio": 1.38,
+    "href": 43.4,
+    "dh": 13.1,
+    "dE00": 6.6
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 48.4,
+    "Cref": 22.2,
+    "Cfilm": 31.2,
+    "Cratio": 1.41,
+    "href": 266.9,
+    "dh": -4.9,
+    "dE00": 5.5
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 40.4,
+    "Cref": 27.2,
+    "Cfilm": 39.1,
+    "Cratio": 1.44,
+    "href": 122.6,
+    "dh": -4.6,
+    "dE00": 5.7
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 55.0,
+    "Cref": 27.4,
+    "Cfilm": 32.5,
+    "Cratio": 1.18,
+    "href": 296.3,
+    "dh": -3.4,
+    "dE00": 3.2
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 73.8,
+    "Cref": 31.9,
+    "Cfilm": 27.6,
+    "Cratio": 0.86,
+    "href": 179.9,
+    "dh": 9.7,
+    "dE00": 4.6
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 59.5,
+    "Cref": 65.0,
+    "Cfilm": 64.8,
+    "Cratio": 1.0,
+    "href": 59.1,
+    "dh": 2.9,
+    "dE00": 3.1
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 31.2,
+    "Cref": 47.3,
+    "Cfilm": 50.8,
+    "Cratio": 1.08,
+    "href": 290.1,
+    "dh": -1.0,
+    "dE00": 7.5
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 41.1,
+    "Cref": 50.6,
+    "Cfilm": 60.5,
+    "Cratio": 1.2,
+    "href": 18.0,
+    "dh": 10.2,
+    "dE00": 10.6
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 17.6,
+    "Cref": 32.1,
+    "Cfilm": 41.0,
+    "Cratio": 1.28,
+    "href": 319.4,
+    "dh": -11.1,
+    "dE00": 11.0
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 73.5,
+    "Cref": 65.3,
+    "Cfilm": 65.9,
+    "Cratio": 1.01,
+    "href": 115.8,
+    "dh": -14.6,
+    "dE00": 9.2
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 70.6,
+    "Cref": 68.8,
+    "Cfilm": 66.2,
+    "Cratio": 0.96,
+    "href": 77.6,
+    "dh": 2.1,
+    "dE00": 1.7
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 20.5,
+    "Cref": 53.3,
+    "Cfilm": 59.4,
+    "Cratio": 1.11,
+    "href": 294.0,
+    "dh": 4.8,
+    "dE00": 7.0
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 54.6,
+    "Cref": 53.9,
+    "Cfilm": 62.4,
+    "Cratio": 1.16,
+    "href": 142.4,
+    "dh": -4.6,
+    "dE00": 3.2
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 36.4,
+    "Cref": 57.3,
+    "Cfilm": 64.8,
+    "Cratio": 1.13,
+    "href": 28.5,
+    "dh": 8.1,
+    "dE00": 7.2
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 77.4,
+    "Cref": 80.9,
+    "Cfilm": 69.9,
+    "Cratio": 0.86,
+    "href": 91.3,
+    "dh": -2.1,
+    "dE00": 4.0
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 41.4,
+    "Cref": 54.5,
+    "Cfilm": 58.1,
+    "Cratio": 1.07,
+    "href": 344.2,
+    "dh": -1.8,
+    "dE00": 8.8
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 50.8,
+    "Cref": 31.7,
+    "Cfilm": 30.0,
+    "Cratio": 0.95,
+    "href": 234.4,
+    "dh": 2.6,
+    "dE00": 1.2
+   }
+  ],
+  "mean_abs_dh": 5.8,
+  "dE00_mean": 6.0,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 4.84923073753047,
+    "dE00_max": 9.067795132721583,
+    "dE00_chrom_mean": 4.495558917930048
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 3.2826013694572875,
+    "dE00_max": 6.237674174074144,
+    "dE00_chrom_mean": 3.040306375061278
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 3.2070077894660343,
+    "dE00_max": 5.802163699670601,
+    "dE00_chrom_mean": 2.895145986475311
+   },
+   "raw_dE00_mean": 6.03831231299701
+  },
+  "matrixA_1024": [
+   [
+    875,
+    136,
+    -150
+   ],
+   [
+    -39,
+    932,
+    -49
+   ],
+   [
+    -70,
+    -126,
+    1012
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ]
+  ],
+  "curveB": [
+   0.785,
+   5429.475,
+   -0.092
+  ]
+ },
+ "fujifilm_pro_400h|fujifilm_crystal_archive_typeii": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 7.2,
+    "a": -4.3,
+    "b": -0.6
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 26.8,
+    "a": -3.2,
+    "b": -0.4
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 50.8,
+    "a": -0.2,
+    "b": 0.3
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 68.1,
+    "a": -0.3,
+    "b": 1.6
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 78.2,
+    "a": -0.0,
+    "b": 2.9
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 83.4,
+    "a": -0.4,
+    "b": 4.4
+   }
+  ],
+  "chroma_ratio_mean": 1.038,
+  "chroma_ratio_median": 0.977,
+  "chroma_ratio_sumC": 0.995,
+  "chroma_ratio_by_L": {
+   "L<45": 1.093,
+   "45-65": 1.01,
+   "L>=65": 0.881
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 29.3,
+    "Cref": 19.8,
+    "Cfilm": 34.1,
+    "Cratio": 1.73,
+    "href": 47.5,
+    "dh": 2.3,
+    "dE00": 9.2
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 63.6,
+    "Cref": 24.8,
+    "Cfilm": 25.2,
+    "Cratio": 1.01,
+    "href": 43.4,
+    "dh": 8.5,
+    "dE00": 3.2
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 49.2,
+    "Cref": 22.2,
+    "Cfilm": 26.0,
+    "Cratio": 1.17,
+    "href": 266.9,
+    "dh": -10.1,
+    "dE00": 4.8
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 39.9,
+    "Cref": 27.2,
+    "Cfilm": 37.1,
+    "Cratio": 1.37,
+    "href": 122.6,
+    "dh": -11.5,
+    "dE00": 6.7
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 55.4,
+    "Cref": 27.4,
+    "Cfilm": 25.4,
+    "Cratio": 0.93,
+    "href": 296.3,
+    "dh": -6.7,
+    "dE00": 2.7
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 71.4,
+    "Cref": 31.9,
+    "Cfilm": 24.8,
+    "Cratio": 0.78,
+    "href": 179.9,
+    "dh": 3.4,
+    "dE00": 3.5
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 56.3,
+    "Cref": 65.0,
+    "Cfilm": 62.2,
+    "Cratio": 0.96,
+    "href": 59.1,
+    "dh": 2.6,
+    "dE00": 5.5
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 34.0,
+    "Cref": 47.3,
+    "Cfilm": 42.4,
+    "Cratio": 0.9,
+    "href": 290.1,
+    "dh": -8.1,
+    "dE00": 6.5
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 40.6,
+    "Cref": 50.6,
+    "Cfilm": 52.9,
+    "Cratio": 1.05,
+    "href": 18.0,
+    "dh": 3.9,
+    "dE00": 9.2
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 18.5,
+    "Cref": 32.1,
+    "Cfilm": 37.6,
+    "Cratio": 1.17,
+    "href": 319.4,
+    "dh": -10.5,
+    "dE00": 9.9
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 69.1,
+    "Cref": 65.3,
+    "Cfilm": 62.3,
+    "Cratio": 0.95,
+    "href": 115.8,
+    "dh": -15.9,
+    "dE00": 10.0
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 65.9,
+    "Cref": 68.8,
+    "Cfilm": 63.5,
+    "Cratio": 0.92,
+    "href": 77.6,
+    "dh": -0.7,
+    "dE00": 4.2
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 21.6,
+    "Cref": 53.3,
+    "Cfilm": 47.6,
+    "Cratio": 0.89,
+    "href": 294.0,
+    "dh": -1.2,
+    "dE00": 5.8
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 52.9,
+    "Cref": 53.9,
+    "Cfilm": 58.8,
+    "Cratio": 1.09,
+    "href": 142.4,
+    "dh": -7.6,
+    "dE00": 4.0
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 33.6,
+    "Cref": 57.3,
+    "Cfilm": 60.2,
+    "Cratio": 1.05,
+    "href": 28.5,
+    "dh": 8.4,
+    "dE00": 8.7
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 73.1,
+    "Cref": 80.9,
+    "Cfilm": 67.1,
+    "Cratio": 0.83,
+    "href": 91.3,
+    "dh": -5.1,
+    "dE00": 7.7
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 41.6,
+    "Cref": 54.5,
+    "Cfilm": 54.4,
+    "Cratio": 1.0,
+    "href": 344.2,
+    "dh": -3.6,
+    "dE00": 8.6
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 50.2,
+    "Cref": 31.7,
+    "Cfilm": 28.3,
+    "Cratio": 0.89,
+    "href": 234.4,
+    "dh": -3.8,
+    "dE00": 2.0
+   }
+  ],
+  "mean_abs_dh": 6.3,
+  "dE00_mean": 6.0,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 4.340997852040428,
+    "dE00_max": 9.08026179419226,
+    "dE00_chrom_mean": 4.062777125017019
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 3.5358900954038224,
+    "dE00_max": 6.565718958657507,
+    "dE00_chrom_mean": 3.3522516013846517
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 3.4207309241744794,
+    "dE00_max": 5.188132540859821,
+    "dE00_chrom_mean": 3.128742138568663
+   },
+   "raw_dE00_mean": 5.99176442596239
+  },
+  "matrixA_1024": [
+   [
+    802,
+    222,
+    -172
+   ],
+   [
+    -32,
+    892,
+    -25
+   ],
+   [
+    -20,
+    5,
+    800
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    626,
+    184,
+    -121
+   ],
+   [
+    3,
+    652,
+    30
+   ],
+   [
+    10,
+    35,
+    605
+   ]
+  ],
+  "curveB": [
+   0.901,
+   1.288,
+   -0.039
+  ]
+ },
+ "fujifilm_xtra_400|fujifilm_crystal_archive_typeii": {
+  "grey": [
+   {
+    "name": "black",
+    "L_ref": 20.6,
+    "L_film": 5.6,
+    "a": -3.1,
+    "b": -2.0
+   },
+   {
+    "name": "grey2",
+    "L_ref": 35.6,
+    "L_film": 21.9,
+    "a": -2.4,
+    "b": -0.1
+   },
+   {
+    "name": "grey3",
+    "L_ref": 50.8,
+    "L_film": 51.0,
+    "a": -0.4,
+    "b": 0.3
+   },
+   {
+    "name": "grey4",
+    "L_ref": 66.9,
+    "L_film": 71.4,
+    "a": -0.2,
+    "b": 0.5
+   },
+   {
+    "name": "grey5",
+    "L_ref": 81.3,
+    "L_film": 81.4,
+    "a": 0.6,
+    "b": 1.7
+   },
+   {
+    "name": "white",
+    "L_ref": 95.2,
+    "L_film": 85.4,
+    "a": 0.2,
+    "b": 3.0
+   }
+  ],
+  "chroma_ratio_mean": 1.224,
+  "chroma_ratio_median": 1.211,
+  "chroma_ratio_sumC": 1.152,
+  "chroma_ratio_by_L": {
+   "L<45": 1.315,
+   "45-65": 1.185,
+   "L>=65": 0.952
+  },
+  "patches": [
+   {
+    "name": "dark_skin",
+    "Lref": 37.3,
+    "Lfilm": 27.2,
+    "Cref": 19.8,
+    "Cfilm": 37.8,
+    "Cratio": 1.91,
+    "href": 47.5,
+    "dh": -4.1,
+    "dE00": 11.5
+   },
+   {
+    "name": "light_skin",
+    "Lref": 64.4,
+    "Lfilm": 65.6,
+    "Cref": 24.8,
+    "Cfilm": 36.2,
+    "Cratio": 1.46,
+    "href": 43.4,
+    "dh": 16.2,
+    "dE00": 8.2
+   },
+   {
+    "name": "blue_sky",
+    "Lref": 49.6,
+    "Lfilm": 48.0,
+    "Cref": 22.2,
+    "Cfilm": 33.5,
+    "Cratio": 1.51,
+    "href": 266.9,
+    "dh": -1.8,
+    "dE00": 5.7
+   },
+   {
+    "name": "foliage",
+    "Lref": 43.4,
+    "Lfilm": 42.0,
+    "Cref": 27.2,
+    "Cfilm": 41.5,
+    "Cratio": 1.53,
+    "href": 122.6,
+    "dh": -5.1,
+    "dE00": 6.1
+   },
+   {
+    "name": "blue_flower",
+    "Lref": 55.2,
+    "Lfilm": 54.0,
+    "Cref": 27.4,
+    "Cfilm": 37.0,
+    "Cratio": 1.35,
+    "href": 296.3,
+    "dh": -1.9,
+    "dE00": 4.5
+   },
+   {
+    "name": "bluish_green",
+    "Lref": 70.7,
+    "Lfilm": 75.2,
+    "Cref": 31.9,
+    "Cfilm": 28.1,
+    "Cratio": 0.88,
+    "href": 179.9,
+    "dh": 10.2,
+    "dE00": 5.3
+   },
+   {
+    "name": "orange",
+    "Lref": 62.1,
+    "Lfilm": 60.6,
+    "Cref": 65.0,
+    "Cfilm": 65.6,
+    "Cratio": 1.01,
+    "href": 59.1,
+    "dh": 3.4,
+    "dE00": 2.8
+   },
+   {
+    "name": "purplish_blue",
+    "Lref": 40.1,
+    "Lfilm": 28.7,
+    "Cref": 47.3,
+    "Cfilm": 56.4,
+    "Cratio": 1.19,
+    "href": 290.1,
+    "dh": 3.1,
+    "dE00": 9.5
+   },
+   {
+    "name": "moderate_red",
+    "Lref": 50.1,
+    "Lfilm": 40.1,
+    "Cref": 50.6,
+    "Cfilm": 62.1,
+    "Cratio": 1.23,
+    "href": 18.0,
+    "dh": 11.5,
+    "dE00": 11.9
+   },
+   {
+    "name": "purple",
+    "Lref": 30.2,
+    "Lfilm": 16.2,
+    "Cref": 32.1,
+    "Cfilm": 44.6,
+    "Cratio": 1.39,
+    "href": 319.4,
+    "dh": -12.9,
+    "dE00": 12.7
+   },
+   {
+    "name": "yellow_green",
+    "Lref": 71.5,
+    "Lfilm": 75.4,
+    "Cref": 65.3,
+    "Cfilm": 68.1,
+    "Cratio": 1.04,
+    "href": 115.8,
+    "dh": -15.5,
+    "dE00": 10.2
+   },
+   {
+    "name": "orange_yellow",
+    "Lref": 71.0,
+    "Lfilm": 72.5,
+    "Cref": 68.8,
+    "Cfilm": 67.6,
+    "Cratio": 0.98,
+    "href": 77.6,
+    "dh": 3.6,
+    "dE00": 2.9
+   },
+   {
+    "name": "blue",
+    "Lref": 29.1,
+    "Lfilm": 19.8,
+    "Cref": 53.3,
+    "Cfilm": 66.3,
+    "Cratio": 1.24,
+    "href": 294.0,
+    "dh": 7.3,
+    "dE00": 8.5
+   },
+   {
+    "name": "green",
+    "Lref": 54.4,
+    "Lfilm": 56.5,
+    "Cref": 53.9,
+    "Cfilm": 66.5,
+    "Cratio": 1.24,
+    "href": 142.4,
+    "dh": -6.6,
+    "dE00": 5.0
+   },
+   {
+    "name": "red",
+    "Lref": 41.8,
+    "Lfilm": 36.1,
+    "Cref": 57.3,
+    "Cfilm": 64.9,
+    "Cratio": 1.13,
+    "href": 28.5,
+    "dh": 7.9,
+    "dE00": 7.3
+   },
+   {
+    "name": "yellow",
+    "Lref": 81.3,
+    "Lfilm": 78.9,
+    "Cref": 80.9,
+    "Cfilm": 71.3,
+    "Cratio": 0.88,
+    "href": 91.3,
+    "dh": -1.1,
+    "dE00": 2.9
+   },
+   {
+    "name": "magenta",
+    "Lref": 50.4,
+    "Lfilm": 39.8,
+    "Cref": 54.5,
+    "Cfilm": 59.4,
+    "Cratio": 1.09,
+    "href": 344.2,
+    "dh": -3.7,
+    "dE00": 10.3
+   },
+   {
+    "name": "cyan",
+    "Lref": 51.2,
+    "Lfilm": 51.1,
+    "Cref": 31.7,
+    "Cfilm": 30.6,
+    "Cratio": 0.97,
+    "href": 234.4,
+    "dh": 4.1,
+    "dE00": 1.4
+   }
+  ],
+  "mean_abs_dh": 6.7,
+  "dE00_mean": 6.7,
+  "fits": {
+   "A_matrix": {
+    "dE00_mean": 5.239422575541384,
+    "dE00_max": 10.983302761745948,
+    "dE00_chrom_mean": 4.8390766031856725
+   },
+   "B_matrix+curve": {
+    "dE00_mean": 3.7053632007552117,
+    "dE00_max": 7.918101856267041,
+    "dE00_chrom_mean": 3.5618655447543586
+   },
+   "C_matrix+RGBcurves": {
+    "dE00_mean": 3.697665070284874,
+    "dE00_max": 7.609649342974021,
+    "dE00_chrom_mean": 3.4225213766289566
+   },
+   "raw_dE00_mean": 6.701233190587023
+  },
+  "matrixA_1024": [
+   [
+    819,
+    225,
+    -194
+   ],
+   [
+    -66,
+    1003,
+    -75
+   ],
+   [
+    -157,
+    -146,
+    1144
+   ]
+  ],
+  "matrixB_1024": [
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ]
+  ],
+  "curveB": [
+   0.827,
+   9033.043,
+   -0.087
+  ]
+ }
+}

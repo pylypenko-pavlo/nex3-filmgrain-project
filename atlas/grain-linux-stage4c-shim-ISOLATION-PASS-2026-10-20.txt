@@ -1,0 +1,35 @@
+STAGE 4c — FULL GRAIN SHIM BUILT + ISOLATION = PASS (2026-10-20). All offline, no camera.
+
+grain_hook_4c.c (archived code/grain-shim/grain_hook.c) = the real grain shim. On a fresh DCF-JPG save it interposes
+Fsys_Close and roundtrips the file through the SELF-CONTAINED SW codec:
+  jpeg_decode -> grain_apply (ultramax luma+chroma, row-streaming) -> jpeg_encode -> splice original Exif(APP1)
+  -> write ".TMP" -> atomic Fsys_Rename over the original.
+Build: arm-linux-gnueabi-gcc -march=armv5te -shared -fPIC -nostdlib -O2 -ffreestanding -fno-builtin
+  -fno-tree-loop-distribute-patterns -o grain_hook_4c.so grain_hook_4c.c swjpeg.c grain.c
+  (the -ffreestanding/-fno-builtin/-fno-tree-loop-distribute-patterns flags stop GCC emitting memcpy/strlen
+   libcalls -> the .so has ZERO external symbols besides __dlopen/__dlsym; no DT_NEEDED; relocs = R_ARM_RELATIVE
+   /GLOB_DAT/JUMP_SLOT only, all sonyld-handled; 2 PT_LOAD; 32 KB). md5 of the proven build: 9d8e1f36...
+
+VALIDATION (qemu):
+- LOAD-PROOF: real normal sonyld (df94859e) loads grain_hook_4c.so, EXIT=0, ctor "4c: hook loaded".
+- FULL ISOLATION (fake POSIX-backed libInfraFsys + caller raw-reads the real 16MP DSC09580.JPG and Fsys-saves
+  it as a DCF JPG; shim preloaded): shim fired on the written DCF-JPG close, log:
+    4c: Fsys resolved / 4c: RT W=4912 H=3264 / 4c: GRAIN ok bytes=0x585f3d dec_us=0x50624 grn_us=0x3a1dcc enc_us=0x96c82
+  Output DSC00001.JPG = valid grained JPEG 5.83 MB, 4912x3264, Exif preserved (Model=NEX-3N, DateTime), sigma_Y
+  on the grey patch = 5.71 (target ~5.8) => the locked ultramax look reproduced through the WHOLE real shim path.
+- FAIL-SAFE unchanged (real close first; .TMP + atomic rename; any error -> original untouched). WRITE=0x7 READ=0x1.
+
+TIMINGS under qemu-arm-static on the Mac (NOT camera-representative): decode 0.33 s, GRAIN 3.8 s, encode 0.62 s
+(~4.8 s total). Grain is the bottleneck (per-pixel u32 hash + multi-tap blur over 16M px + chroma 2-pass).
+=> KNOWN ITEM: grain speed may make the on-save delay several seconds on the camera. Optimizable later (cheaper
+   PRNG, or generate noise at half-res since ultramax grain is coarse ~2px, then re-validate the look). Not a
+   safety/correctness issue (roundtrip runs after the real close; fail-safe protects the file).
+
+OPEN UX CONSIDERATION for the boot test: the shim rewrites the just-saved JPG (via .TMP+rename) AFTER the camera's
+save pipeline has recorded the original in its image database -> a size/content mismatch may re-raise the camera's
+"memory-card write not completed / recover?" prompt (as in 4b, but now with a VALID grained photo, NOT a crash).
+Recover rebuilds the DB to match the grained file (photo intact). Avoiding the prompt entirely would need updating
+the camera DB or a different interposition point (future work). The boot test will show whether it reappears.
+
+NEXT: camera (silicon test + boot test) to get the REAL grain time and see the grain on a real shot, OR optimize
+grain speed first. Camera idle on the harmless 4a logger; env.txt would point to grain_hook_4c.so when armed.

@@ -1,0 +1,163 @@
+BRICK INCIDENT + HARDWARE-RECOVERY PLAN — 2026-10-21
+=====================================================
+The dev-body NEX-3N bricked (userland-dead) during a re-stage. This records the exact cause, why it is
+NOT software-recoverable, the grounded hardware-recovery plan, and the CORRECTED safe-staging procedure
+so a recovered/replacement body never repeats it.
+
+WHAT HAPPENED (root cause = destructive-action SEQUENCING, mine)
+---------------------------------------------------------------
+Context: FAST+PT shim worked on camera (16 s/shot, grain confirmed). Owner asked to bump grain x1.5.
+I rebuilt grain_hook_4c.so (x1.5, md5 b7d873ea) and RE-STAGED it over the armed one while env.txt still
+pointed at /setting/grain_hook_4c.so. The senser writeFile FAILED mid-transfer (libusb Errno 5 I/O) —
+the camera hung (black screen) in service mode, and the partial write TRUNCATED /setting/grain_hook_4c.so.
+Battery-pull cold boot -> Loader1/Loader2/kernel OK, but sonyld could not load the corrupt preload ->
+_rtld_die killed userland -> permanent black screen, no USB enumeration.
+THE MISTAKE: I overwrote a boot-critical file that env.txt still referenced, with no intermediate revert.
+Had I reverted env.txt -> grain_hook_4a.so FIRST (known-good logger), the failed .so write would have been
+harmless (next boot loads 4a.so). See CORRECTED PROCEDURE below.
+
+WHY NOT SOFTWARE-RECOVERABLE (dump-verified + community-confirmed)
+-----------------------------------------------------------------
+Two agents + the boot1 disassembly + the ma1co/pmca community all converge:
+- Loader1/Loader2/kernel run every boot; only the env.txt-preloaded p3 userland dies. A door helps only
+  if settable WITHOUT userland AND routes to a kernel that ignores env.txt (only the p1 updater does).
+- \updater\mode on p2 (nflasha2=/setting, FAT) is Loader2's FIRST check (boot_is_updater @0xa01efe50)
+  and WOULD enter the pmca-reachable updater — but it must be PRE-PLACED; userland is dead so nothing can
+  create it now, and p2 is internal NAND (not externally writable).
+- SD card: DEAD. boot1 has NO SD/MMC driver at all (zero sd/mmc/card strings; FAT layer is NAND-only,
+  device ctx 0xa0010844 = NAND MBR). No SD trigger at any boot stage.
+- Key/button combos: DEAD. No boot-mode sub reads the key GPIO as recovery; cmode/adjust is double-gated
+  (Backup 0x510011 + internal-p2 "CC" file); all non-updater modes still load p3 -> env.txt -> re-brick.
+- image_update (reg 0xa001081c==2), USB-at-boot, loader USB window: DEAD (firmware-written / updater-only).
+- pmca itself needs LIVE firmware to reach senser/updater (confirmed: it enters updater via the running
+  firmware's MTP handshake). A non-booting body is out of its reach.
+- Empirical: 90 s USB poll across a cold boot -> NO Sony device (vendor 054c) enumerates. Confirmed.
+
+THE ONE RECOVERY DOOR = HARDWARE BOOT_MODE STRAP -> UPDATER
+----------------------------------------------------------
+boot_is_updater jumper sub @0xa01efe34: enter updater iff  [0xa0010024]==4 && ((0xf3060000>>8)&0xf)==2.
+=> 4 GPIO inputs on the CXD4132 at port 0xf3060000 bits[11:8] must read binary 0010, gated by the
+boot-source reg 0xa0010024==4 (normal NAND boot). Force that strap -> Loader2 boots the p1 updater
+(ignores env.txt) -> pmca updaterShellCommand connects -> mount nflasha2 -> fix env.txt -> recovered.
+Community corroboration: NEX boards have BOOT_MODE strap pins (someone toggled "BOOT_MODE_1 high" on a
+NEX and changed boot behaviour); NEX/Alpha have a service connector with 2 UARTs + JTAG, UART0 console
+active at boot ("Uncompressing Linux... booting the kernel" seen on NEX-5N); the JTAG/UART pads are
+documented in the Sony service manual (ma1co PMCA-RE #373, RX100).
+
+HARDWARE IDS (from the dump)
+----------------------------
+- Main SoC: Sony CXD4132 (BIONZ). GPIO controller base 0xf3060000 is on it. No public pinout.
+- PMIC: CXD90014 ("Charon") — power-key/VBUS over SIO.
+- NAND partitions nflasha1..8; p1=updater initrd, p2=/setting (FAT, env.txt + grain_hook_*.so), p3=main.
+
+WHAT'S NEEDED (hands-on, multi-session)
+---------------------------------------
+1. Sony NEX-3NL/3NY Ver.1.0 LEVEL3 service manual (on elektrotanya; download is captcha-gated) — for the
+   physical location of: BOOT_MODE strap pins (map to 0xf3060000[11:8]), UART0 TX/RX/GND, JTAG pads.
+2. USB-UART adapter at the board's logic level (3.3 V likely; confirm 1.8 vs 3.3 from the manual).
+3. (optional, heavy backup) JTAG adapter or a NAND programmer to reflash nflasha2 directly.
+
+RECOVERY PLAN (step by step)
+----------------------------
+1. Obtain + analyse the service manual -> strap/UART/JTAG pad locations.
+2. Open the body; tap UART0 (TX/RX/GND); power on; capture the boot log to CONFIRM the death point
+   (sonyld load-fail on the corrupt preload). Diagnostic only.
+3. Set the BOOT_MODE strap to 0b0010 (updater); power on -> camera enters the p1 updater.
+4. pmca updaterShellCommand -> busybox sh: `mount -t vfat /dev/nflasha2 /setting`; revert the preload:
+   `echo 'LD_PRELOAD=/setting/grain_hook_4a.so' > /setting/env.txt`  (or delete the corrupt 4c.so and
+   point env.txt at 4a.so); `sync`; `umount /setting`.  [4a.so = the known-good logger, still on /setting]
+5. Remove the strap; normal cold boot -> STOCK camera restored. Re-stage grain later via the CORRECTED
+   procedure.
+Fallback if the strap can't be located/forced: JTAG or NAND-programmer reflash of nflasha2 (fix env.txt).
+
+CORRECTED SAFE-STAGING PROCEDURE (for any future body — MANDATORY)
+-----------------------------------------------------------------
+Never overwrite a boot-critical file that an armed trigger still points at. Order:
+  1. DISARM first: env.txt -> grain_hook_4a.so (known-good). Verify readback.
+  2. THEN overwrite /setting/grain_hook_4c.so with the new build. Verify readback md5 == expected.
+  3. Only after a VERIFIED good .so, RE-ARM: env.txt -> grain_hook_4c.so. Verify readback.
+  4. Clear the log; cold boot. A failed write in step 2 now leaves the camera booting 4a.so (safe),
+     never a truncated armed preload.
+Also: pre-place the \updater\mode recovery net (Stage 2b) on the NEW body BEFORE arming any preload, so a
+future preload failure is recoverable in software (the net this dev body never had).
+
+SERVICE-MANUAL-VERIFIED RECOVERY (equipment = soldering iron + USB cable ONLY)
+------------------------------------------------------------------------------
+Source: Sony NEX-3NL/3NY Ver.1.0 LEVEL3 service manual (~/Downloads/sony_nex-3nl_nex-3ny_ver.1.0_level3.pdf,
+40pp A3). Cross-checked with the boot1 strap (0xf3060000[11:8]==2 == updater) and the dvxuser community
+("BOOT_MODE_1 high changes the boot"). The DGU loader serial console is diagnostic-only ("NAND Command
+Not available for Loader") so serial cannot fix env.txt directly -> we force the UPDATER instead.
+
+STRAP = BOOT_MODE_1 HIGH:
+- IC_1001 (CXD4132) SYSTEM block, sch page 20: BOOT_MODE_0=ball AA17 (CL1005), BOOT_MODE_1=ball AB10
+  (CL1003, series R1004 180R), BOOT_MODE_2=ball AA10. Default all LOW -> boot value 0 (normal).
+  0xf3060000[11:8]==2 == 0b0010 == BOOT_MODE_1 high, 0/2 low == UPDATER. So assert ONLY BOOT_MODE_1 high.
+- Debug connector CN3011 (sch page 21/32; board SY-1013), pinout: 1/16 REG_GND, 2 DEBUG_MODE,
+  3 NTRST, 4 TDI, 5 TMS, 6 TCK, 7 RTCK, 8 TDO, 9 NSRST, 10 UART_TXD_CA, 11 UART_RXD_CA,
+  12 DEBUG_UART0_TXD, 13 DEBUG_UART0_RXD, 14 EVER_3.15V (CL3006), 15 BOOT_MODE_1 (CL3005).
+- PHYSICAL: SY-1013 BOARD, SIDE B (sch page 38). CL3005 (BOOT_MODE_1) and CL3006 (EVER_3.15V) are two
+  ADJACENT round test pads just above the RIGHT end of CN3011 (between CN3011 and Q1301/R1301).
+  Locator (text, the manual drawing is not redistributed): on SY-1013 side B, two adjacent round test pads just above the RIGHT end of debug connector CN3011, between CN3011 and Q1301/R1301; CL3006 (EVER_3.15V) is the left pad, CL3005 (BOOT_MODE_1) the right one; R1301 sits directly above them and must not be touched. Bridge CL3005<->CL3006.
+- DEBUG UART0 is 3.15V logic (UART block IOVDD = D_3.15V_IC_1001); it is also on the external MULTI
+  terminal pins 8(TX)/9(RX) + GND 5/14 if a 3.3V USB-UART is ever obtained (not needed for this route).
+
+PROCEDURE:
+1. Open the body; reach SY-1013 Side B. Bridge CL3005 <-> CL3006 with a solder blob / short wire
+   (BOOT_MODE_1 <- EVER_3.15V = pull high). EVER_3.15V is always-on so it is high when the strap is
+   sampled at reset. BOOT_MODE_1 is a high-Z config input -> shorting to 3.15V is safe.
+2. Connect USB; power on. Loader2 reads value 2 -> boots the p1 UPDATER kernel (ignores env.txt/dmode).
+3. pmca updaterShellCommand connects over USB (no UART needed). Run:
+   code/grain-shim/tools/recover_env_via_updater.py  (mounts nflasha2=/setting; reverts env.txt ->
+   LD_PRELOAD=/setting/grain_hook_4a.so, the known-good logger; verifies; umounts).
+   Run via: cd work/pmca && SUDO_ASKPASS=.../askpass.sh sudo -A env PYTHONPATH=work/pmca <venv>/python \
+     code/grain-shim/tools/recover_env_via_updater.py
+   (If the updater wants an "OK"/reset confirm like the a6000 flow, handle at the prompt.)
+4. Power off; DESOLDER the CL3005<->CL3006 bridge.
+5. Normal cold boot -> loads grain_hook_4a.so (harmless logger) -> STOCK camera restored.
+RESIDUAL RISK / UNVERIFIED: polarity (HIGH=updater) is high-confidence (dump value 2 + community) but
+never exercised on THIS body; if the strap yields a non-updater mode, re-check BOOT_MODE_0/2 default-low
+and the exact bit order. The strap writes nothing to flash, so a wrong strap is non-destructive (just
+remove it and retry) — only the soldering itself carries the usual physical risk.
+
+HW-RECOVERY ATTEMPT OUTCOME (2026-10-21) — FAILED, body WRITTEN OFF
+------------------------------------------------------------------
+Owner attempted the BOOT_MODE_1 strap with the available tools (soldering iron + USB cable, NO
+magnification, owner's eyesight limited on 0.2-0.3 mm pads). Result over two tries:
+- The solder went down as a wide BLOB of solder + burnt flux across the right end of CN3011 (photos
+  IMG_5976-5979), bridging many connector pins instead of a clean CL3005<->CL3006 link. Likely multiple
+  shorts (incl. risk of EVER_3.15V<->REG_GND). Each power-on: NO behaviour change (same dead black
+  screen, no SD-light activity that an actual updater boot would show).
+- Camera presents NO USB device -> not in updater. (DETECTION LESSON: system_profiler/ioreg are BLIND on
+  this Mac even for a working device; the AUTHORITATIVE check is libusb, i.e. pmca's own method:
+  code/grain-shim/tools/usb_list.py enumerates usb.core.find with the /opt/homebrew libusb backend, run under sudo;
+  it saw the camera fine during staging and saw 0 devices post-brick. Use libusb, not ioreg, next time.)
+- Root blocker: a clean minimal bridge on fine-pitch pads is not achievable blind; blind rework only
+  made bigger blobs. The strap route is SOUND in theory (dump + manual verified) but needs a microscope/
+  loupe + solder wick, which were not on hand.
+DECISION (owner, 2026-10-21): WRITE OFF this body ("наш мусор"); do not sink more into it. Moving to a
+replacement NEX-3N (Allegro). The strap recovery (bridge CL3005<->CL3006 near CN3011, SY-1013 Side B ->
+updater -> pmca updatershell over USB -> recover_env_via_updater.py) stays documented here for anyone
+with proper magnification.
+
+STATE / HANDOFF
+---------------
+Dev body #1: BRICKED + WRITTEN OFF (truncated grain_hook_4c.so armed in env.txt; strap recovery possible
+only with a microscope, not pursued).
+Grain pipeline INTACT + portable to any NEX-3N body:
+  - FAST+PT x1.5 .so md5 b7d873ea (offline sigY 5.18) ; x1.0 md5 2cf01a99 (sigY 3.47).
+  - Codec (SW integer JPEG, FAST AAN + chroma passthrough), baked-tile ultramax400 grain, fast landing
+    — all validated offline AND previously on-camera (16 s/shot, grain confirmed on DSC09794/09795).
+  - Sources (in the repo): code/grain-shim/grain_hook.c, code/grain-shim/swjpeg.c/.h, code/grain-shim/grain_stream.c, code/grain-shim/grain_tile.S,
+    code/grain-shim/grain_luts.h, code/grain-shim/bake_tile.py (STRENGTH, 1.5 for that build), code/grain-shim/test_fastpt.c, grain_tile.bin.
+FOR THE NEXT (replacement) BODY — do BEFORE arming any preload:
+  1. Prove the updater door BEFORE the first arming: place \updater\mode on /setting/updater (Stage 2a,
+     comp intact), cold-boot -> Loader2 must enter the pmca-reachable updater; it then self-clears.
+     CORRECTION 2026-10-21: this is a TEST of the door, not a standing net. Loader2 consumes the file on
+     the boot it diverts, so it cannot coexist with a normal shooting boot; with comp removed (2b) EVERY
+     boot enters the updater until comp is restored. A preload that loads and then kills userland has no
+     software way back. The real protection is the staging ORDER below.
+  2. Use the CORRECTED safe-staging order: disarm env.txt->4a.so FIRST, overwrite grain_hook_4c.so,
+     verify md5, THEN re-arm env.txt->4c.so. A failed .so write can then never brick.
+  3. Re-stage x1.5 (b7d873ea) or re-tune strength to taste; the owner wanted grain more visible than the
+     locked sigma3.5 (bumped x1.5 = sigma~5), so confirm the look on the new body.
+Owner next step: acquire a replacement NEX-3N (Allegro).

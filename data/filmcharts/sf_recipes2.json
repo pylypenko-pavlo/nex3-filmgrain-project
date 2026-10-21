@@ -1,0 +1,1328 @@
+{
+ "kodak_portra_160|kodak_portra_endura": {
+  "tone": [
+   0.755,
+   0.812,
+   -0.049
+  ],
+  "dE_tone_only": 6.2,
+  "dE_tone_matrix": 4.1,
+  "dE_chrom": 4.0,
+  "Mnorm_1024": [
+   [
+    1007,
+    299,
+    -282
+   ],
+   [
+    4,
+    852,
+    168
+   ],
+   [
+    7,
+    -12,
+    1029
+   ]
+  ],
+  "rowsum": [
+   0.994,
+   0.972,
+   1.034
+  ],
+  "sat_equiv": 0.907,
+  "worst": [
+   [
+    "blue_sky",
+    6.1
+   ],
+   [
+    "light_skin",
+    6.1
+   ],
+   [
+    "blue_flower",
+    5.6
+   ],
+   [
+    "bluish_green",
+    5.2
+   ]
+  ]
+ },
+ "kodak_portra_400|kodak_portra_endura": {
+  "tone": [
+   0.762,
+   0.812,
+   -0.048
+  ],
+  "dE_tone_only": 5.6,
+  "dE_tone_matrix": 4.1,
+  "dE_chrom": 3.9,
+  "Mnorm_1024": [
+   [
+    1035,
+    265,
+    -276
+   ],
+   [
+    -5,
+    904,
+    125
+   ],
+   [
+    8,
+    -13,
+    1029
+   ]
+  ],
+  "rowsum": [
+   1.023,
+   0.97,
+   1.007
+  ],
+  "sat_equiv": 0.93,
+  "worst": [
+   [
+    "blue_sky",
+    6.1
+   ],
+   [
+    "blue_flower",
+    5.9
+   ],
+   [
+    "red",
+    5.6
+   ],
+   [
+    "light_skin",
+    5.3
+   ]
+  ]
+ },
+ "kodak_portra_800|kodak_portra_endura": {
+  "tone": [
+   0.746,
+   0.788,
+   -0.049
+  ],
+  "dE_tone_only": 4.5,
+  "dE_tone_matrix": 3.6,
+  "dE_chrom": 3.5,
+  "Mnorm_1024": [
+   [
+    1068,
+    165,
+    -208
+   ],
+   [
+    4,
+    929,
+    91
+   ],
+   [
+    3,
+    5,
+    1017
+   ]
+  ],
+  "rowsum": [
+   1.021,
+   0.976,
+   1.002
+  ],
+  "sat_equiv": 0.959,
+  "worst": [
+   [
+    "blue_flower",
+    5.3
+   ],
+   [
+    "light_skin",
+    5.3
+   ],
+   [
+    "bluish_green",
+    5.2
+   ],
+   [
+    "blue_sky",
+    5.1
+   ]
+  ]
+ },
+ "kodak_ektar_100|kodak_portra_endura": {
+  "tone": [
+   0.787,
+   0.816,
+   -0.045
+  ],
+  "dE_tone_only": 6.3,
+  "dE_tone_matrix": 4.8,
+  "dE_chrom": 4.8,
+  "Mnorm_1024": [
+   [
+    1102,
+    198,
+    -277
+   ],
+   [
+    -8,
+    899,
+    133
+   ],
+   [
+    6,
+    -12,
+    1030
+   ]
+  ],
+  "rowsum": [
+   1.014,
+   0.965,
+   1.02
+  ],
+  "sat_equiv": 0.967,
+  "worst": [
+   [
+    "light_skin",
+    7.4
+   ],
+   [
+    "blue_flower",
+    6.8
+   ],
+   [
+    "blue_sky",
+    6.8
+   ],
+   [
+    "bluish_green",
+    6.6
+   ]
+  ]
+ },
+ "kodak_gold_200|kodak_portra_endura": {
+  "tone": [
+   0.768,
+   0.809,
+   -0.047
+  ],
+  "dE_tone_only": 5.0,
+  "dE_tone_matrix": 4.2,
+  "dE_chrom": 3.9,
+  "Mnorm_1024": [
+   [
+    1086,
+    100,
+    -162
+   ],
+   [
+    4,
+    907,
+    113
+   ],
+   [
+    2,
+    7,
+    1015
+   ]
+  ],
+  "rowsum": [
+   1.04,
+   0.973,
+   0.987
+  ],
+  "sat_equiv": 0.976,
+  "worst": [
+   [
+    "bluish_green",
+    6.3
+   ],
+   [
+    "blue_flower",
+    5.9
+   ],
+   [
+    "blue_sky",
+    5.6
+   ],
+   [
+    "light_skin",
+    5.0
+   ]
+  ]
+ },
+ "kodak_ultramax_400|kodak_portra_endura": {
+  "tone": [
+   0.752,
+   0.795,
+   -0.048
+  ],
+  "dE_tone_only": 4.4,
+  "dE_tone_matrix": 3.6,
+  "dE_chrom": 3.4,
+  "Mnorm_1024": [
+   [
+    1068,
+    157,
+    -202
+   ],
+   [
+    7,
+    944,
+    74
+   ],
+   [
+    2,
+    6,
+    1016
+   ]
+  ],
+  "rowsum": [
+   1.025,
+   0.975,
+   1.0
+  ],
+  "sat_equiv": 0.962,
+  "worst": [
+   [
+    "light_skin",
+    5.4
+   ],
+   [
+    "bluish_green",
+    5.3
+   ],
+   [
+    "blue_flower",
+    5.3
+   ],
+   [
+    "blue_sky",
+    5.0
+   ]
+  ]
+ },
+ "kodak_vision3_250d|kodak_portra_endura": {
+  "tone": [
+   0.731,
+   0.762,
+   -0.049
+  ],
+  "dE_tone_only": 4.2,
+  "dE_tone_matrix": 3.4,
+  "dE_chrom": 3.3,
+  "Mnorm_1024": [
+   [
+    1016,
+    216,
+    -208
+   ],
+   [
+    14,
+    945,
+    66
+   ],
+   [
+    3,
+    8,
+    1013
+   ]
+  ],
+  "rowsum": [
+   1.013,
+   0.985,
+   1.002
+  ],
+  "sat_equiv": 0.93,
+  "worst": [
+   [
+    "light_skin",
+    6.0
+   ],
+   [
+    "blue_flower",
+    5.1
+   ],
+   [
+    "bluish_green",
+    4.7
+   ],
+   [
+    "blue_sky",
+    4.7
+   ]
+  ]
+ },
+ "kodak_vision3_500t|kodak_portra_endura": {
+  "tone": [
+   0.73,
+   0.766,
+   -0.049
+  ],
+  "dE_tone_only": 5.3,
+  "dE_tone_matrix": 4.3,
+  "dE_chrom": 4.2,
+  "Mnorm_1024": [
+   [
+    839,
+    463,
+    -279
+   ],
+   [
+    5,
+    969,
+    50
+   ],
+   [
+    0,
+    10,
+    1014
+   ]
+  ],
+  "rowsum": [
+   1.02,
+   0.977,
+   1.004
+  ],
+  "sat_equiv": 0.82,
+  "worst": [
+   [
+    "light_skin",
+    6.3
+   ],
+   [
+    "cyan",
+    6.0
+   ],
+   [
+    "blue_flower",
+    6.0
+   ],
+   [
+    "purplish_blue",
+    5.5
+   ]
+  ]
+ },
+ "kodak_vision3_50d|kodak_portra_endura": {
+  "tone": [
+   0.737,
+   0.789,
+   -0.05
+  ],
+  "dE_tone_only": 3.9,
+  "dE_tone_matrix": 3.5,
+  "dE_chrom": 3.3,
+  "Mnorm_1024": [
+   [
+    969,
+    152,
+    -98
+   ],
+   [
+    18,
+    950,
+    56
+   ],
+   [
+    2,
+    3,
+    1019
+   ]
+  ],
+  "rowsum": [
+   1.015,
+   0.977,
+   1.008
+  ],
+  "sat_equiv": 0.934,
+  "worst": [
+   [
+    "light_skin",
+    6.1
+   ],
+   [
+    "blue_flower",
+    4.6
+   ],
+   [
+    "bluish_green",
+    4.5
+   ],
+   [
+    "blue_sky",
+    4.0
+   ]
+  ]
+ },
+ "kodak_vision3_200t|kodak_portra_endura": {
+  "tone": [
+   0.72,
+   0.767,
+   -0.051
+  ],
+  "dE_tone_only": 5.0,
+  "dE_tone_matrix": 4.2,
+  "dE_chrom": 4.1,
+  "Mnorm_1024": [
+   [
+    839,
+    481,
+    -297
+   ],
+   [
+    3,
+    998,
+    23
+   ],
+   [
+    3,
+    -7,
+    1028
+   ]
+  ],
+  "rowsum": [
+   1.023,
+   0.977,
+   1.001
+  ],
+  "sat_equiv": 0.829,
+  "worst": [
+   [
+    "light_skin",
+    5.9
+   ],
+   [
+    "cyan",
+    5.7
+   ],
+   [
+    "purplish_blue",
+    5.6
+   ],
+   [
+    "blue_flower",
+    5.6
+   ]
+  ]
+ },
+ "fujifilm_c200|kodak_portra_endura": {
+  "tone": [
+   0.834,
+   0.863,
+   -0.04
+  ],
+  "dE_tone_only": 5.4,
+  "dE_tone_matrix": 4.6,
+  "dE_chrom": 4.5,
+  "Mnorm_1024": [
+   [
+    1052,
+    284,
+    -312
+   ],
+   [
+    17,
+    1002,
+    5
+   ],
+   [
+    -1,
+    -3,
+    1029
+   ]
+  ],
+  "rowsum": [
+   1.027,
+   0.958,
+   1.016
+  ],
+  "sat_equiv": 0.941,
+  "worst": [
+   [
+    "light_skin",
+    9.4
+   ],
+   [
+    "moderate_red",
+    7.7
+   ],
+   [
+    "bluish_green",
+    7.6
+   ],
+   [
+    "blue_flower",
+    6.1
+   ]
+  ]
+ },
+ "fujifilm_pro_400h|kodak_portra_endura": {
+  "tone": [
+   0.756,
+   0.801,
+   -0.049
+  ],
+  "dE_tone_only": 5.6,
+  "dE_tone_matrix": 4.5,
+  "dE_chrom": 4.3,
+  "Mnorm_1024": [
+   [
+    998,
+    364,
+    -338
+   ],
+   [
+    13,
+    954,
+    57
+   ],
+   [
+    4,
+    -4,
+    1024
+   ]
+  ],
+  "rowsum": [
+   1.038,
+   0.96,
+   1.002
+  ],
+  "sat_equiv": 0.898,
+  "worst": [
+   [
+    "light_skin",
+    6.7
+   ],
+   [
+    "blue_flower",
+    6.4
+   ],
+   [
+    "blue_sky",
+    6.4
+   ],
+   [
+    "bluish_green",
+    5.9
+   ]
+  ]
+ },
+ "fujifilm_xtra_400|kodak_portra_endura": {
+  "tone": [
+   0.856,
+   0.889,
+   -0.039
+  ],
+  "dE_tone_only": 5.9,
+  "dE_tone_matrix": 4.2,
+  "dE_chrom": 3.9,
+  "Mnorm_1024": [
+   [
+    886,
+    448,
+    -310
+   ],
+   [
+    -61,
+    1056,
+    29
+   ],
+   [
+    -154,
+    -79,
+    1257
+   ]
+  ],
+  "rowsum": [
+   0.972,
+   0.965,
+   1.063
+  ],
+  "sat_equiv": 0.97,
+  "worst": [
+   [
+    "light_skin",
+    8.0
+   ],
+   [
+    "dark_skin",
+    7.8
+   ],
+   [
+    "yellow_green",
+    6.7
+   ],
+   [
+    "bluish_green",
+    5.8
+   ]
+  ]
+ },
+ "kodak_portra_160|fujifilm_crystal_archive_typeii": {
+  "tone": [
+   0.794,
+   0.841,
+   -0.046
+  ],
+  "dE_tone_only": 5.5,
+  "dE_tone_matrix": 3.7,
+  "dE_chrom": 3.7,
+  "Mnorm_1024": [
+   [
+    1032,
+    178,
+    -185
+   ],
+   [
+    -14,
+    901,
+    137
+   ],
+   [
+    11,
+    -9,
+    1023
+   ]
+  ],
+  "rowsum": [
+   0.993,
+   1.014,
+   0.993
+  ],
+  "sat_equiv": 0.947,
+  "worst": [
+   [
+    "bluish_green",
+    5.5
+   ],
+   [
+    "red",
+    5.2
+   ],
+   [
+    "purple",
+    5.1
+   ],
+   [
+    "blue_sky",
+    5.0
+   ]
+  ]
+ },
+ "kodak_portra_400|fujifilm_crystal_archive_typeii": {
+  "tone": [
+   0.801,
+   0.842,
+   -0.046
+  ],
+  "dE_tone_only": 5.2,
+  "dE_tone_matrix": 3.4,
+  "dE_chrom": 3.3,
+  "Mnorm_1024": [
+   [
+    1026,
+    158,
+    -160
+   ],
+   [
+    -59,
+    972,
+    111
+   ],
+   [
+    5,
+    2,
+    1017
+   ]
+  ],
+  "rowsum": [
+   1.017,
+   1.018,
+   0.966
+  ],
+  "sat_equiv": 0.956,
+  "worst": [
+   [
+    "bluish_green",
+    5.3
+   ],
+   [
+    "red",
+    4.8
+   ],
+   [
+    "blue_flower",
+    4.8
+   ],
+   [
+    "blue_sky",
+    4.8
+   ]
+  ]
+ },
+ "kodak_portra_800|fujifilm_crystal_archive_typeii": {
+  "tone": [
+   0.784,
+   0.816,
+   -0.046
+  ],
+  "dE_tone_only": 4.2,
+  "dE_tone_matrix": 3.1,
+  "dE_chrom": 3.0,
+  "Mnorm_1024": [
+   [
+    1061,
+    53,
+    -91
+   ],
+   [
+    -13,
+    976,
+    62
+   ],
+   [
+    4,
+    62,
+    958
+   ]
+  ],
+  "rowsum": [
+   1.03,
+   1.019,
+   0.951
+  ],
+  "sat_equiv": 0.955,
+  "worst": [
+   [
+    "dark_skin",
+    5.5
+   ],
+   [
+    "bluish_green",
+    4.7
+   ],
+   [
+    "moderate_red",
+    4.1
+   ],
+   [
+    "red",
+    3.9
+   ]
+  ]
+ },
+ "kodak_ektar_100|fujifilm_crystal_archive_typeii": {
+  "tone": [
+   0.833,
+   0.847,
+   -0.041
+  ],
+  "dE_tone_only": 5.4,
+  "dE_tone_matrix": 3.8,
+  "dE_chrom": 3.7,
+  "Mnorm_1024": [
+   [
+    1083,
+    95,
+    -154
+   ],
+   [
+    -59,
+    975,
+    108
+   ],
+   [
+    3,
+    6,
+    1015
+   ]
+  ],
+  "rowsum": [
+   1.005,
+   1.018,
+   0.978
+  ],
+  "sat_equiv": 0.988,
+  "worst": [
+   [
+    "bluish_green",
+    6.1
+   ],
+   [
+    "moderate_red",
+    5.9
+   ],
+   [
+    "dark_skin",
+    5.6
+   ],
+   [
+    "blue_flower",
+    5.4
+   ]
+  ]
+ },
+ "kodak_gold_200|fujifilm_crystal_archive_typeii": {
+  "tone": [
+   0.81,
+   0.839,
+   -0.044
+  ],
+  "dE_tone_only": 4.7,
+  "dE_tone_matrix": 3.5,
+  "dE_chrom": 3.3,
+  "Mnorm_1024": [
+   [
+    1081,
+    -3,
+    -54
+   ],
+   [
+    -15,
+    960,
+    79
+   ],
+   [
+    3,
+    67,
+    954
+   ]
+  ],
+  "rowsum": [
+   1.044,
+   1.021,
+   0.936
+  ],
+  "sat_equiv": 0.97,
+  "worst": [
+   [
+    "dark_skin",
+    6.1
+   ],
+   [
+    "bluish_green",
+    5.6
+   ],
+   [
+    "moderate_red",
+    5.4
+   ],
+   [
+    "blue_sky",
+    4.4
+   ]
+  ]
+ },
+ "kodak_ultramax_400|fujifilm_crystal_archive_typeii": {
+  "tone": [
+   0.79,
+   0.823,
+   -0.046
+  ],
+  "dE_tone_only": 4.0,
+  "dE_tone_matrix": 3.2,
+  "dE_chrom": 3.0,
+  "Mnorm_1024": [
+   [
+    1062,
+    41,
+    -79
+   ],
+   [
+    -11,
+    989,
+    45
+   ],
+   [
+    3,
+    62,
+    959
+   ]
+  ],
+  "rowsum": [
+   1.031,
+   1.02,
+   0.949
+  ],
+  "sat_equiv": 0.96,
+  "worst": [
+   [
+    "dark_skin",
+    5.5
+   ],
+   [
+    "bluish_green",
+    4.7
+   ],
+   [
+    "moderate_red",
+    4.0
+   ],
+   [
+    "blue_sky",
+    3.8
+   ]
+  ]
+ },
+ "kodak_vision3_250d|fujifilm_crystal_archive_typeii": {
+  "tone": [
+   0.768,
+   0.791,
+   -0.047
+  ],
+  "dE_tone_only": 4.0,
+  "dE_tone_matrix": 3.0,
+  "dE_chrom": 2.8,
+  "Mnorm_1024": [
+   [
+    1009,
+    96,
+    -81
+   ],
+   [
+    -4,
+    982,
+    47
+   ],
+   [
+    3,
+    68,
+    953
+   ]
+  ],
+  "rowsum": [
+   1.018,
+   1.032,
+   0.95
+  ],
+  "sat_equiv": 0.926,
+  "worst": [
+   [
+    "dark_skin",
+    5.9
+   ],
+   [
+    "bluish_green",
+    4.2
+   ],
+   [
+    "moderate_red",
+    3.8
+   ],
+   [
+    "yellow_green",
+    3.5
+   ]
+  ]
+ },
+ "kodak_vision3_500t|fujifilm_crystal_archive_typeii": {
+  "tone": [
+   0.768,
+   0.795,
+   -0.047
+  ],
+  "dE_tone_only": 4.9,
+  "dE_tone_matrix": 3.5,
+  "dE_chrom": 3.3,
+  "Mnorm_1024": [
+   [
+    802,
+    318,
+    -97
+   ],
+   [
+    -12,
+    993,
+    42
+   ],
+   [
+    0,
+    74,
+    950
+   ]
+  ],
+  "rowsum": [
+   1.039,
+   1.019,
+   0.942
+  ],
+  "sat_equiv": 0.808,
+  "worst": [
+   [
+    "dark_skin",
+    5.8
+   ],
+   [
+    "moderate_red",
+    4.8
+   ],
+   [
+    "blue_flower",
+    4.0
+   ],
+   [
+    "cyan",
+    3.9
+   ]
+  ]
+ },
+ "kodak_vision3_50d|fujifilm_crystal_archive_typeii": {
+  "tone": [
+   0.775,
+   0.819,
+   -0.048
+  ],
+  "dE_tone_only": 3.6,
+  "dE_tone_matrix": 3.0,
+  "dE_chrom": 2.8,
+  "Mnorm_1024": [
+   [
+    1003,
+    77,
+    -56
+   ],
+   [
+    0,
+    993,
+    30
+   ],
+   [
+    3,
+    63,
+    958
+   ]
+  ],
+  "rowsum": [
+   1.006,
+   1.032,
+   0.963
+  ],
+  "sat_equiv": 0.932,
+  "worst": [
+   [
+    "dark_skin",
+    5.3
+   ],
+   [
+    "bluish_green",
+    4.1
+   ],
+   [
+    "moderate_red",
+    3.9
+   ],
+   [
+    "yellow_green",
+    3.7
+   ]
+  ]
+ },
+ "kodak_vision3_200t|fujifilm_crystal_archive_typeii": {
+  "tone": [
+   0.756,
+   0.796,
+   -0.049
+  ],
+  "dE_tone_only": 4.4,
+  "dE_tone_matrix": 3.5,
+  "dE_chrom": 3.2,
+  "Mnorm_1024": [
+   [
+    806,
+    297,
+    -79
+   ],
+   [
+    -11,
+    1008,
+    27
+   ],
+   [
+    5,
+    0,
+    1019
+   ]
+  ],
+  "rowsum": [
+   1.035,
+   1.016,
+   0.949
+  ],
+  "sat_equiv": 0.859,
+  "worst": [
+   [
+    "dark_skin",
+    5.0
+   ],
+   [
+    "red",
+    4.8
+   ],
+   [
+    "moderate_red",
+    4.0
+   ],
+   [
+    "bluish_green",
+    3.9
+   ]
+  ]
+ },
+ "fujifilm_c200|fujifilm_crystal_archive_typeii": {
+  "tone": [
+   0.301,
+   1.36,
+   -0.616
+  ],
+  "dE_tone_only": 5.1,
+  "dE_tone_matrix": 4.7,
+  "dE_chrom": 4.8,
+  "Mnorm_1024": [
+   [
+    906,
+    205,
+    -88
+   ],
+   [
+    22,
+    946,
+    56
+   ],
+   [
+    -27,
+    141,
+    910
+   ]
+  ],
+  "rowsum": [
+   1.036,
+   0.993,
+   0.971
+  ],
+  "sat_equiv": 0.831,
+  "worst": [
+   [
+    "dark_skin",
+    8.9
+   ],
+   [
+    "blue",
+    8.1
+   ],
+   [
+    "purple",
+    6.7
+   ],
+   [
+    "light_skin",
+    6.4
+   ]
+  ]
+ },
+ "fujifilm_pro_400h|fujifilm_crystal_archive_typeii": {
+  "tone": [
+   0.798,
+   0.829,
+   -0.045
+  ],
+  "dE_tone_only": 4.6,
+  "dE_tone_matrix": 3.8,
+  "dE_chrom": 3.7,
+  "Mnorm_1024": [
+   [
+    1022,
+    218,
+    -216
+   ],
+   [
+    -2,
+    992,
+    35
+   ],
+   [
+    8,
+    -4,
+    1020
+   ]
+  ],
+  "rowsum": [
+   1.029,
+   1.008,
+   0.963
+  ],
+  "sat_equiv": 0.943,
+  "worst": [
+   [
+    "bluish_green",
+    5.7
+   ],
+   [
+    "moderate_red",
+    4.9
+   ],
+   [
+    "blue_flower",
+    4.9
+   ],
+   [
+    "blue_sky",
+    4.7
+   ]
+  ]
+ },
+ "fujifilm_xtra_400|fujifilm_crystal_archive_typeii": {
+  "tone": [
+   0.275,
+   1.488,
+   -0.73
+  ],
+  "dE_tone_only": 5.2,
+  "dE_tone_matrix": 4.8,
+  "dE_chrom": 5.1,
+  "Mnorm_1024": [
+   [
+    857,
+    234,
+    -66
+   ],
+   [
+    14,
+    962,
+    48
+   ],
+   [
+    -155,
+    145,
+    1034
+   ]
+  ],
+  "rowsum": [
+   1.027,
+   0.999,
+   0.974
+  ],
+  "sat_equiv": 0.862,
+  "worst": [
+   [
+    "moderate_red",
+    9.4
+   ],
+   [
+    "dark_skin",
+    7.7
+   ],
+   [
+    "orange",
+    6.5
+   ],
+   [
+    "yellow_green",
+    6.2
+   ]
+  ]
+ }
+}

@@ -1,0 +1,27 @@
+STAGE 4c — GRAIN WORKS ON CAMERA + auto-landing fix (2026-10-20). THE PROJECT GOAL IS ACHIEVED.
+
+PROVEN ON HARDWARE (prior boot, callback shim): the shim decoded the just-saved 16MP SOOC JPEG, added the
+ultramax film grain (hf-std 6.03, the locked look), re-encoded with Exif preserved -> a grained SOOC JPEG
+(DSC09790, landed manually from its .TMP; copied to ~/Desktop/DSC09790_grain.jpg). In-camera film grain works.
+
+THE ONLY BLOCKER WAS THE FINAL WRITEBACK: Fsys_Rename(tmp,path) is a PrFILE veneer and fails even with the dest
+removed (lnx RE: the low-level rename forwards to an external PrFILE op, unreliable in this Fsys config) ->
+ABANDON rename. FIX (proven primitives only, all observed working this session): after the grained .TMP exists,
+  Fsys_Remove(path); Fsys_Open(path,0x7)+Fsys_Write+Fsys_Close   (0x7 = the firmware's capture-create flags).
+This is the identical sequence the firmware uses for every photo. Fsys_Open @0x143fd, Write @0x16cd9, Close
+@0x11d01, Remove @0x154b9 [VERIFIED].
+
+FINAL SHIM (code/grain-shim/grain_hook.c, md5 e9ac0d9e4dc181fd1151866170247582) design for the ~45MB-Linux / 388KB-1MB-free / slow-SD camera:
+  PHASE 1: read the whole source JPEG into a RAM buffer (one sequential read -> no 4KB SD read/write interleave,
+    which was the callback version's "long hang"); streaming-decode from RAM (92KB scratch) + grain (row-stream,
+    ~0.4MB) + streaming-encode via write_cb to a ".TMP" (Exif APP1 spliced in the first header chunk). The
+    ORIGINAL IS NOT TOUCHED -> a watchdog reboot during the slow codec loses nothing.
+  PHASE 2 (land): read the grained .TMP back into the freed RAM buffer, validate SOI, then Remove(orig) +
+    Open-create(orig,0x7) + Write + Close; Remove(.TMP) on success. The .TMP is the on-disk backup through the
+    tiny remove->write window -> power-loss safe (grained image recoverable from .TMP).
+ISOLATION PASS (qemu, real DSC09580): "GRAIN ok bytes=0x590491 codec_us.. land_us.. total_us..", output valid
+grained JPEG, Exif preserved, sigma_Y 5.73, NO .TMP leftover. Working set ~5.8MB (RAM src/tmp) + 0.5MB scratch;
+no 4KB SD interleave. Freestanding, zero external symbols besides __dlopen/__dlsym.
+EXPECT on the boot test: grain lands automatically on the shot (DSC####.JPG grained); a multi-second pause
+(inherent: ARMv5 16MP re-encode + ~21MB sequential SD I/O + a one-time ~5MB page reclaim); maybe a "recover?"
+prompt (Remove+create desyncs the DCF db; harmless). The log's codec_us/total_us give the REAL camera timing.

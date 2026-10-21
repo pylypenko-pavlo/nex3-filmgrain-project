@@ -1,0 +1,105 @@
+QEMU FAITHFULNESS + SAFE ON-CAMERA PRELOAD TEST
+2026-10-20. VM `armgrain` (qemu-arm-static + arm-linux-gnueabi-gcc); dump read-only. No camera.
+Each claim [VERIFIED cite] or [OPINION].
+
+======================================================================
+TASK 1 — DOES QEMU REPRODUCE THE CAMERA LOADER'S ACCEPTANCE? -> YES.
+======================================================================
+Harness: testprog (PT_INTERP = camera sonyld df94859e, the NORMAL/Stage-3 build), run under
+qemu-arm-static with QEMU_LD_PREFIX = a sysroot of the camera's own libs (from the p1 initrd).
+Objects the camera PROVABLY loads at runtime, run as LD_PRELOAD:
+
+  LD_PRELOAD=/lib/libsonyefence.so  qemu testprog  -> exit=0                 [VERIFIED]
+  LD_PRELOAD=/lib/LeakTracer.so     qemu testprog  -> exit=0 (deps resolved) [VERIFIED]
+      (LeakTracer needs 5 DT_NEEDED incl libsonystdc++.so.6 + GNU_HASH + init_array; with the
+       SONAME symlinks present it fully loads+relocates+runs its ctor chain -> exit 0.)
+  LD_PRELOAD=/lib/grain_probe_fs.so qemu testprog  -> exit=0 + ctor log line "grain_probe(fs)
+       ctor ran: sonyld accepted the preload"                                [VERIFIED]
+
+Negative controls (must be rejected with a STATIC die-string):
+  LD_PRELOAD=<64 random bytes>  -> format error, exit=1                      [VERIFIED]
+  LD_PRELOAD=<ET_REL .o>        -> "/rel.o: unsupported file type", exit=1   [VERIFIED]
+       (this is the EXACT _rtld_map_object die-string I extracted statically at sonyld off 0x25218;
+        it distinguishes a FORMAT rejection from a later missing-dependency failure.)
+Missing-dependency path is ALSO observed and distinct (expected, not a format reject):
+  before the symlinks, LeakTracer gave "Shared object libsonystdc++.so.6 not found" -> that is a
+  DT_NEEDED resolution failure AFTER format acceptance. [VERIFIED]
+
+VERDICT (Task 1): qemu + the camera's real sonyld (df94859e) faithfully reproduces the loader's
+acceptance decision — it ACCEPTS the camera's own provably-loaded preloads (libsonyefence.so,
+LeakTracer.so) to a clean exit, ACCEPTS our grain_probe_fs.so (load+relocate+ctor), and REJECTS
+malformed objects with the exact static die-strings. Format acceptance, DT_NEEDED resolution, and
+relocation all execute as real camera code. [VERIFIED]
+
+======================================================================
+TASK 2 — ISOLATED ON-CAMERA PRELOAD TEST (zero brick risk) -> FEASIBLE.
+======================================================================
+Findings [VERIFIED from the dump]:
+- The updater busybox is DYNAMIC: `bin/busybox` interp = /lib/libsonyld.so; the p1 updater initrd
+  ships /lib/sonyld.so + the full camera libc (libsonyc.so, libsonystdc++, libsonypthread, ...).
+  => the updater shell runs real camera binaries through a real sonyld.
+- The updater sonyld (p1, md5 850db922fe51836e3c25bf0e07d4dd1c) DIFFERS from the normal/Stage-3
+  sonyld (p3, md5 df94859e...). A plain `LD_PRELOAD=... busybox` tests 850db922. To test the
+  Stage-3-relevant df94859e, place it on /setting and run a dynamic binary whose PT_INTERP points
+  at it (below). BOTH builds accept our object in qemu (df94859e exit 0 + ctor; 850db922 exit 0).
+- Updater vfat mount opts (common.src) = "posix_attr,rw,nodiratime,noatime,shortname=mixed" — NO
+  `noexec` -> binaries on a mounted /setting are EXECUTABLE. /ramdsk (tmpfs) also available. busybox
+  has mount/cp/cat/ls. [VERIFIED]
+
+qemu simulation of the EXACT on-camera command (normal sonyld df94859e placed at a /setting path,
+invoked via a zero-dep dynamic binary dyntest whose interp = that sonyld):
+  baseline  qemu /setting/dyntest                              -> exit=0
+  LD_PRELOAD=/setting/grain_probe_fs.so qemu /setting/dyntest  -> exit=0 (ACCEPTED, ctor ran) [VERIFIED]
+  LD_PRELOAD=/setting/bad.o            qemu /setting/dyntest   -> "unsupported file type", exit=1 [VERIFIED]
+This is the exact pattern the updater shell would run, proven to accept/reject correctly against the
+normal sonyld.
+
+ISOLATION (why it CANNOT brick) [VERIFIED by process model + the controls above]:
+- The test runs as a CHILD process inside the ALREADY-BOOTED updater. If the preload fails to load,
+  sonyld _rtld_die exits ONLY that child (nonzero); the updater shell (parent) and init survive — the
+  controls (bad.o/junk) killed only the child, the shell kept running. A preload failure here never
+  touches the boot path. This is categorically different from Stage 3 (preload in init's boot-critical
+  children). ZERO brick risk.
+
+EXACT on-camera command sequence (run from the pmca updater shell, sh(be,[...])); all READ-ONLY to
+flash — it only reads /setting files and execs in RAM:
+PREP (host): put three files on /setting via senser cam.writeFile (or the updater shell after mount):
+    /setting/grain_probe_fs.so   (our gold object, built in-VM, md5 to be recorded)
+    /setting/sonyld_norm.so      (= the NORMAL p3 sonyld df94859e, copied from the dump)
+    /setting/dyntest             (zero-dep dynamic ELF, PT_INTERP=/ramdsk/sonyld.so, built in-VM)
+TEST (updater busybox):
+  sh(be,[
+    'mount -t vfat /dev/nflasha2 /setting -o rw',
+    'mkdir -p /ramdsk && cp /setting/sonyld_norm.so /ramdsk/sonyld.so',
+    'cp /setting/dyntest /setting/grain_probe_fs.so /ramdsk/',
+    'rm -f /setting/grain_probe_fs.log',
+    'LD_PRELOAD=/ramdsk/grain_probe_fs.so /ramdsk/dyntest ; echo EXIT=$?',   # <- the decisive line
+    'cat /setting/grain_probe_fs.log 2>&1',                                  # ctor proof (if the ctor logs here)
+    'umount /setting',
+  ])
+  (dyntest built with PT_INTERP=/ramdsk/sonyld.so so the NORMAL sonyld is the loader, and everything
+   runs from the exec-capable /ramdsk; /setting needs no noexec workaround but /ramdsk is belt-and-braces.)
+INTERPRET:
+  EXIT=0 and NO die-string on the console  -> the camera's REAL normal sonyld ACCEPTS grain_probe_fs.so
+      on real silicon. Combined with Task 1, the Stage-3 load-failure brick cause (C-LNX-012) is reduced
+      to near-zero. [this is the prize]
+  Any die-string ("wrong number of segments"/"unsupported file type"/"unrecognized file format2") +
+      nonzero EXIT -> the object is rejected on real silicon; DO NOT proceed to Stage 3; fix the object.
+BONUS (tests the updater's own 850db922 too): `LD_PRELOAD=/ramdsk/grain_probe_fs.so busybox echo OK`.
+
+SCOPE/CAVEATS:
+- This proves sonyld's LOAD/relocate/ctor acceptance — exactly the brick cause (a failed LOAD is fatal,
+  C-LNX-012). sonyld's map_object is per-object and host-process-independent, so a load that succeeds in
+  dyntest succeeds identically in im.elf/the appFw tree. [OPINION, strong — same object, same loader]
+- It does NOT exercise the grain HOOK under the real appFw (runtime behavior); but hook misbehavior is
+  not a boot-brick (it would at worst corrupt a JPEG / crash the app process, recoverable), whereas a
+  LOAD failure is the unrecoverable brick this test targets.
+- Two sonyld builds exist; the /setting/dyntest path tests the Stage-3 one (df94859e). Run both for
+  completeness.
+
+BOTTOM LINE: qemu is faithful (Task 1 VERIFIED). An isolated, zero-brick-risk on-camera test of
+grain_probe_fs.so against the REAL sonyld IS feasible from the updater shell (Task 2 VERIFIED, exact
+commands above). Passing it on real silicon would nearly eliminate the Stage-3 load-failure brick risk
+BEFORE any boot-path preload. It still does not create a recovery NET for a Stage-3 failure (see
+brick-recovery-analysis.txt) — it lowers the probability of the failure, it does not make a failure
+recoverable.

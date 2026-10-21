@@ -1,0 +1,54 @@
+STAGE 4c — GRAIN RECIPE (LOCKED 2026-10-20). Target look = filmgrain-cli ultramax400 / strength 0.15.
+Reproduced by a FAST, integer-portable on-camera composite, validated on a real NEX-3N SOOC frame.
+
+================= WHY NOT run filmgrain-cli on camera =================
+filmgrain-cli (~/filmgrain-cli/filmgrain.py) = the Newson-Delon-Galerne Boolean/Poisson-disk
+stochastic grain model (physically based, Monte-Carlo, 400 samples/px). On a 1 MP crop it took ~34-42 s on a
+multicore Mac WITH numba; a 16 MP frame ~= 10 min on the Mac. On the camera ARM (single core, hundreds of MHz,
+no SIMD/numba) it is HOURS — infeasible. So we BAKE the look offline and composite it cheaply on-camera.
+
+================= THE LOOK, CHARACTERIZED (ultramax400/0.15, measured off a gray-ramp) =================
+GRANULARITY CURVE sigma(Y) — grain luma-std vs tone (midtone-weighted hump, ~0 at black/white):
+  V:    8    24    40    56    72    88   104   120   135   152   168   184   200   216   232  248
+  sigY 0.19 1.52  3.37  5.27  6.98  8.29 8.79  8.74  8.06  6.90  5.50  3.79  2.24  1.15  0.39 0.00   (peak ~8.8 @V~110)
+  sigCb0.02 0.79  2.35  3.45  4.32  4.87 5.11  5.16  4.41  3.72  2.60  1.85  1.19  0.62  0.13 0.00   (peak ~5.2)
+  sigCr0.02 0.46  1.21  2.08  2.60  3.01 3.06  2.95  2.79  2.24  1.63  1.36  0.47  0.48  0.11 0.00   (peak ~3.1)
+  -> build 256-entry LUTs by linear interpolation of these points (0 outside [8,248], ramp 0..sigY[8] on 0..8).
+GRAIN SIZE (autocorr of the luma grain delta): lag0..4 = 1.00, 0.82, 0.47, 0.20, 0.07 -> correlation ~2-2.5 px
+  (coarse "ultramax" grit). Matched by a separable blur kernel (below).
+
+================= THE FAST ON-CAMERA MODEL (integer-portable to the C shim) =================
+Per frame, in the YCbCr domain (after decode, before encode):
+  1. luma noise n = white_noise(x,y,frame_seed)  [C: a cheap integer hash PRNG per pixel; fresh seed per frame
+     so grain differs every shot, like film]
+  2. blur n with the SEPARABLE integer kernel K = [1,4,11,16,11,4,1] (sum 48), applied horizontally then
+     vertically, then renormalize to unit variance. (This reproduces the measured autocorr:
+     K gives autocorr 1.00,0.84,0.51,0.23,0.07 vs the target 1.00,0.82,0.47,0.20,0.07.)
+  3. Y'  = clip(Y  + LUT_sigY[Y]  * n_luma , 0,255)
+  4. Cb' = clip(Cb + LUT_sigCb[Y] * n_cb , 0,255)   n_cb = INDEPENDENT noise field, blurred COARSER (kernel
+  5. Cr' = clip(Cr + LUT_sigCr[Y] * n_cr , 0,255)   n_cr = INDEPENDENT field; chroma sigma ~= luma_blur*2)
+  NOTE: Cb/Cr MUST use SEPARATE noise fields from each other and from luma (decorrelated), else the colour
+  mottle goes magenta/green instead of the soft NDG blue/warm mottle. Chroma grain is coarser (lower freq).
+  Grain is LUMA-DOMINANT (sigY > sigCb > sigCr). All ops integer; sigma as fixed-point, kernel sum 48.
+
+VALIDATION (fast composite vs the NDG ultramax reference, on the real crop DSC09580): grain size + intensity
+match (grey patch meanY=61: sigY mine=5.66 vs NDG 5.74), colour mottle matches after decorrelating Cb/Cr.
+Owner LOCKED this look (2026-10-20). Side-by-side: <scratch>/lnx/fixtures/_cmp_match.png (CLEAN | MINE | NDG ref).
+
+================= ARTIFACTS =================
+- ~/nex3n-research/atlas/grain-int-grain.py  (INTEGER-EXACT grain = the direct template for grain.c;
+    validated to reproduce the look: grey-patch sigY=5.63 vs NDG 5.74, chroma matches. C-port constants locked:
+    per-pixel u32 hash PRNG of (x,y,seed) -> noise [-128,127]; separable blur K=[1,4,11,16,11,4,1]/48 (round);
+    SHIFT=8 fixed-point gainLUT[V]=round(sigma(V)*256/blur_std_cal); g=(blur*gainLUT[Y])>>8; clip[0,255];
+    chroma = 2x blur passes (coarser) + INDEPENDENT hash seeds (seed+101 Cb, seed+202 Cr).)
+- ~/nex3n-research/atlas/grain-tune-composite.py  (the float tuning/validation harness, copied here)
+- ~/nex3n-research/atlas/grain_recipe_ultramax.npz (kernel + the 256-entry LY/LCB/LCR LUTs + raw points)
+- fixtures (real NEX-3N SOOC, <scratch>/lnx/fixtures/): DSC09580.JPG (dev frame), crop.jpg (dev crop), fg_ultra/ (NDG ref),
+  ramp.jpg + fg_ramp/ (the gray-ramp used to measure sigma).
+
+================= INTEGRATION (next, once the SW codec lands) =================
+The grain composite drops into the shim's roundtrip BETWEEN jpeg_decode -> {this grain pass on Y/Cb/Cr planes}
+-> jpeg_encode. Port notes: integer hash PRNG (e.g. a per-pixel xorshift/wyhash of (x,y,seed)); the K blur as
+integer add-shift; sigma LUTs baked as a 256-entry fixed-point table each; clip to [0,255]; per-frame seed from
+a counter or gettimeofday. Luma pass is the must-have; chroma pass optional (two more noise fields). The SW codec
+(decode+encode) is being built by a sonnet agent; grain is cheap on top (~1-2 madds/px).

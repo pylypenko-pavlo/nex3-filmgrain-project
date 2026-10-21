@@ -1,0 +1,46 @@
+STAGE 4c — SW CODEC + GRAIN, END-TO-END LOOK VALIDATED OFFLINE (2026-10-20).
+decode -> grain -> encode runs through the REAL freestanding integer codec on a real 16MP SOOC frame in qemu
+and reproduces the locked ultramax400/0.15 look. No camera touched.
+
+================= THE SW JPEG CODEC (built by a sonnet agent, VERIFIED) =================
+code/grain-shim/swjpeg.c / code/grain-shim/swjpeg.h (now in the repo; also VM /tmp/swjpeg, host <scratch>/swjpeg_work).
+Freestanding integer baseline codec: `arm-linux-gnueabi-gcc -march=armv5te -nostdlib -fPIC -c swjpeg.c` → 14KB
+object, ZERO external symbols (no libc, no __aeabi_*, no float, no variable division; own udiv32 + reciprocal
+quant; PC-rel R_ARM_REL32 only → no runtime fixups). Decode of DSC09580 = BITEXACT vs libjpeg/PIL (MAE 0, 0
+differing px), 4:2:2 (Y 2x1). No-grain roundtrip PSNR 61.8 dB (Huffman tables match Sony's DHT). 900k fuzz
+inputs under ASAN/UBSAN clean; progressive rejected cleanly. API (swjpeg.h): jpeg_decode_arena_size / jpeg_decode
+/ jpeg_encode_arena_size / jpeg_encode; jpeg_image has comp[3] (Y/Cb/Cr) each with data/stride/width/height/pw/ph
+/h/v/tq, and qt[4][64]. Decode arena 16MP: 4:2:2 30.59 MiB, 4:2:0 22.95, 4:4:4 45.88. Encode arena 2664 B.
+LIMITS: baseline only (SOF0/8-bit SOF1, 1 or 3 comp); encoder writes JFIF APP0 only — Exif/APP1, ICC, MPF are
+DROPPED (shim must splice APP1 back; APP2/MPF can't be copied verbatim — internal offsets; MPO 2nd frame gone).
+
+================= THE GRAIN PASS (grain-grain.c + code/grain-shim/grain_luts.h, archived) =================
+Freestanding integer film-grain on the decoded planes, implementing the locked recipe (ultramax400/0.15):
+per-pixel u32 hash noise -> separable blur K=[1,4,11,16,11,4,1]/48 (luma 1 pass; chroma 2 passes = coarser)
+-> plane' = clip(plane + (blur * GAIN[co-located luma]) >> 8). GAIN_Y/CB/CR[256] baked from int_grain.py
+(peaks 132/110/65; cal_l=16.99, cal_c=11.96). Y/Cb/Cr use INDEPENDENT seeds (seed, +101, +202) -> decorrelated
+chroma mottle. grain.o compiles `-nostdlib` with ZERO external symbols (division only by the constant 48 ->
+mul+shift; the one luma/chroma ratio uses a tiny loop-idiv computed ONCE per component, not per pixel).
+
+================= END-TO-END VALIDATION (qemu, real frame) =================
+test harness grain-grain_main.c (libc, NOT shipped): read DSC09580.JPG -> jpeg_decode -> grain_apply(seed=7)
+-> jpeg_encode -> d580_grain.jpg. Build+run in VM /tmp/grain (swjpeg.o + grain.o + grain_main, qemu-arm-static).
+RESULT: valid grained JPEG 5.79 MB (grain is incompressible -> larger than the 3.6MB original, expected). On the
+flat grey patch: sigma_Y SW-pipeline = 5.78 vs NDG ultramax reference 5.84 -> MATCH. Visual (fixtures/
+_cmp_pipeline.png: CLEAN | SW decode->grain->encode | NDG ref): grain size, intensity, soft decorrelated chroma
+all match. => the full on-camera pipeline reproduces the locked look, proven offline. Runtime under qemu ~5.5s
+(NOT camera-representative).
+
+================= REMAINING BEFORE THE CAMERA =================
+1. MEMORY (the gating camera risk — the old HW crash was DMM; the new risk is OOM). Current full-plane grain
+   scratch = 2*pw*ph int16 = 64 MB (luma); + decode arena 31 MB + src ~4 MB + output ~6-8 MB => peak ~110+ MB,
+   likely too much for the appFw process (~256 MB camera). FIX: row-streaming grain (generate noise on demand,
+   keep only a ~7-13 row sliding window) -> grain scratch ~1 MB; free src after decode; cap output ~12 MB. Target
+   peak ~40 MB. Re-validate the look after the rewrite.
+2. EXIF: splice the original's APP1 (Exif) into the encoder output after APP0 (TIFF offsets inside APP1 are
+   self-relative -> safe to copy verbatim). Drop APP2/MPF (produces a plain JPEG, no MPO 2nd frame).
+3. INTEGRATE into grain_hook_4b.c roundtrip: replace the (crashing) Mcmd codec with jpeg_decode -> grain_apply
+   -> jpeg_encode -> APP1 splice, using mmap arenas; link swjpeg.c + grain.c into the shim .so (all freestanding).
+   WRITE_FLAGS already fixed to 0x07.
+4. ISOLATION test the full shim (fake-Fsys harness + the real codec/grain on the real fixture), then camera:
+   silicon test + boot test (fail-safe still protects the file; the SW path has no DMM/DMA dependency).

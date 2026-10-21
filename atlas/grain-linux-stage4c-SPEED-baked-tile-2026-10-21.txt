@@ -1,0 +1,53 @@
+STAGE 4c — SPEED (offline, part 1): BAKED GRAIN TILE. Grain is now a cheap LUT lookup (no per-pixel hash/blur).
+
+DeepSeek's #1 lever. The grain pass was ~79% of the ~2min/shot. Replaced the per-pixel u32 hash + separable
+blur with a PRE-BAKED toroidal grain tile in rodata:
+  per pixel: ni = grain_tile[((absY+oy)&511)*512 + ((x+ox)&511)];  plane' = clip(plane + (ni*GAIN[lumaY])>>8)
+No hash, no runtime blur, NO ring scratch (-0.4MB). Y/Cb/Cr use independent per-frame toroidal offsets.
+- grain_tile.bin: 512x512 int8, TOROIDAL [1,4,1] blurred hash-noise (the LOCKED ultramax400 spectrum),
+  normalized std=50. Embedded via grain_tile.S (.incbin) -> rodata. Regenerate with code/grain-shim/bake_tile.py
+  (deterministic). GAIN_Y/CB/CR = locked sigma (luma x0.60, soft chroma) * 256 / tile_std (peaks Y=27/Cb=2/Cr=1).
+- grain_stream.c rewritten to the tile lookup (no rings); grain_hook_4c.c drops the grain-scratch mmap.
+BUILD: add grain_tile.S to the link (grain_tile.bin in cwd for .incbin):
+  arm-linux-gnueabi-gcc -march=armv5te -shared -fPIC -nostdlib -O2 -ffreestanding -fno-builtin
+  -fno-tree-loop-distribute-patterns -o grain_hook_4c.so grain_hook_4c.c swjpeg.c grain_stream.c grain_tile.S
+  => md5 8b7a0f368ecd0d32e5d376d3b5ff60a1, 304 KB (incl. the 256KB tile), ZERO external symbols besides __dlopen/__dlsym.
+VALIDATION (qemu, real DSC09580): GRAIN ok, sigY 3.61 (= locked retune 3.55); the 512-tile shows NO visible
+repetition across a 1200px flat strip (>2 tile periods). codec_us (decode+grain+encode) qemu 3.5s -> 1.1s
+(grain nearly free now). Scaling qemu->camera (orig 4.8s=117s, x24) => expect ~26-30s/shot (was ~2min) -> hits
+DeepSeek's ~30s spatial floor.
+MEMORY: net slightly LESS (removed ~0.4MB grain ring scratch; added 256KB tile rodata; .so file 42KB->304KB).
+Working set still dominated by the ~5.8MB src/tmp RAM buffer + SD I/O.
+STATE: baked-tile shim grain_hook_4c.so md5 8b7a0f368ecd0d32e5d376d3b5ff60a1 on host, NOT re-staged (deploy later). Camera idle on 4a.
+NEXT for 15-20s: coefficient-domain grain (entropy-decode -> perturb DCT coeffs with the tile's per-block DCT ->
+entropy-recode, SKIP IDCT+FDCT+color); bigger change + blockiness tradeoff -> assess later. Also: reduce the
+file-landing SD I/O, and the on-camera grain SWITCH + colors/style-names backlog.
+
+================= DEEPSEEK SPEED CROSS-CHECK #2 (2026-10-21) =================
+Q1 TRANSFORMS (ranked, for this integer ARMv5TE no-FPU/no-SIMD core):
+  0. DCT-DOMAIN grain is still the biggest single lever (skip IDCT+FDCT): decode->dequant->add tile's per-block
+     DCT->requant->Huffman. Deferred (bigger change + blockiness risk) -> hold as reserve.
+  Staying spatial (SAFE, accuracy-neutral except AAN):
+  1. SPARSE/ZERO-BLOCK IDCT (decode): all-AC-zero->DC fill; skip all-zero rows/cols; DC-only shortcuts. ~2-4x on
+     IDCT, ~1.3-2x decode. EXACT. Biggest spatial win; beats switching IDCT algorithm.
+  2. AAN scaled FDCT (encode; dense because grain fills the AC) with the scale folded into quant. ~1.4-2x transform.
+  3. Huffman fast tables (8-10b peek + maxcode + 32b bitbuf), decode+encode. ~1.5-2.5x entropy. EXACT.
+  Combined #1+#2+#3 ~= 2x on decode+encode -> with the baked tile, plausibly ~15-20s WITH the fine grain (no
+  DCT-domain tradeoff). => broadened the codec agent's task to #1+#2+#3 (was AAN-only).
+Q2 LANDING: DeepSeek says KEEP the .TMP backup. Dropping it to save ~5s risks permanent photo loss in the
+  remove+create+write window (watchdog/power). No rename -> no atomic swap -> must keep a complete on-SD recovery
+  copy. => REVERTED the planned enc-in-RAM-no-.TMP landing; kept the proven .TMP write + remove+create+copy.
+  (Also flagged: confirm Fsys_Open/Close flushes to SD for either scheme to be truly power-safe.)
+PLAN: baked tile (done) + codec opts #1/#2/#3 (agent) + safe .TMP landing -> target ~15-20s with fine grain;
+DCT-domain held as reserve. Then on-camera speed validation, grain SWITCH, colors/style-names.
+
+================= FAST LANDING (owner chose speed over the .TMP backup, 2026-10-21) =================
+Owner: the camera is a toy + the original isn't precious -> drop the .TMP for ~5 s. New shim (code/grain-shim/grain_hook.c,
+md5 ea5045391bd6851aa0950fb594536d5a): CALLBACK-decode the source from the file (read_cb=Fsys_Read) + baked-tile grain + encode the grained
+JPEG into a ~6 MB RAM buffer (write_cb, Exif spliced); the ORIGINAL is untouched during the whole codec (so a
+watchdog reboot during compute loses nothing). Then land in ONE write: Fsys_Remove(orig)+Open-create(0x7)+Write.
+No .TMP, no copy, no re-read -> landing SD I/O ~15 MB -> ~5 MB (camera ~-5 s). RISK (accepted): a crash/power-loss
+in the ~1-2 s write window loses that shot (no on-disk backup). Memory ~6 MB RAM enc + 0.1 MB decode scratch +
+256 KB tile. Isolation (qemu): GRAIN ok, sigY 3.57, Exif preserved, NO .TMP; codec_us ~1.1 s (qemu), land ~free.
+STATE: shim md5 ea5045391bd6851aa0950fb594536d5a on host, NOT re-staged. Est camera now ~21-25 s (baked tile ~26-30 - landing ~5); the codec
+agent's sparse-IDCT + Huffman + AAN opts should push toward ~15-20 s. Camera idle on 4a.

@@ -1,0 +1,19 @@
+STAGE 4c — CALLBACK-STREAMING SHIM (both blockers fixed), isolation PASS (2026-10-20). All offline.
+
+Fixes the 388KB-free OOM/thrash AND the Fsys_Rename failure:
+- Codec gained a CALLBACK I/O mode (jpeg_sdec_init_cb(read_fn)/jpeg_senc_init_cb(write_fn)): the decoder pulls
+  the source from the file 4KB at a time, the encoder pushes output to the file on demand. The shim holds
+  NEITHER the ~4MB src NOR the ~6MB output. Codec scratch ~100KB (dec 95456 + enc 7392, byte-identical to the
+  whole-frame path; fuzz-clean, even fixed a latent SOS-double-component bug). grain_hook_4c.c rewrites the
+  roundtrip around read_cb=Fsys_Read(original) / write_cb=Fsys_Write(temp); Exif(APP1) is spliced inside
+  write_cb on the first (header) chunk. WORKING SET now ~600KB (head 72KB + decode scratch ~95KB + grain
+  scratch ~432KB) vs the ~11MB that thrashed -> per DeepSeek a one-time ~53-page reclaim, not the repeated
+  2600-page thrash => the long hang should be gone.
+- RENAME: Fsys_Rename won't clobber an existing dest (EEXIST) -> shim now does Fsys_Remove(path) then
+  Fsys_Rename(temp,path) (lnx RE, verified). Output validated (temp starts FF D8) before the replace.
+Build md5 7fc1d9acb24927c689ff37ff1fe90090 (41KB, zero external symbols besides __dlopen/__dlsym, no DT_NEEDED). Isolation (fake-Fsys feeds
+the real DSC09580 via the callbacks): RT W=4912 H=3264, GRAIN ok; output valid grained JPEG, Exif preserved
+(NEX-3N, DateTime), sigma_Y 5.83 -> the locked ultramax look through the whole callback-streaming shim.
+NEXT: stage md5 7fc1d9acb24927c689ff37ff1fe90090 -> silicon -> boot test. Log now shows "4c: mem total=.. free=.." (real appFw free),
+"RT W=H", "GRAIN ok bytes=.. codec_us=.. total_us=..". Expect: grain lands on the shot (remove+rename),
+no long hang (~600KB working set), a multi-second pause (inherent), maybe a "recover?" prompt (DCF-db desync).

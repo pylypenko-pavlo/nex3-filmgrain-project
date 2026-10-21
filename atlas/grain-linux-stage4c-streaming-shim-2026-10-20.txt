@@ -1,0 +1,28 @@
+STAGE 4c — STREAMING SHIM built + isolation PASS (2026-10-20). Solves the OOM; all offline.
+
+The codec now has a BAND-AT-A-TIME streaming mode (jpeg_sdec_scratch_size/jpeg_sdec_init/jpeg_sdec_band +
+jpeg_senc_init/jpeg_senc_band/jpeg_senc_fini); decode scratch for 16MP = 92 KB (was 31 MB). Byte-identical to
+the whole-frame encoder. code/grain-shim/grain_stream.c = BANDED grain (ring state carried across bands; noise is
+hash-based so it looks ahead in the NOISE, no future pixels needed) -> BYTE-IDENTICAL to the whole-frame
+grain.c on both real frames (DSC09580, DSC09788, seed 7) => the validated ultramax look is preserved exactly.
+
+grain_hook_4c.c rewritten to drive sdec_band -> grain_stream_band -> senc_band in lockstep + Exif splice +
+atomic rename. Added sysinfo (free RAM) + per-step logging (per DeepSeek) so a boot test pinpoints any failure:
+  log order: "4c: hook loaded" / "Fsys resolved" / "mem@capture total=.. free=.." / "RT W=H" (after sdec_init)
+  / "GRAIN ok bytes=.. codec_us=.. total_us=.." (or "SKIP <reason>").
+Build: arm-linux-gnueabi-gcc -march=armv5te -shared -fPIC -nostdlib -O2 -ffreestanding -fno-builtin
+  -fno-tree-loop-distribute-patterns -o grain_hook_4c.so grain_hook_4c.c swjpeg.c grain_stream.c
+=> md5 3a5dd43e, 37 KB, ZERO external symbols besides __dlopen/__dlsym, no DT_NEEDED.
+
+VALIDATION (qemu): load-proof OK; full isolation (fake-Fsys feeds the real 16MP DSC09580, shim grains it via
+the streaming path): log shows mem@capture (sysinfo works), RT W=4912 H=3264, GRAIN ok bytes=0x585cd5,
+codec_us~4.8s (qemu, not camera time). Output = valid grained JPEG, Exif preserved (Model=NEX-3N, DateTime),
+sigma_Y 5.79 on the grey patch -> the locked look through the whole streaming shim.
+
+MEMORY: shim peak now ~11 MB (src ~4 + out ~6 + grain scratch ~0.7 + decode scratch 0.09) vs the ~31+ MB that
+OOM'd. The Linux side has only ~45 MB total, so ~11 MB is BORDERLINE; the "mem@capture free=" log on the next
+boot gives the exact appFw free memory. FALLBACK if still too tight: stream the OUTPUT to the .TMP file too
+(needs an incremental-drain/callback mode in the encoder) -> drops `out` ~6 MB -> peak ~5 MB.
+
+NEXT: stage grain_hook_4c.so (md5 3a5dd43e) -> silicon test + arm -> boot test. The boot either grains the shot
+(done) or the freeram + step logs give the exact budget to cut to. Fail-safe still protects the photo.

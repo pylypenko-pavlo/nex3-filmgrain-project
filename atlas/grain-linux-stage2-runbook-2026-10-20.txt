@@ -1,0 +1,114 @@
+STAGE 2 RUNBOOK — Q-39 recovery-net gate (\updater\mode entry)
+2026-10-20. DOCUMENT ONLY — run NOTHING on camera until owner's final approval.
+Goal: prove that a pre-placed /setting/updater/mode forces Loader2 into the USB-reachable updater
+independently of the main firmware (the net that makes a Stage-3 preload brick recoverable).
+Each claim [VERIFIED <addr/bytes/atlas>] or [OPINION].
+
+======================================================================
+PRIORITY 1 — SAFETY ANALYSIS
+======================================================================
+1. WHAT comp / dat4 ARE, and WHO reads them:
+- /setting/updater/comp = a ZERO-byte marker file (existence-only flag). Stock = 0 B.
+  [VERIFIED: dump ls -la -> comp 0 bytes]. Reconstructable by `touch`.
+- /setting/updater/dat4 = 2-byte version marker (ud_datcnv / version-skip). We DO NOT touch it.
+  [VERIFIED: dump ls -la -> dat4 2 bytes; up.sh ud_datcnv -i dat4]
+- Loader2 (boot1) NEVER reads comp: boot_is_updater @0xa01efe50 = `jumper_check` (bl 0xa01efe34)
+  OR `FAT_open("\updater\mode")>=0` (adr->string @0xa01f0258, bl FAT_open 0xa01f28d0, `cmp r0,#0;
+  bge return1`). It checks EXISTENCE of \updater\mode only; comp not referenced anywhere in boot1
+  (grep: only \updater\mode, \mode, \mode\cmode). [VERIFIED disasm + string scan] -> confirms C-BOOT-035.
+- It is the FIRST check in boot_init_mode @0xa01f00fe (`bl boot_is_updater; bne -> mode3 UPDATER`),
+  BEFORE cmode/warm/ssboot. So mode diverts at Loader2 regardless of WBI -> NO WBI-zero needed. [VERIFIED]
+- comp is read ONLY by the updater's execute_ufp.sh: `if [ -e /setting/updater/comp ]; then rm -rf
+  /setting/updater/mode*; fi` (deletes the flag post-entry so it doesn't loop). [VERIFIED script]
+- The NORMAL-boot firmware (libObj.so) references /setting/updater/mode* and `rm -f .../mode*` but
+  has NO reference to comp [VERIFIED: grep libObj/im.elf/bootin -> mode/mode1/3/6/dat4 present, comp
+  ABSENT]. => deleting comp does NOT affect normal boot.
+- E-0021 reconciled: empty mode + comp present -> Loader2 DID enter the updater (first check), but
+  execute_ufp saw comp -> `rm mode*`, and with no pmca host connected updaterufp timed out
+  (ud_timeout_poweroff) -> next boot normal, mode gone. The owner (who battery-pulled without
+  connecting pmca) saw only "normal boot". This is CONSISTENT with "mode enters the updater", not
+  evidence against it. [OPINION, strongly supported by execute_ufp.sh + C-BOOT-035]
+
+2. WHY no destructive path from a BARE `mode`:
+- Inside the updater, getCurrentMode (UdtrMain.sh) maps mode3->MINOR, mode2->SERVICE, mode6->VERSKIP,
+  mode1->PROD, and DEFAULT (bare `mode`, no digit) -> MODE_USER. [VERIFIED UdtrMain.sh L8-24]
+- MODE_USER -> `execute_ufp.sh` -> plain `updaterufp.elf` (passive USB protocol server that WAITS for
+  a host; ud_timeout_poweroff powers off if none). It flashes NOTHING on its own. [VERIFIED execute_ufp.sh]
+- The ONLY flashing path is execute_prod.sh (reads *.dat, updaterfileinput/seninput), reached ONLY
+  by MODE_PROD == `mode1`. We NEVER create mode1. [VERIFIED UdtrMain.sh L96-100 + execute_prod.sh]
+- `uincomp` flag -> blink_error_exit (halt, recoverable by battery pull); stock lacks it; STEP 0 checks.
+
+3. COLD-BOOT OUTCOME ENUMERATION (create bare `mode`):
+(a) Loader2 FAT-opens \updater\mode -> ENTER updater -> updaterufp USB-reachable. RECOVERABLE: it IS
+    the recovery shell (pmca updaterShellCommand connects, as wbi_zero.py/bk_check.py do). = PASS.
+(b) Loader2 FAT-open of the 0-byte mode FAILS -> fall through to normal boot; libObj deletes mode, or
+    we delete it. RECOVERABLE. = net unconfirmed by this variant (retry with 1-byte mode, still
+    MODE_USER). [OPINION: up.sh uses `touch mode` (0-byte) as Sony's own trigger, so 0-byte likely works]
+(c) No third state exists: boot_is_updater returns exactly 1 (updater) or 0 (normal) [VERIFIED binary
+    return 1/0]; no destructive branch is reachable without mode1. NOT PERMANENT.
+=> The test writes ONLY 0-byte files on p2 /setting/updater; it touches NO p1/Loader2/Backup/WBI/kemco.
+   The updater is Loader2-launched, independent of userland, so reaching it does not need the main
+   firmware. The jumper is NOT required for this test's recovery.
+
+BACKING UP comp: `cp /setting/updater/comp /setting/updater/comp.sav` makes restore trivial, and even
+without it `touch /setting/updater/comp` fully reconstructs the 0-byte flag. [VERIFIED comp is 0 B]
+
+======================================================================
+PRIORITY 2 — LEAST-DANGEROUS SEQUENCE (busybox: echo/cat/ls/cp/rm/touch/mount; NO printf/od)
+======================================================================
+Reach the updater busybox via the normal pmca flow (updaterShellCommand -> sh(be,[...])). /setting may
+need mounting in the updater shell (E-0023: nflasha2 mounts vfat rw).
+
+STEP 0 — recon (updater shell), read-only:
+  sh(be,['mount -t vfat /dev/nflasha2 /setting 2>&1','ls -la /setting/updater',
+          'cat /setting/updater/comp | wc -c','umount /setting'])
+  EXPECT: comp (0 B), dat4 (2 B), NO mode*, NO uincomp. If mode*/uincomp present -> STOP, report.
+
+STAGE 2a (SAFEST precursor — comp INTACT, confirms the mechanism, self-clears):
+  WRITE:  sh(be,['mount -t vfat /dev/nflasha2 /setting','touch /setting/updater/mode',
+                 'ls -la /setting/updater','sync','umount /setting'])        # comp untouched
+  Exit updater, BATTERY-PULL cold boot WITH pmca polling for the device.
+  CONFIRM: pmca sees the camera enumerate as the UPDATER during boot (updaterShellCommand connects) ->
+           the mode->updater mechanism WORKS. comp then auto-deletes mode*; camera returns to normal.
+  REVERT: none needed (self-cleared). Verify: next normal boot, senser reachable;
+          sh(be,['mount -t vfat /dev/nflasha2 /setting','ls -la /setting/updater','umount /setting'])
+          shows mode gone, comp intact.
+  If 2a is INCONCLUSIVE (updater window too brief to catch) -> Stage 2b.
+
+STAGE 2b (the PERSISTENT net test — only if 2a inconclusive; comp absent so mode is NOT auto-deleted):
+  WRITE:  sh(be,['mount -t vfat /dev/nflasha2 /setting',
+                 'cp /setting/updater/comp /setting/updater/comp.sav',      # backup (0 B)
+                 'rm -f /setting/updater/comp',
+                 'touch /setting/updater/mode',
+                 'ls -la /setting/updater','sync','umount /setting'])
+  Exit, BATTERY-PULL cold boot.
+  CONFIRM: EVERY power-on now lands in the updater (comp absent -> mode survives) -> pmca connects to
+           the updater with ample time. mode still present on readback = the net HOLDS. = PASS.
+  REVERT (in that updater shell — the only channel here, since the main firmware never runs):
+          sh(be,['mount -t vfat /dev/nflasha2 /setting',
+                 'rm -f /setting/updater/mode /setting/updater/mode*',
+                 'cp /setting/updater/comp.sav /setting/updater/comp',       # or: touch .../comp
+                 'rm -f /setting/updater/comp.sav',
+                 'ls -la /setting/updater','sync','umount /setting'])
+          Exit, battery-pull cold boot -> NORMAL. Verify via senser: cam.readFile('/setting/updater/comp')
+          exists (0 B), mode absent.
+  SECONDARY revert channel (only applies after a normal boot is restored): senser
+          cam.deleteFile('/setting/updater/mode'); cam.writeFile('/setting/updater/comp', b'').
+
+HARD CONSTRAINTS (either stage):
+- NEVER create mode1 / mode-with-a-digit that selects PROD (would reach execute_prod.sh flasher).
+  Only bare `mode` (= MODE_USER = passive updater). [VERIFIED UdtrMain.sh]
+- Only 0-byte file ops in /setting/updater (p2). Do not touch p1/Loader2/Backup/WBI/kemco.
+- No WBI-zero needed (mode diverts at Loader2 before ssboot).
+
+======================================================================
+GO / NO-GO
+======================================================================
+GO — RECOVERABLE, no permanent-brick path, under the constraints above. [VERIFIED]
+Rationale: the test writes only 0-byte flags on p2; Loader2's updater entry is the first boot check
+and is userland-independent, so the camera either (a) enters the pmca-reachable updater or (b) boots
+normally — both recoverable; no destructive branch is reachable without mode1, which we never create;
+comp is a 0-byte flag not read by normal boot and is reconstructable by `touch`. The physical jumper is
+NOT required to recover this test. The ONLY things this could not survive — p1/Loader2 corruption — are
+never touched. Recommend Stage 2a first (safest, self-clearing); escalate to 2b (comp backed up) only
+if 2a cannot catch the updater window.

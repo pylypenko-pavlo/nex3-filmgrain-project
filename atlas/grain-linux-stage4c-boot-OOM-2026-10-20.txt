@@ -1,0 +1,74 @@
+STAGE 4c — BOOT TEST (2026-10-20): the grain shim LOADED, booted, but OOM-KILLED on the decode arena.
+Fail-safe HELD (photo intact). The memory wall (flagged in advance) is confirmed; fix = a streaming codec.
+
+WHAT HAPPENED: silicon PASS + armed (env.txt->grain_hook_4c.so, md5 9d8e1f36). Owner cold-booted, camera booted
+and shot DSC09788. The camera "hung on writing", then froze and self-rebooted (watchdog). Log
+/setting/grain_hook_4c.log:
+  4c: hook loaded x(many)   4c: Fsys resolved x3    <-- and NOTHING ELSE.
+No "4c: RT W=.. H=.." (which is logged right AFTER jpeg_decode) and NO "4c: SKIP" (logged at any fail goto).
+=> the imaging process was HARD-killed (SIGKILL, no chance to log) somewhere in: read / decode_arena_size /
+   mmap(31MB) / jpeg_decode -- i.e. BEFORE decode completed. A failed mmap would have logged "SKIP mmap-dec";
+   it did not -> the mmap SUCCEEDED (lazy) and the process died FAULTING the pages = OUT OF MEMORY.
+
+CONFIRMED NOT A CODEC BUG: the exact boot frame DSC09788.JPG grains CLEANLY through the same codec+grain in
+qemu (decode 4912x3264 -> grain -> encode -> Exif splice -> valid 5.0 MB grained JPEG). So the camera failure is
+memory, not the codec. Peak shim mmap during a roundtrip = src(16MB) + decode arena(31MB) + grain scratch(0.27MB)
++ encode out(16MB) ~= 63 MB (47 MB live during decode alone). The appFw imaging process cannot fault that much
+anon memory (the HW path used a reserved DMM pool; our SW path pulls from the process heap, which is tight).
+FAIL-SAFE HELD THROUGH THE OOM-KILL: the roundtrip died long before the step-6 writeback, so DSC09788.JPG on the
+card is the INTACT original (valid, 4912x3264, 3.64 MB, NOT grained). No data loss. DISARMED: env.txt -> 4a.
+
+THE FIX = STREAMING / TILED CODEC (O(W) memory instead of O(W*H)):
+Baseline JPEG is MCU-row sequential, so decode->grain->encode can run BAND BY BAND (one MCU row of pixels at a
+time; 4:2:2 MCU = 16x8, so an 8-luma-row band ~= 40KB + chroma), keeping only a few bands resident -> the decode
+"arena" drops from 31 MB to ~0.5-1 MB. The grain is ALREADY row-streaming AND is generated from a per-pixel hash
+(no dependence on neighbouring image data), so it slots into a per-band callback with zero cross-band issues.
+This needs swjpeg restructured into a fused streaming roundtrip (decoder keeps Huffman/DC/restart state across
+bands; encoder keeps bitwriter/DC state; a grain hook runs on each decoded band before it is encoded). Delegated
+to the codec agent. Alternative considered + rejected: file-backed decode buffer (mmap a temp file so the kernel
+pages it) avoids the rewrite but adds ~31MB of flash/SD I/O per shot (slow, wear, mmap-file support unknown);
+reduced-resolution DCT-scaled decode is rejected (it would destroy the full-res photo).
+
+STATE: camera idle on the harmless 4a logger; photos safe. NEXT: build the streaming codec, re-validate the look
+(byte-diff vs the whole-frame output on the real frame), re-isolation-test the shim, then another boot test.
+
+================= DEEPSEEK CROSS-CHECK (2026-10-20) — instrument, don't assume =================
+1. OOM is PLAUSIBLE, NOT PROVEN. "no SKIP" only proves death before a handled return. The same signature
+   (loaded+resolved -> silent death -> watchdog reboot) also fits: SIGSEGV/SIGBUS on a fault, SIGILL (an
+   instruction the real BIONZ core lacks but qemu emulates), stack overflow, a WATCHDOG TIMEOUT during a slow
+   decode, or reentrancy/deadlock in the Fsys_Close hook. => ADD fsync'd step logs (after read / after
+   decode_arena_size / after the mmap / before+after decode+encode) AND log the actual free RAM, and fold them
+   into the NEXT boot test (no extra owner cycle) to CONFIRM the cause + get the memory budget before trusting
+   the rewrite. (Our logmsg already opens/writes/closes each line = effectively flushed, good.)
+   [Our own refinement: "RT W=H" is logged right after jpeg_decode and did NOT appear, so death is in
+   read/arena_size/mmap/decode. decode is ~seconds; a minute with no RT => not mere slowness -> stuck/killed in
+   decode, OOM page-fault-kill the best fit. Reentrancy ruled out: roundtrip uses the RESOLVED real Fsys_*,
+   never our interposers. Stack is ~2KB. But CONFIRM via instrumentation regardless.]
+2. Streaming correctness pitfalls (all to be handled by the codec): DC predictors persist across bands unless an
+   RSTn resets; parse original DRI/RSTn (may drop RSTn on re-encode but must not byte-align mid-interval); 4:2:2
+   MCU=16x8 -> 8 luma rows/band, all components per band, handle last partial row; grain hash uses ABSOLUTE x,y
+   (seams fine); fixed ring, no per-band alloc; keep encoder bitwriter state across bands.
+3. Lower-effort fixes: free src before encode / stream I/O only drops peak from ~63MB virtual to ~31MB — but our
+   src/enc caps are LAZY mmap (resident ~4MB/~6MB), so the REAL resident peak is already ~35MB during decode
+   (src_actual 4 + decode arena 31). The 31MB decode arena IS the wall -> banding is required (DeepSeek: "if OOM
+   at 31MB you need banding"). Reduced-res / DCT-domain grain rejected (unfaithful / destroys full res).
+4. The appFw heap may be only a few MB -> even ~1-2MB streaming scratch could fail. MEASURE free RAM cheaply:
+   the sysinfo syscall (ARM __NR_sysinfo=116 -> totalram/freeram), or /proc/meminfo (MemFree/MemAvailable),
+   /proc/self/status (VmRSS/VmSize), /proc/self/limits (RLIMIT_AS). => the shim will log sysinfo freeram at
+   capture time on the next boot; also worth a quick updater-shell `cat /proc/meminfo` for the total-RAM ceiling.
+
+REVISED PLAN: (a) codec agent builds the streaming band codec (<2MB). (b) I add to the shim: sysinfo freeram log
++ per-step logs (read/arena/mmap/decode/encode). (c) Next boot test runs the STREAMING shim WITH that
+instrumentation -> either it grains (done) or the logs + freeram pinpoint the real cause/size. No wasted cycle.
+
+================= RAM CEILING MEASURED (updater /proc/meminfo + cmdline, 2026-10-20) =================
+Kernel cmdline: mem=512M@0x80000000  memrsv=448M@0x84000000  memrsv=0x1270000(~19MB)@0x82D90000
+=> Physical RAM is 512 MB, but 448 MB is RESERVED @0x84000000 (the imaging DMM pool the HW codec DMAs from)
+   + ~19 MB reserved => the LINUX side manages only ~45 MB (0x80000000..0x82D90000 = 47.6 MB) for the kernel +
+   ALL appFw userland. Updater /proc: CommitLimit 19708 kB, Committed_AS 40580 kB, Max stack 8 MB, data/AS
+   unlimited. This DEFINITIVELY explains both failures: (a) the HW codec needs DMM buffers because all the big
+   memory lives in the 448 MB reserved pool; (b) our 31 MB anon decode arena OOM'd because the Linux side has
+   only ~45 MB total and the appFw already uses most of it. OOM CONFIRMED as the cause.
+=> Streaming shim peak ~10 MB (src ~4 + out ~6 + scratch ~0.5) is borderline; the sysinfo freeram log on the
+   next boot gives the exact appFw free memory. If too tight, stream the OUTPUT to the .TMP file too (needs an
+   incremental-drain mode in the encoder) to drop `out` from ~6 MB to near-zero -> peak ~5 MB.

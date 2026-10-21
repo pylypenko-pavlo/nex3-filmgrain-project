@@ -1,0 +1,61 @@
+STAGE 4c — THE GRAIN PIPELINE WORKS ON THE REAL CAMERA (2026-10-20). Only Fsys_Rename + memory remain.
+
+Streaming shim boot test. Log /setting/grain_hook_4c.log:
+  4c: hook loaded x4 / 4c: Fsys resolved
+  4c: mem@capture total=0x35fe000 free=0x61000     <- total 56.5 MB, FREE ONLY 388 KB at capture
+  4c: RT W=4912 H=3264                              <- sdec_init OK (92KB decode scratch mmap fine)
+  4c: SKIP rename                                   <- reached the VERY END: decode + grain + encode (all 408
+                                                        bands) + write .TMP ALL SUCCEEDED; only Fsys_Rename failed
+=> THE WHOLE decode->grain->encode->write PIPELINE RAN ON THE CAMERA. The grained .TMP was fully written. The
+   only failure is the final atomic rename. (The "long hang" the owner saw = thrashing: with 388 KB free, the
+   ~11 MB of anon mmaps fault in by reclaiming clean code-cache pages -> the appFw re-faults its code from flash
+   -> very slow, but it COMPLETED.) Fail-safe HELD: rename failed -> .TMP removed by cleanup -> the original
+   DSC09789.JPG is intact (valid 4912x3264, 3.11 MB, hf-std 1.75 = NOT grained, no .TMP leftover). No data loss.
+
+TWO REMAINING BLOCKERS:
+1. Fsys_Rename(tmp, path) @0x1593d returns <0. Prime suspects: the target (original) already EXISTS and this FS
+   rename won't overwrite (need Fsys_Remove(path) first), OR the arg order is (new,old) not (old,new) [RE had
+   flagged Rename/Move arg order TODO-CONFIRM], OR Fsys_Move@0x1420d is the right call. MUST RE Fsys_Rename to
+   fix SAFELY (a wrong blind fix risks losing the original). Overwrite-in-place (open original WRITE+TRUNC, write
+   grained out) is a fallback but drops atomicity -> a reboot mid-write (plausible under the thrash) corrupts the
+   photo, so NOT preferred until the hang is fixed.
+2. FREE RAM = 388 KB. The ~11 MB working set (src 4MB held whole for decode + Exif, out ~6MB held whole, grain
+   scratch 0.65MB, decode scratch 0.09MB) thrashes. FIX: stream the INPUT (decoder reads src from the file on
+   demand via a read callback -> don't hold 4MB) AND the OUTPUT (encoder writes each band to the file via a
+   write callback -> don't hold 6MB). Working set then ~= scratch ~0.75MB -> far less thrash -> fast. Needs the
+   codec agent to add input-read + output-write callbacks to the streaming API.
+
+STATE: camera disarmed to the 4a logger, photos safe. NEXT: (a) RE Fsys_Rename/Move for the correct, safe
+file-landing; (b) add streaming I/O callbacks to the codec so the shim holds neither src nor out; then integrate
+-> a ~1MB-working-set shim that lands the grain fast + safely -> boot test. The grain itself is DONE (proven on
+hardware); these are plumbing + memory.
+
+================= DEEPSEEK CROSS-CHECK on the 388KB-free memory (2026-10-20) =================
+1. The 11MB working set thrashed because it was ~10.6MB OVER free -> ~2600 code-cache pages reclaimed and
+   re-faulted from flash repeatedly during the long decode = severe thrash = the long hang. Streaming I/O drops
+   the working set to ~0.4MB = only ~12-22KB OVER the 388KB free -> ~3-8 pages reclaimed ONCE (scratch allocated
+   once + reused) -> trivial, "unlikely noticeable thrash". => streaming I/O should fix the SPEED. The residual
+   per-shot cost is just the ARMv5TE codec itself (inherently multi-second on 16MP), which the owner accepted.
+2. If still tight, shrink the grain scratch (~0.4MB) further, biggest-win first: (a) 8-bit rings for the hblur
+   noise (half); (b) chroma as a single pass with the 13-tap KC=K*K kernel instead of 2x7-tap (fewer rings);
+   (c) sequential Cb-then-Cr reuse. [Column-tiling, DeepSeek's top idea, does NOT fit our full-width row-band
+   streaming — skip it.] All require a bit-exact re-validation. Likely unnecessary since 0.4MB ~= free already.
+3. I/O pitfalls to handle: Fsys/page-cache may cache src/temp and re-add pressure (use nocache/drop if available);
+   interleaved SD read(src)+write(temp) serialises on the card + triggers erase-block RMW/GC -> use larger
+   sequential buffers, avoid fine interleave; keep the .TMP+rename (power-loss safe: original survives until
+   rename); the rename failure matches "FS won't overwrite existing / target open" -> close+flush+remove-first.
+4. Blunt: viable but marginal; the multi-second pause per shot is inherent to in-process 16MP re-encode on this
+   ARM. Alternatives (grain before the camera's own JPEG encode; use the reserved pool; defer to playback) are
+   heavier re-architectures -> keep the current approach, accept the pause, make the working set ~= free.
+
+================= RENAME CAUSE + FIX (lnx RE, 2026-10-20) — VERIFIED =================
+Fsys_Rename(SOURCE,DEST) @0x1593d: arg order was RIGHT (source=tmp, dest=path). It has NO clobber handling and
+goes straight to the PrFILE/FAT rename, which REFUSES an existing destination (EEXIST). DSC#####.JPG already
+existed -> <0. No firmware whole-file "replace DCF" API exists (it writes new DSC numbers or patches metadata
+in place). FIX (verified): Fsys_Remove(path) BEFORE Fsys_Rename(tmp,path). No flush needed (Close(tmp) commits;
+Rename flushes internally). Applied to grain_hook_4c.c. Fsys_Remove @0x154b9, Fsys_Rename flush vtable @0x15a18.
+Tiny window where the DCF is absent (remove->rename); power loss there loses the shot (grained bytes survive in
+.TMP); low-prob, acceptable. Remove+Rename briefly desyncs the MPR DCF database -> the camera's "recover?" prompt
+may appear (harmless; the on-disk grained file is correct). Runner-up (keeps name present, may avoid the prompt,
+NOT power-safe): open the ORIGINAL with WRITE|CREATE|TRUNC (flags 0x16, TRUNC bit inferred) and write in place.
+Sticking with the fully-verified Remove+Rename.

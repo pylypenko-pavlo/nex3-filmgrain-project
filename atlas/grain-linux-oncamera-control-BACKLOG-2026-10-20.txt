@@ -1,0 +1,88 @@
+ON-CAMERA GRAIN TOGGLE — reading a menu setting from inside the appFw hook. 2026-10-20.
+Read-only/analysis. [VERIFIED addr/atlas] or [OPINION].
+
+CONTEXT: the grain hook runs inside the still-save appFw process (the one with libmpr/libObj/libbackup),
+at Fsys_Close of a DCF *.JPG. It must read a user-facing menu setting to gate grain ON/OFF, with NO
+menu-UI change, and default to grain-OFF on any uncertainty.
+
+======================================================================
+CHOSEN TOGGLE — Creative Style, via Backup 0x01070175 byte 0  [VERIFIED, best readability]
+======================================================================
+The CURRENTLY SELECTED Creative Style is a persistent Backup property:
+  Backup id 0x01070175, byte 0 = selected Creative Style item (C-BK-013, C-CTRL-011/013; verified-code;
+  read by av-cam's liro_read_creative_style @0x2a0f2a). Value v = ColorMode + 1:
+     Standard=1, Vivid=2, (Neutral=3), Portrait=4, Landscape=5, B&W=6, (Clear=7,Deep=8,Light=9),
+     Sunset=10, (Night=11,Autumn=12,Real=13,Sepia=14).  [VERIFIED enum, C-COL-028 + C-CTRL-013]
+This is the cleanest readable source because:
+ - it is a BACKUP property (global, persistent, process-independent) -> readable from the appFw hook
+   with the SAME primitive the firmware itself uses;
+ - Backup_read / Backup_read_4Byte / Backup_nread are EXPORTED by libbackup.so (same lib libmpr/libObj
+   already import Backup_read from) -> resolvable via __dlopen("libbackup.so",1)+__dlsym (the proven
+   Stage-4a resolution route). [VERIFIED exports]
+ - the owner flips it in a normal menu: Menu > Creative Style > <chosen>. It does not break normal use
+   (the chosen style still renders its colour normally; grain is ADDED on top only for that style).
+
+READ RECIPE (in grain_hook, resolved once, lazy, like Fsys_* — all read-only, cannot brick):
+  void* bk = __dlopen("libbackup.so",1);
+  // Backup_read_4Byte(id): id in r0, returns the 4-byte value at that id (low byte = our item).
+  unsigned (*Backup_read_4Byte)(unsigned) = __dlsym(bk,"Backup_read_4Byte");
+  // (fallback, general: int Backup_nread(unsigned id, void* buf, int len) = __dlsym(bk,"Backup_nread");)
+  int style = -1;
+  if (Backup_read_4Byte) style = (int)(Backup_read_4Byte(0x01070175) & 0xFF);
+  int grain_on = (style == GRAIN_STYLE);   // GRAIN_STYLE = the owner's chosen value, e.g. 2 (Vivid) etc.
+SIGNATURE [VERIFIED from disasm @libbackup 0xcb4 / 0xcd8]: Backup_read(id r0, outbuf r1) and
+Backup_read_4Byte(id r0) take the Backup id in r0; the 4Byte form returns the value (low byte = the
+item). The EXACT byte semantics (Backup_read_4Byte low byte == byte0 of 0x01070175) is to be confirmed
+by ONE read-only call in the isolated updater-shell/qemu test before boot use. [OPINION on exact byte;
+VERIFIED that id->value read works]
+"ON" VALUE: the owner designates one Creative Style as the grain style and GRAIN_STYLE is set to that v
+(e.g. Vivid=2, or B&W=6, or Sunset=10). Build-time constant; no UI change.
+
+======================================================================
+FAIL-SAFE (grain OFF on any uncertainty) [VERIFIED by construction]
+======================================================================
+grain_on is TRUE only when ALL hold: __dlopen+__dlsym("Backup_read_4Byte") succeeded (non-NULL) AND the
+read returned a plausible value AND (value & 0xFF) == GRAIN_STYLE. Any failure (dlopen NULL, dlsym NULL,
+read error/negative, value != GRAIN_STYLE) -> grain_on = FALSE -> the shim does the plain passthrough
+(never decodes/re-encodes) -> the user's JPG is untouched. We never grain on doubt. The read is wrapped
+like Fsys_* resolution: cached, never aborts, never blocks (Backup_read is the same fast synchronous
+call the firmware makes during every capture).
+
+======================================================================
+ALTERNATIVES (ranked: readability / natural-toggle / safety)
+======================================================================
+1. Creative Style via Backup 0x01070175  — CHOSEN. readability: HIGH (verified Backup id + exported
+   reader); natural toggle: GOOD (a dedicated "film" style); safety: HIGH (read-only Backup). [VERIFIED]
+2. Picture Effect = Soft Focus (the original vision) — readability: LOW from the hook. Picture Effect is
+   class ctx[0x23] in AV-CAM (CPU1, not Linux-readable), set via the model (pvt_SetParamPictureEffect)
+   and messaged to av-cam; NO confirmed Backup id for the current effect was found (the 0x0107 menu
+   block has the style byte, not a verified picture-effect byte). To use Soft Focus the hook would need
+   EITHER (a) parse the just-saved JPG's Sony makernote (libObj writes MkNotePictureEffect @0xdc5e89 into
+   the file -> the effect IS in the file we already re-read for grain, but Sony makernote IFD parsing is
+   fragile/proprietary), OR (b) one read-only probe to find a Picture-Effect Backup id (e.g. test
+   0x01070316, read by the Creative-Style/greyout view per C-CTRL-020/C-FX-008 — role unconfirmed).
+   natural toggle: BEST (Off vs Soft Focus = clean ON/OFF, matches the vision); safety: HIGH if read via
+   Backup. -> pursue only if the owner wants the Soft-Focus UX enough to run the probe. [OPINION]
+3. Creative Style SLIDER value (e.g. Sharpness) via its Backup triple 0x0107xxxx (C-CTRL-013) — a "secret"
+   value (e.g. Sharpness=+3) toggles grain. readability HIGH (verified Backup), natural toggle POOR
+   (non-obvious), safety HIGH. Fallback only. [VERIFIED ids]
+4. DRO/other persisted setting — possible but no cleaner than #1; not investigated. [OPINION]
+
+======================================================================
+WHICH PROCESS? — not an issue for the Backup route.
+======================================================================
+Backup is a GLOBAL persistent store; Backup_read returns the same value in any process and is reachable
+wherever libbackup + the Backup service are present. The grain decision is made ONLY when a DCF *.JPG is
+closed, which happens in the still-save appFw process (the one with libmpr/libObj/libbackup) — so the
+read runs exactly where libbackup is live. Our Fsys_Close hook is global (all ~6 processes) but
+is_dcf_jpg gates everything: non-appFw processes never close a DSC*.JPG, so they never read the setting.
+=> No process-specificity problem; no need to detect the process. [VERIFIED reasoning]
+CAUTION to confirm in the isolated test (read-only, zero brick risk): that __dlopen("libbackup.so") +
+Backup_read_4Byte(0x01070175) returns the live selected-style byte in the appFw context, and that the
+GRAIN_STYLE mapping (v = ColorMode+1) matches what the owner's chosen menu item produces.
+
+BOTTOM LINE: gate grain on the Creative Style, read from Backup 0x01070175 byte 0 via
+__dlopen("libbackup.so")+__dlsym("Backup_read_4Byte"); grain ON iff (value & 0xFF) == the owner's chosen
+style value; default OFF on any failure. VERIFIED Backup id + exported reader + value enum; the only
+thing to confirm (read-only) is the exact byte semantics and the chosen value. If the owner insists on
+the Soft-Focus UX, add one read-only probe for a Picture-Effect Backup id or a makernote parse.

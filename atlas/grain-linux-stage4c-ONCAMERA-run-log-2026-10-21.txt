@@ -1,0 +1,35 @@
+ON-CAMERA RUN LOG — grain shim x1.0 build (md5 2cf01a99af741527cf6101fc63748acb), NEX-3N fw 1.00, 2026-10-21. Read back from /setting/grain_hook_4c.log through the senser shell after two shots (DSC09794, DSC09795).
+
+RAW LOG (verbatim)
+------------------
+4c: hook loaded
+4c: hook loaded
+4c: hook loaded
+4c: Fsys resolved
+4c: mem total=0x35fe000 free=0x10a000
+4c: RT W=4912 H=3264
+4c: GRAIN ok bytes=0x4171f6 codec_us=0xbeba78 land_us=0x5bb49 total_us=0xc55b69
+4c: mem total=0x35fe000 free=0x2d6000
+4c: RT W=4912 H=3264
+4c: GRAIN ok bytes=0x4bc03e codec_us=0xd252ce land_us=0x67d4f total_us=0xd9bc09
+
+DECODED
+-------
+shot 1 (DSC09794): output 4,289,014 B, codec 12.500 s, landing 0.376 s, total in shim 12.934 s,
+                   free RAM at capture 1.09 MB (0x10a000).
+shot 2 (DSC09795): output 4,964,414 B, codec 13.784 s, landing 0.425 s, total in shim 14.269 s,
+                   free RAM at capture 2.97 MB (0x2d6000).
+
+Linux-side RAM total 0x35fe000 = 56.6 MB.
+
+Stopwatch per shot about 16 s. The difference to the 12.9 s and 14.3 s inside the shim is the camera's
+own capture/save around the hook.
+
+Grain confirmed on the frames: flat-patch high-frequency noise 4.05 (DSC09795, midtone 4.17) vs 1.6 on
+ungrained frames. DSC09794 is a bright scene where the luma-adaptive grain is near zero by design
+(high-key 1.12).
+
+NOTE ON AN EARLIER FILE
+-----------------------
+atlas/grain-linux-stage4c-SPEED-fastpt-validated-2026-10-21.txt was written BEFORE this run and says the
+build "has NOT run on the camera yet"; this file supersedes that sentence.

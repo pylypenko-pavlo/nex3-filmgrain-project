@@ -1,0 +1,19 @@
+STAGE 4c — GRAIN STYLE RETUNED to REAL ultramax400 scans (2026-10-21). Backlog item #2 (STYLE) = DONE.
+
+PROBLEM: the first locked look (filmgrain-cli ultramax400/0.15) was too strong/coarse on real shots (owner: "~ISO800").
+REFERENCE: the owner's real film-scan pack at ~/Pictures/ (pos/ultramax400-euro-1 5044x3340, portra400-
+croatia, kodacolor200, review/doublex, film/<rolls>). Owner chose ultramax400 (their own stock).
+MEASURED real grain (high-pass residual in flat patches, median over frames):
+  ultramax400 sigY~3.0, autocorr lag1=0.47 lag2~0.0 -> FINE ~1px;  portra400 sigY~4.5;  kodacolor200 sigY~2.6.
+  vs MY OLD SYNTHETIC: sigY peak 8.8, autocorr lag1=0.82 lag2=0.47 -> ~3x too strong + ~2x too coarse.
+RETUNE (locked by owner): FINER kernel [1,4,1]/6 (was [1,4,11,16,11,4,1]/48) to match the real ~1px grain +
+autocorr lag1~0.44; luma sigma x0.60 (peak 8.8->5.27; measured on the camera fixture sigY 3.55 ~= real ~3.5);
+soft chroma. Validated 1:1 vs the real ultramax scan crop (fixtures/_retune_cmp.png, Desktop/grain_retune_cmp.png)
+and the final shim result (Desktop/grain_retuned_final.png). Tuning harness: grain-retune.py.
+INTEGRATED + INTEGER-VALIDATED: regenerated grain_luts.h (cal_l=36.96/cal_c=25.86, peak gains Y=37 Cb=4 Cr=3),
+updated grain_stream.c kernel (R=1, RING=3, KSUM=6, 3-tap). Rebuilt grain_hook_4c.so -> md5 dbeca51e, zero
+external symbols, isolation GRAIN ok with sigY 3.55 on the real camera fixture. BONUS: the 3-tap kernel is
+cheaper than the 7-tap -> grain ~30% faster (qemu codec 4.8s->3.5s); helps the speed backlog too.
+STATE: retuned shim grain_hook_4c.so md5 dbeca51e ready on host (<scratch>/lnx/grain_hook_4c.so); NOT yet re-staged to
+camera (deploy after the speed work). Camera idle on 4a. REMAINING BACKLOG: (1) SPEED (baked grain tile from THIS
+locked look -> ~30s; coefficient-domain -> 15-20s); (2) on-camera grain SWITCH; (3) colors + style names.

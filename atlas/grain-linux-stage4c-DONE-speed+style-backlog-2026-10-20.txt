@@ -1,0 +1,72 @@
+STAGE 4c — DONE: IN-CAMERA FILM GRAIN WORKS AUTOMATICALLY ON THE NEX-3N (2026-10-20). Session-end state.
+Two backlog items (both "later" per owner): SPEED (~2min/shot -> target 15-20s) and STYLE (current grain too strong).
+
+================= ACHIEVED (the whole project's goal) =================
+Shoot -> the camera AUTOMATICALLY produces a SOOC JPEG with real film grain. The LD_PRELOAD shim (grain_hook_4c.so,
+md5 e9ac0d9e, env.txt preload, dmode=3) interposes Fsys_Close in the appFw, and on a fresh DCF-JPG save:
+read src to RAM -> streaming SW-decode (freestanding integer codec) -> row-streaming integer grain (ultramax) ->
+streaming SW-encode to .TMP with Exif(APP1) spliced -> land via Fsys_Remove(orig)+Open-create(0x7)+Write (rename
+is a dead PrFILE veneer) -> grained DSC####.JPG on the card, Exif preserved, no manual steps. PROVEN on hardware:
+DSC09790 (manual-landed) and DSC09791 (FULLY AUTO). Both on ~/Desktop (DSC09790_grain.jpg, DSC09791_auto_grain.jpg).
+Sources (shim files in the repo, the rest archived in this atlas): code/grain-shim/grain_hook.c, code/grain-shim/swjpeg.c/.h, code/grain-shim/grain_stream.c, grain-grain.c,
+code/grain-shim/grain_luts.h, grain-int-grain.py, grain-tune-composite.py, grain_recipe_ultramax.npz.
+
+================= MEASURED ON-CAMERA TIMING (~121 s total) =================
+codec_us ~117 s (decode ~8 s + grain ~92 s[79%] + encode ~15 s), land_us ~3.5 s. Free RAM at capture ~0.4-1 MB
+(total 56 MB; 448 MB reserved imaging DMA pool). The camera took ~2 min and COMPLETED (the owner's "long hang").
+
+================= BACKLOG 1: SPEED (owner wants ~15-20 s/shot; DeepSeek analysis) =================
+GRAIN (92 s) dominates -> biggest lever. Ranked:
+1. BAKED GRAIN TILE (do first): ship a unit-variance grain tile (baked offline with the exact 7-tap toroidal
+   spectrum, per channel) in the .so rodata; apply Y'=clip(Y + ((int8)tile[(x+ox)&M][(y+oy)&M]*sigmaLUT[Y])>>8),
+   random ox,oy per shot. NO per-pixel hash, NO blur -> ~5-8 instr/pixel -> grain 92 s -> ~2-5 s. MUST be
+   RAM-resident (SD thrash kills it). Sizes vs ~0.4 MB free: 256^2 Y + 128^2 Cb/Cr = 96 KB (safe); 512^2 Y +
+   2x128^2 = 288 KB + scratch ~388 KB (borderline); 1024^2 = 1 MB (only if ~1 MB free + mlock). 512 tile +
+   random offset is fine for ~2px grain; 256 may show repetition in flat areas.
+2. COEFFICIENT-DOMAIN GRAIN = the ONLY path to 15-20 s: entropy-decode to quantized DCT coeffs, ADD the
+   precomputed DCT of the spatial grain tile per 8x8 block (quantized with the shot's actual JPEG quant table),
+   entropy-recode -> SKIP IDCT+FDCT+color-convert. ~23 s dec/enc -> ~8-12 s. Caveat: naive per-coeff noise is
+   8x8-block-correlated/blocky; precomputing the DCT of the CONTINUOUS tile per block (then quantizing) keeps
+   fine grain up to quantization; if Q is coarse the HF grain dies -> shape noise to surviving coeffs or accept a
+   look change. Needs the per-shot quant tables (the decoder already has them).
+3. AAN integer IDCT/FDCT (if staying spatial): shaves ~3-6 s off 23 s. Memory-neutral. After the baked tile.
+4. Landing: avoid the temp->orig copy (saves ~3.5 s) — but rename is dead, so a copy or in-place overwrite is
+   needed; keep sequential.
+BLUNT FLOOR (DeepSeek): spatial fine grain hard floor ~25-35 s (baked tile 5 + decode 8 + encode 15 + file 3.5
+= ~31.5 s; AAN -> ~25-30 s). 15-20 s NOT reachable spatially -> needs coefficient-domain. => PLAN: (a) baked
+tile first (get to ~30 s, keeps the exact spatial look); (b) if 15-20 s required, move grain to the
+coefficient domain (assess the blockiness/quality tradeoff on the real frames offline before committing).
+
+================= BACKLOG 2: STYLE (owner: current grain reads ~ISO 800, too strong) =================
+The locked ultramax400/strength-0.15 look is too coarse/strong on real shots ("ну на 800 где-то минимум").
+Revisit OFFLINE on the real fixtures (DSC09580/09790/09791): try a FINER/subtler stock+strength (portra400 was
+finer; lower strength e.g. 0.08-0.12; smaller grain radius), re-characterize sigma(Y)+autocorr, rebuild the
+GAIN LUTs + blur kernel (grain-tune-composite.py / grain-int-grain.py), re-validate vs the new reference. This
+is pure offline tuning (filmgrain-cli -> fast integer composite), no camera needed until a new .so is built.
+
+================= HOW TO RESUME =================
+Camera is DISARMED (env.txt -> grain_hook_4a.so, harmless logger), photos safe. To re-run the WORKING grain:
+re-stage grain_hook_4c.so (md5 e9ac0d9e; host <scratch>/lnx/grain_hook_4c.so) via deploy_4c_stage.py, silicon_test_4c.py
+(arms env.txt->4c), cold boot, shoot, read_and_disarm_4c.py. Build: in lima VM 'armgrain',
+arm-linux-gnueabi-gcc -march=armv5te -shared -fPIC -nostdlib -O2 -ffreestanding -fno-builtin
+-fno-tree-loop-distribute-patterns -o grain_hook_4c.so grain_hook_4c.c swjpeg.c grain_stream.c (sources in
+<scratch>/lnx/vm/ and archived here). pmca via GUI askpass: cd work/pmca && SUDO_ASKPASS=.../askpass.sh sudo -A env
+PYTHONPATH=work/pmca <venv>/python <script>. NEXT: baked-tile speedup + style retune (both offline first).
+EOF
+
+================= NEXT-SESSION PLAN (owner, 2026-10-20 EOD) =================
+Order of work going forward:
+1. STYLE TUNE AGAINST REAL FILM SCANS (tomorrow): the owner has a large pack of real/live film scans. Re-tune the
+   grain to MATCH THOSE instead of the filmgrain-cli NDG synthetic reference — characterize sigma(Y)+autocorr+
+   chroma from the real scans, rebuild the GAIN LUTs/kernel (or the baked tile), re-validate on the real camera
+   fixtures (DSC09580/09790/09791). Current ultramax400/0.15 is too strong (~ISO800) -> aim finer per the scans.
+   Pure offline (no camera). [This supersedes "BACKLOG 2: STYLE" above — the scan pack is the new reference.]
+   NOTE: fold this with the SPEED baked-tile work — bake the tile from the scan-matched spectrum once the look is set.
+2. ON-CAMERA GRAIN SWITCH: gate the grain on a user-facing menu setting so it can be toggled from the camera
+   (default OFF, fail-safe). The investigated recipe: read the Creative Style via __dlopen("libbackup.so")+
+   Backup_read_4Byte(0x01070175)&0xFF in the hook, or repurpose Picture Effect = Soft Focus (matches the original
+   "select Soft Focus -> get grain" vision). See grain-linux-oncamera-control-BACKLOG-2026-10-20.txt.
+3. COLORS + STYLE NAMES: finish the colour work and the naming in the camera "styles" (Creative Style colour
+   grading + labels) — the broader looks project (cross-ref style-grain-coupling.md, looks/, filmcharts/). Grain
+   becomes one component of each named style.
+Speed (baked tile -> coefficient-domain) runs in parallel with #1 (bake the tile from the final scan-matched look).

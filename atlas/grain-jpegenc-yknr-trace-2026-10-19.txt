@@ -1,0 +1,109 @@
+NEX-3N grain hook — static RE of sa_jpeg_enc_1unit (TARGET A) + sa_yknr (TARGET B)
+Read-only, 0-flash. Disasm: sadis.py. Addresses text-relative.
+
+====================================================================
+TARGET A — sa_jpeg_enc_1unit.bin (17412 B, ver2, tag SAJPGE_ULF4_, img0 text 0x0-0x40d0)
+====================================================================
+VERDICT: full-res luma pixels do NOT stage through scalar-writable SRAM.
+They stream from DRAM straight into the HW engine (codec) past the scalar.
+TARGET A is CLOSED as a sftfcs-style SRAM hook. (VERIFIED)
+
+Evidence:
+1. Engine model identical to yknr/sftfcs. Two real engine-launch wrappers,
+   both bl-reached (preceded by DATA, not fall-through):
+   - 0x2180: op000a; push {r8-r14,lr}; mov r0,r4; run_engine @0x2196 (main encode)
+   - 0x4a2 / 0x250-0x256: same shape (push lr; mov r0,r4; run_engine @0x256).
+   r4 = command table is RUNTIME-built — no `ldr r4,[pc]` loads a table ptr (grep:
+   the only r4 pc-loads fetch small consts 0x0100). r8-r14 = 7 buffer pointers
+   from stack [sp,#32..56]. Same as sftfcs fn0x194 / yknr. (VERIFIED)
+
+2. The scalar builds DMA descriptors pointing at DRAM pixel pools, then kicks DMA:
+   - Descriptor-build @0x55a-0x584: writes a 24-B descriptor at SRAM 0x1f18 whose
+     [+0] = (input addr) & 0x3fffffff — a DRAM bus address masked to physical; the
+     source addr is pulled from a descriptor queue at MMIO 0x481d0 (0x53c-0x53e).
+     [+20] = 0x40000000 (GO). Then 0x48230(OUT kick), 0x48208(IN enable 0x10000),
+     wfi, 0x48200(IN kick). (VERIFIED)
+   - MCU-address loop @0x720-0x830: scalar computes DRAM pool addresses
+       luma  = 0x60000000 + off   (0x762, 0x7e6, 0x816)
+       chroma= 0x68000000 + off   (0x740, 0x794, 0x816-sibling)
+     masks (0x1ff80000 / 0x3ff80000 / 0x3fffffff), >>3/>>19, and writes them as
+     8-B descriptor entries into SRAM 0x93c0 (str addr,[0x93c0+idx*8+4]). These feed
+     the DMA that streams MCU blocks DRAM->engine. (VERIFIED)
+   ⇒ the per-MCU pixel bytes are HW-DMA'd from DRAM to the engine; the scalar only
+   writes the *pointers*, never the pixels.
+
+3. What IS in scalar SRAM: the 24/8-B DMA descriptors (0x1f18, 0x93c0), engine
+   config ports 0x40000-0x40040 (geometry/qscale, minus-1 convention), and dense
+   marker/Huffman/header tables around SRAM 0x5500-0x5800 (literals 0x5510..0x5800
+   referenced ~40x). The "heavy byte-store clusters" at 0x3200-0x3db0 are NOT scalar
+   pixel loops — they are inline VLIW engine microcode (0x3a00 = e1f7..fba0 1f70, the
+   .vliw64 byte pattern). So there is no full-res luma plane in scalar SRAM to strb
+   into. (VERIFIED)
+
+Residual (OPINION, weak): the luma DRAM base (0x60000000-pool) is live in a scalar
+register (r1 @0x7ec/0x816) at descriptor-build time. A DSP-side scalar *DRAM* pre-write
+there is conceivable, but it is the same class as the already camera-REFUTED ARM write
+to the develop/YCC_FULL DRAM canvas (C-MEM-021, C-PIPE-001), and additionally needs DSP
+DRAM-write access + cache coherency + landing before the HW DMA read. Not a clean hook;
+unproven.
+
+No injection point delivered for A: there is no scalar address + SRAM tile pointer +
+pre-launch write window of the sftfcs kind. The engine input is DRAM, not SRAM.
+
+====================================================================
+TARGET B — sa_yknr.bin (ver2, tag SA_YKNR_0x02, text 0x410-0x3eb0)
+====================================================================
+VERDICT: NOT viable. Two independent blockers. (VERIFIED)
+
+B1. No sftfcs-shape scalar SRAM input-tile. Same engine model: 5 run_engine wrappers
+   (0x1b42,0x20f6,0x2536,0x2976,0x2db6), byte-identical; r8-r14 = 7 buffer ptrs from
+   [sp,#32..56]; r4 runtime cmd table. DRAM pools 0x60000000/0x80000000 streamed via
+   DMA; SRAM ring 0x91f0, output 0x9000/0x9800, status 0x94dc/e0/e4. (VERIFIED)
+   Per C-PIPE-022 (saemu, VERIFIED): the scalar makes 0 pixel byte-accesses to the
+   2 KB tile buffers 0x5000/0xa000/0xd000/0x10000/0x13000; the y3 slot operates on DMA
+   descriptors; the shared pixel buffer is the engine DMA aperture 0xf81400 (DRAM).
+   The 226 scalar byte-ops I confirmed (loops @0x8a8/0x8de: ldrsb[r3];strb[r7], stride 2,
+   tiny runtime-computed bounds) are per-tile edge-pad / de-interleave metadata, NOT the
+   full-res plane. ⇒ no clean "strb the SRAM input tile before run_engine" like sftfcs.
+   (VERIFIED)
+
+B2 (the deciding factor — ISO gate). ADDENDUM (a): a yknr-internal hook does NOT run at
+   base/low ISO. CAMERA-VERIFIED: E-0091 zeroed yknr's luma stores -> grain at ISO 3200,
+   "ISO 200 perfectly clean (yknr off -> edit not executed)"; E-0086 (log 730) the
+   job-fill detour fires at high ISO, not at ISO 200. Static root: C-NR-007/C-NR-029
+   (VERIFIED code) predicate 0xd5760 = OFF if NR-level[obj+0x15c]==0; at level1 OFF for
+   modes {1,5,0x13,0x1A,0x1F,0x20}; else only inside the ISO window ~200..6400 (Backup
+   0x3004a +0xD2..+0xDC). At base ISO f/2 1/30 (ISO 200, bottom/edge of window, default
+   NR) the module is effectively skipped. So a yknr hook is useless exactly where grain
+   is wanted.
+
+   ADDENDUM (b) cheapest un-gate: widen Backup 0x3004a +0xD2..+0xDC to span base ISO AND
+   keep NR-level>=1 AND mode not in the off-set. OPINION: whether widening the window
+   forces yknr to actually RUN a pixel pass at base ISO (vs merely un-killing NR) is
+   UNTESTED — it is the re-test proposed in 07-open-questions (never executed). Even if
+   it runs, B1 still holds (no scalar pixel staging -> back to the already-FAILED VLIW
+   route E-0092), and running a *denoiser* at base ISO smooths detail. So un-gating does
+   not rescue B.
+
+No always-on full-res scalar-SRAM luma stage exists: per capture-orchestrator, the only
+DSP VLIW touching still luma per-pixel is yknr (ISO-gated); sftfcs is low-res +
+Soft-Focus-mode-only; jpeg_enc is every-pixel/every-ISO but DRAM-streamed past the scalar.
+
+====================================================================
+BOTTOM LINE
+====================================================================
+Neither A nor B gives a clean scalar-SRAM full-res grain hook.
+- B is doubly dead (no pixel SRAM staging; ISO-gated off at base ISO). Drop it.
+- A is the ONLY stage that touches every pixel at every ISO (the universal property we
+  need), but its pixels are HW-DMA'd from DRAM pools (luma 0x60000000, chroma 0x68000000)
+  into the engine, past the scalar — no SRAM write window. The one remaining lever is a
+  DSP-side write to the DRAM luma pool at the descriptor-build site, which is unproven.
+
+SINGLE CHEAPEST NEXT STEP (camera): mirror the sftfcs CONSTANT-write proof, but on A.
+Add a tiny scalar loop at the jpeg descriptor-build site (~0x7ec/0x816, where the luma
+DRAM address 0x60000000+off is live in r1) that strb's a CONSTANT into a few bytes of that
+DRAM address just before the GO/IN-kick, shoot at BASE ISO. If the constant mark appears
+in the SOOC JPEG -> the DSP-DRAM pre-write reaches the encoder and A becomes the universal
+hook. If the frame is clean -> A is definitively closed (the DSP cannot reach the pixels
+either), and the grain program must move off the SA-DSP entirely (e.g. the Linux
+decode/re-encode route C-LNX-011).

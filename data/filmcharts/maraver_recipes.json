@@ -1,0 +1,744 @@
+{
+ "colorplus200": {
+  "Mnorm_1024": [
+   [
+    1132,
+    193,
+    -301
+   ],
+   [
+    44,
+    995,
+    -15
+   ],
+   [
+    9,
+    -25,
+    1040
+   ]
+  ],
+  "rowsum": [
+   1.109,
+   1.021,
+   0.87
+  ],
+  "gain": 0.582,
+  "gamma": 0.636,
+  "lift": -0.0275,
+  "sat_equiv": 0.994,
+  "nonsat_resid_maxabs": 0.294,
+  "worst_B": [
+   [
+    "black",
+    5.8
+   ],
+   [
+    "grey4",
+    5.7
+   ],
+   [
+    "grey5",
+    5.6
+   ],
+   [
+    "grey3",
+    5.6
+   ]
+  ],
+  "dE": {
+   "A_matrix": 5.0,
+   "B_matrix+curve": 3.8,
+   "C_matrix+RGBcurves": 3.5
+  },
+  "raw": 6.6
+ },
+ "cs50d": {
+  "Mnorm_1024": [
+   [
+    1200,
+    127,
+    -304
+   ],
+   [
+    58,
+    1009,
+    -43
+   ],
+   [
+    -21,
+    48,
+    997
+   ]
+  ],
+  "rowsum": [
+   0.923,
+   1.18,
+   0.897
+  ],
+  "gain": 0.732,
+  "gamma": 0.609,
+  "lift": -0.0203,
+  "sat_equiv": 1.0,
+  "nonsat_resid_maxabs": 0.297,
+  "worst_B": [
+   [
+    "black",
+    11.4
+   ],
+   [
+    "white",
+    9.2
+   ],
+   [
+    "grey3",
+    6.1
+   ],
+   [
+    "blue_flower",
+    5.8
+   ]
+  ],
+  "dE": {
+   "A_matrix": 5.5,
+   "B_matrix+curve": 4.1,
+   "C_matrix+RGBcurves": 2.8
+  },
+  "raw": 9.4
+ },
+ "cs800t": {
+  "Mnorm_1024": [
+   [
+    1266,
+    -23,
+    -219
+   ],
+   [
+    -1,
+    979,
+    45
+   ],
+   [
+    -39,
+    78,
+    985
+   ]
+  ],
+  "rowsum": [
+   0.766,
+   1.113,
+   1.121
+  ],
+  "gain": 0.714,
+  "gamma": 0.557,
+  "lift": -0.0234,
+  "sat_equiv": 1.045,
+  "nonsat_resid_maxabs": 0.211,
+  "worst_B": [
+   [
+    "blue",
+    15.1
+   ],
+   [
+    "light_skin",
+    11.7
+   ],
+   [
+    "grey2",
+    10.8
+   ],
+   [
+    "yellow",
+    10.1
+   ]
+  ],
+  "dE": {
+   "A_matrix": 8.2,
+   "B_matrix+curve": 6.9,
+   "C_matrix+RGBcurves": 5.1
+  },
+  "raw": 10.3
+ },
+ "ektar100": {
+  "Mnorm_1024": [
+   [
+    958,
+    81,
+    -15
+   ],
+   [
+    23,
+    990,
+    11
+   ],
+   [
+    -24,
+    51,
+    997
+   ]
+  ],
+  "rowsum": [
+   1.038,
+   0.999,
+   0.963
+  ],
+  "gain": 0.798,
+  "gamma": 0.607,
+  "lift": -0.0273,
+  "sat_equiv": 0.934,
+  "nonsat_resid_maxabs": 0.037,
+  "worst_B": [
+   [
+    "blue",
+    10.2
+   ],
+   [
+    "cyan",
+    7.9
+   ],
+   [
+    "grey2",
+    6.0
+   ],
+   [
+    "green",
+    5.3
+   ]
+  ],
+  "dE": {
+   "A_matrix": 5.4,
+   "B_matrix+curve": 3.9,
+   "C_matrix+RGBcurves": 3.8
+  },
+  "raw": 7.1
+ },
+ "fuji200": {
+  "Mnorm_1024": [
+   [
+    1028,
+    109,
+    -113
+   ],
+   [
+    44,
+    1018,
+    -38
+   ],
+   [
+    10,
+    -27,
+    1041
+   ]
+  ],
+  "rowsum": [
+   1.116,
+   1.021,
+   0.864
+  ],
+  "gain": 0.765,
+  "gamma": 0.677,
+  "lift": -0.0176,
+  "sat_equiv": 0.985,
+  "nonsat_resid_maxabs": 0.111,
+  "worst_B": [
+   [
+    "black",
+    5.9
+   ],
+   [
+    "purplish_blue",
+    5.3
+   ],
+   [
+    "white",
+    4.8
+   ],
+   [
+    "cyan",
+    4.6
+   ]
+  ],
+  "dE": {
+   "A_matrix": 4.4,
+   "B_matrix+curve": 3.3,
+   "C_matrix+RGBcurves": 2.9
+  },
+  "raw": 6.2
+ },
+ "gold200": {
+  "Mnorm_1024": [
+   [
+    1317,
+    128,
+    -421
+   ],
+   [
+    68,
+    958,
+    -2
+   ],
+   [
+    3,
+    32,
+    989
+   ]
+  ],
+  "rowsum": [
+   1.035,
+   1.088,
+   0.877
+  ],
+  "gain": 0.894,
+  "gamma": 0.477,
+  "lift": -0.104,
+  "sat_equiv": 1.03,
+  "nonsat_resid_maxabs": 0.409,
+  "worst_B": [
+   [
+    "grey2",
+    7.9
+   ],
+   [
+    "white",
+    7.9
+   ],
+   [
+    "purple",
+    6.2
+   ],
+   [
+    "grey4",
+    5.6
+   ]
+  ],
+  "dE": {
+   "A_matrix": 6.3,
+   "B_matrix+curve": 3.9,
+   "C_matrix+RGBcurves": 3.1
+  },
+  "raw": 8.9
+ },
+ "lomo400": {
+  "Mnorm_1024": [
+   [
+    1110,
+    210,
+    -296
+   ],
+   [
+    19,
+    982,
+    23
+   ],
+   [
+    -9,
+    42,
+    991
+   ]
+  ],
+  "rowsum": [
+   1.098,
+   1.0,
+   0.902
+  ],
+  "gain": 0.814,
+  "gamma": 0.64,
+  "lift": -0.0403,
+  "sat_equiv": 0.95,
+  "nonsat_resid_maxabs": 0.293,
+  "worst_B": [
+   [
+    "green",
+    6.9
+   ],
+   [
+    "blue",
+    6.2
+   ],
+   [
+    "black",
+    6.1
+   ],
+   [
+    "grey3",
+    5.2
+   ]
+  ],
+  "dE": {
+   "A_matrix": 4.7,
+   "B_matrix+curve": 3.5,
+   "C_matrix+RGBcurves": 3.4
+  },
+  "raw": 6.0
+ },
+ "lomochrome92": {
+  "Mnorm_1024": [
+   [
+    878,
+    281,
+    -135
+   ],
+   [
+    145,
+    758,
+    121
+   ],
+   [
+    39,
+    222,
+    763
+   ]
+  ],
+  "rowsum": [
+   0.898,
+   1.03,
+   1.073
+  ],
+  "gain": 0.811,
+  "gamma": 1.032,
+  "lift": 0.0056,
+  "sat_equiv": 0.698,
+  "nonsat_resid_maxabs": 0.174,
+  "worst_B": [
+   [
+    "white",
+    7.8
+   ],
+   [
+    "grey3",
+    4.5
+   ],
+   [
+    "grey2",
+    4.4
+   ],
+   [
+    "blue",
+    3.3
+   ]
+  ],
+  "dE": {
+   "A_matrix": 2.6,
+   "B_matrix+curve": 2.5,
+   "C_matrix+RGBcurves": 2.2
+  },
+  "raw": 8.7
+ },
+ "onehundred_b": {
+  "Mnorm_1024": [
+   [
+    1211,
+    -182,
+    -5
+   ],
+   [
+    -50,
+    1064,
+    10
+   ],
+   [
+    -9,
+    98,
+    935
+   ]
+  ],
+  "rowsum": [
+   0.917,
+   0.952,
+   1.131
+  ],
+  "gain": 0.673,
+  "gamma": 0.654,
+  "lift": -0.0193,
+  "sat_equiv": 1.054,
+  "nonsat_resid_maxabs": 0.14,
+  "worst_B": [
+   [
+    "white",
+    6.5
+   ],
+   [
+    "black",
+    6.3
+   ],
+   [
+    "grey5",
+    4.9
+   ],
+   [
+    "grey2",
+    4.4
+   ]
+  ],
+  "dE": {
+   "A_matrix": 4.5,
+   "B_matrix+curve": 3.1,
+   "C_matrix+RGBcurves": 2.4
+  },
+  "raw": 6.9
+ },
+ "phoenix200": {
+  "Mnorm_1024": [
+   [
+    1135,
+    -231,
+    120
+   ],
+   [
+    168,
+    773,
+    84
+   ],
+   [
+    -50,
+    158,
+    916
+   ]
+  ],
+  "rowsum": [
+   1.168,
+   1.236,
+   0.596
+  ],
+  "gain": 0.53,
+  "gamma": 0.808,
+  "lift": -0.009,
+  "sat_equiv": 0.974,
+  "nonsat_resid_maxabs": 0.244,
+  "worst_B": [
+   [
+    "white",
+    19.1
+   ],
+   [
+    "purple",
+    15.7
+   ],
+   [
+    "blue",
+    11.0
+   ],
+   [
+    "grey5",
+    10.4
+   ]
+  ],
+  "dE": {
+   "A_matrix": 6.2,
+   "B_matrix+curve": 6.2,
+   "C_matrix+RGBcurves": 3.7
+  },
+  "raw": 14.5
+ },
+ "portra160": {
+  "Mnorm_1024": [
+   [
+    1029,
+    35,
+    -40
+   ],
+   [
+    -2,
+    992,
+    34
+   ],
+   [
+    2,
+    23,
+    999
+   ]
+  ],
+  "rowsum": [
+   0.918,
+   1.077,
+   1.005
+  ],
+  "gain": 0.863,
+  "gamma": 0.711,
+  "lift": -0.0093,
+  "sat_equiv": 0.975,
+  "nonsat_resid_maxabs": 0.041,
+  "worst_B": [
+   [
+    "white",
+    9.3
+   ],
+   [
+    "purple",
+    7.0
+   ],
+   [
+    "blue",
+    6.0
+   ],
+   [
+    "cyan",
+    5.5
+   ]
+  ],
+  "dE": {
+   "A_matrix": 4.9,
+   "B_matrix+curve": 3.5,
+   "C_matrix+RGBcurves": 3.0
+  },
+  "raw": 6.6
+ },
+ "portra400": {
+  "Mnorm_1024": [
+   [
+    918,
+    119,
+    -14
+   ],
+   [
+    67,
+    992,
+    -36
+   ],
+   [
+    0,
+    41,
+    984
+   ]
+  ],
+  "rowsum": [
+   1.045,
+   1.046,
+   0.909
+  ],
+  "gain": 0.735,
+  "gamma": 0.616,
+  "lift": -0.0262,
+  "sat_equiv": 0.907,
+  "nonsat_resid_maxabs": 0.05,
+  "worst_B": [
+   [
+    "blue",
+    8.8
+   ],
+   [
+    "cyan",
+    5.8
+   ],
+   [
+    "blue_flower",
+    5.6
+   ],
+   [
+    "foliage",
+    4.4
+   ]
+  ],
+  "dE": {
+   "A_matrix": 5.2,
+   "B_matrix+curve": 3.5,
+   "C_matrix+RGBcurves": 3.1
+  },
+  "raw": 8.2
+ },
+ "proimage100": {
+  "Mnorm_1024": [
+   [
+    997,
+    310,
+    -283
+   ],
+   [
+    44,
+    947,
+    33
+   ],
+   [
+    -2,
+    94,
+    932
+   ]
+  ],
+  "rowsum": [
+   0.789,
+   1.0,
+   1.212
+  ],
+  "gain": 1.106,
+  "gamma": 0.317,
+  "lift": -0.2397,
+  "sat_equiv": 0.852,
+  "nonsat_resid_maxabs": 0.287,
+  "worst_B": [
+   [
+    "blue",
+    11.3
+   ],
+   [
+    "grey3",
+    7.4
+   ],
+   [
+    "black",
+    6.7
+   ],
+   [
+    "grey4",
+    6.2
+   ]
+  ],
+  "dE": {
+   "A_matrix": 7.3,
+   "B_matrix+curve": 4.5,
+   "C_matrix+RGBcurves": 4.3
+  },
+  "raw": 13.3
+ },
+ "ultramax400": {
+  "Mnorm_1024": [
+   [
+    1244,
+    -95,
+    -124
+   ],
+   [
+    29,
+    975,
+    20
+   ],
+   [
+    15,
+    -22,
+    1032
+   ]
+  ],
+  "rowsum": [
+   0.901,
+   1.066,
+   1.033
+  ],
+  "gain": 0.585,
+  "gamma": 0.654,
+  "lift": -0.0447,
+  "sat_equiv": 1.09,
+  "nonsat_resid_maxabs": 0.144,
+  "worst_B": [
+   [
+    "white",
+    8.1
+   ],
+   [
+    "blue",
+    7.0
+   ],
+   [
+    "cyan",
+    6.9
+   ],
+   [
+    "grey2",
+    6.6
+   ]
+  ],
+  "dE": {
+   "A_matrix": 5.2,
+   "B_matrix+curve": 3.9,
+   "C_matrix+RGBcurves": 3.6
+  },
+  "raw": 6.2
+ }
+}
